@@ -200,3 +200,6 @@ FakesAssemblies/
 *.dll
 *.v12.suo
 *.csprojResolveAssemblyReference.cache
+
+*.synctex
+*.synctex.gz
