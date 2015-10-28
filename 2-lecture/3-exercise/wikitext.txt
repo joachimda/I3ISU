@@ -1,0 +1,11 @@
+h1. Exercise 3 - Sharing a Vector class between threads
+
+_The supplied class Vector 1 holds 10.000 elements per default, which at all times must have
+the same value. Vector::setAndTest() sets the value of all the elements and then immediately
+checks that the Vector object is consistent (all elements hold the expected value).
+Create a thread function writer that uses Vector::setAndTest() to set and test the value of
+a shared Vector object. Then create a main() function that creates a user-defined number of
+writer threads (between 1 and 100), each with their own unique ID. Let each writer set and
+test the shared Vector object to its ID every second. If a writer detects an inconsistency in the
+shared Vector object (i.e. setAndTest() returns false ), it should write an error message._
+
