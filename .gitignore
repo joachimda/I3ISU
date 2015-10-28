@@ -201,5 +201,9 @@ FakesAssemblies/
 *.v12.suo
 *.csprojResolveAssemblyReference.cache
 
-*.synctex
 *.synctex.gz
+
+*.aux
+*.lof
+*.lot
+*.toc
