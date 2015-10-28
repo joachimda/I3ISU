@@ -1,0 +1,19 @@
+h1. Welcome to your new wiki
+
+h2. Members:
+
+* Joachim Dam Andersen (201370031@post.au.dk) 
+* Bjørn Nørgaard Sørensen (201370248@post.au.dk) 
+* Issa Mohammed (201270434@post.au.dk)
+
+h1. Exercises
+
+|_.Exercises							|_.Status				|_.Review                            |
+|[[Exercise 01 - Building C++ programs for host and Target]]	|%{background:lightgreen}Done%	        |%{background:lightgreen}OK%         |
+|[[Exercise 02 - Posix Threads]]				|%{background:lightgreen}Done%	        |%{background:lightgreen}OK%         |
+|[[Exercise 03 - Thread Synchronization I]]			|%{background:lightgreen}Done%	        |%{background:lightgreen}OK%         |
+|[[Exercise 04 - Thread Synchronization II]]			|%{background:lightgreen}Done%		|%{background:red}Not reviewed yet%  |
+|[[Exercise 05 - Thread Communication]]				|%{background:yellow}In progress...%	|%{background:red}Not reviewed yet%  |
+|[[Exercise 06 - OS API]]					|%{background:red}Not begun yet%	|%{background:red}Not reviewed yet%  |
+|[[Exercise 07 - Resource Handling]]				|%{background:red}Not begun yet%	|%{background:red}Not reviewed yet%  |
+|[[Exercise 08 - Message Distribution System]]			|%{background:red}Not begun yet%	|%{background:red}Not reviewed yet%  |

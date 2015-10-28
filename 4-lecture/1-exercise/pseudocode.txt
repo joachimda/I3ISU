@@ -1,0 +1,37 @@
+carThread() {
+	mutex_lock(entry_mtx);
+	awaitEntry = true;
+	cond_sig(entry);
+	while(!entryOpen) {
+		cond_wait(entry_cond, entry_mtx);
+	}
+	driveIn();
+	awaitEntry = false;
+	mutex_unlock(entry_mtx);
+
+	spendTimeInGarage();
+
+	mutex_lock(exit_mtx);
+	awaitExit = true;
+	cond_sig(exit);
+	while(!exitOpen) {
+		cond_wait(exit_cond, exit_mtx);
+	}
+	driveOut();
+	awaitExit = false;
+	mutex_unlock(exit_mtx);
+}
+
+guardthread(){
+	mutex_lock(enter_mtx);
+	while(!carWaitingEntry) {
+		cond_wait(entry_cond, enter_mtx);
+	}
+	enterOpen = true;
+	cond_signal(entry_cond);
+	while(carWaitingEntry) {
+		cond_wait(entry_cond, enter_mtx);
+	}
+	enterOpen = false;
+	pthread_mutex_unlock(enter_mtx);
+}

@@ -1,0 +1,486 @@
+h1. Building C++ programs for host and Target
+
+{{>toc}}
+
+h2. Introduction
+
+In this exercise you will use different ways of compiling a program for Linux. The programs
+you create are not the issue in this exercise – it is the process of compiling them that is in
+focus. It is important that you finish this lab exercise as it is the basis for next week’s exercise.
+Furthermore all subsequent exercises require that you use makefiles.
+
+h2. Prerequisites
+
+In order to complete this exercise, you must:
+* Have completed the Getting set up exercise, thus a working Linux (in a VMWare)
+* Have access to a target - DevKit8000.
+
+h1. Exercise 1 - The Hello World program
+
+In the file hello.cpp write a small "Hello World!" C++ program. Use direct compiler invocation
+of the compiler g++ to compile your program to an executable hello. Correct any errors
+you may have, then execute your program.
+
+{{collapse(View code..)
+<pre><code class="cpp">
+#include <iostream>
+using namespace std;
+
+int main() {
+	cout << "Hello World!" << endl;
+	return 0;
+}
+</pre>
+}}
+
+*Compilation of the "Hello World" program*
+
+We compile the program using direct compiler invocation:
+
+In the linux terminal we write:
+
+{{collapse(View code..)
+<pre>
+$ g++ -c hello.cpp
+$ g++ hello.o hello
+$ ./hello
+Hello World!
+</pre>
+}}
+
+*The shown code explained respectively*
+
+First at object file is created by invoking the compiler only
+
+The object file is then linked and put into and executable file, hello.
+
+The executable file can then be run by typing: ./hello
+
+h1. Exercise 2 - Makefiles - compiling for host
+
+h2. Exercise 2.1 - Makefiles???
+
+_Answer the following questions and remember to use code snippets if it serves to pave the way
+for better understanding_
+
+* What is a target?
+
+A target is an objective to be done.
+
+* What is a dependant and how is it related to a target?
+
+a dependant is one or more files that is needed to complete the target objective.
+
+* Does it matter whether one uses tabs or spaces in a makefile?
+
+Yes! every rule for a recipe begin with a tab.
+
+* How do you define and use a variable in a makefile?
+
+Define: CXX=g++
+
+Usage: $(CXX)
+
+* Why use variables in a makefile?
+
+If a variable is used to define install/build paths and or compilerconfigurations and so on, you only need to change the variable and not all the places that the path/configuration is used.
+
+* How do you use a created makefile?
+
+You can use _make_ or _make <target>_ to only make a specific target.
+
+* In the makefile scripting language they often refer to built-in variables such as these: $@, $< and $^ - Explain what each of these represent.
+
+$@ - The filename of the target
+$< - The name of the first prerequisite
+$^ - All names of the prerequisites
+
+* $(CC) and $(CXX) - what do they refer to?
+
+they refer to the variables CC and CXX, respectively. If you follow the convention, these will refer to compilers.
+
+* how do they differ from each other?
+
+According to the convention, the CC variable will hold the C compiler, and the CXX variable will hold the C++ compiler.
+
+* $(CFLAGS) and $(CXXFLAGS) - what do they refer to?
+
+they refer to the variables CC and CXX, respectively. If you follow the convention, these will refer to compiler flags.
+
+* how do they differ from each other?
+
+According to the convention, the CC variable will hold the C compiler flags, and the CXX variable will hold the C++ compiler flags.
+
+* What does $(SOURCES : .cpp = .o) mean? Any spaces in this text???
+
+This line is used in "pattern matching rules" - See Exercise 2.3.2 for more info on this subject. And yes, there are indeed spaces in this text.
+
+h2. Exercise 2.2 Using makefiles - starting out
+
+_Write a makefile for the program hello you created in the first exercise. Add a target all that
+compiles your program, furthermore use variables to specify the following:_
+* The name of the executable
+* The used compiler.
+_Compile your program using make and execute it._
+
+* Add two targets to your makefile; clean that removes them all object files as well as the executable.
+* Add a target help that prints a list of available targets. Remember to verify via tests
+* that all three targets do as expected.
+{{collapse(Makefile)
+<pre>
+SOURCES= *.cpp
+OBJECTS=$(SOURCES:.cpp=.o)
+EXECUTABLE=main
+CXX=g++
+
+all: $(OBJECTS)
+	$(CXX) -o $(EXECUTABLE) $(OBJECTS)
+	make clean
+
+$(OBJECTS): $(SOURCES)
+	$(CXX) -c $(SOURCES)
+
+.PHONY: clean
+clean: 
+	rm -f *.o 
+	rm -f *.h.gch
+
+help: 
+	echo "Available targets are: all, clean and help"
+</pre>
+}}
+
+{{collapse(Testing the makefile in the terminal)
+
+!https://redmine.iha.dk/courses/projects/i3isu-e2015_blackboardsux/repository/revisions/master/entry/1-lecture/images/using_makefiles.png!
+
+}}
+
+h2. Exercise 2.3 - Program based on multiple files
+
+h3. Exercise 2.3.1 - Being explicit
+
+_Create a simple program parts consisting of 5 files:_
+
+* part1.cpp - _contains 1 simple function part1() that prints "This is part 1!" on stdout_
+* part1.h - _contains the definition of part1()_
+* part2.cpp - _contains 1 simple function part2() that prints "This is part 2!" on stdout_
+* part2.h - _contains the definition of part2()_
+* main.cpp - _contains main() which calls part1() and part2()_
+
+The Makefile we made in exercise 2.2 will work perfectly for this. See exercise 2.2, or see the repository for a closer look
+
+h3. Exercise 2.3.2 - Using pattern matching rules
+
+_The makefile created in the previous exercise is very explicit and rather large. In this exercise
+the idea is to use the same but shrink it down and make it less error prone. In make the solution
+is to use pattern-matching which has special syntax involving the % character for representing
+wildcards3. In other words, one writes a general rule that applies to many situations alleviating
+the need to write a rule for each and every file.
+In this version of the makefile two extra variables are needed_
+* Source files
+* Object files (acquired from the source file variable - how?)
+
+_Write a pattern matching rule that creates object files based on our cpp files.
+What makes this an improved solution as opposed the previous one?_
+
+This way of creating object files is easier as we do not have to manually create every single object file.
+
+{{collapse(Makefile)
+
+<pre>
+
+SOURCES=*.cpp
+OBJECTS=$(SOURCES:.cpp=.o)
+DEPS=$(SOURCES:.cpp=.d)
+EXECUTABLE=main
+CXXFLAGS=-I
+CXX=g++
+
+$(EXECUTABLE): $(DEPS) $(OBJECTS)
+	#$(CXX) $(CXXFLAGS) -o $@ $(OBJECTS)
+	$(CXX) -o $@ $(OBJECTS)
+	make clean
+
+$(OBJECTS): $(SOURCES)
+	$(CXX) -c $(SOURCES)
+
+%.d: %.cpp
+	$(CXX) -MT$(@:.d=.o) -MM $(CXXFLAGS) $^ > $@
+
+.PHONY: clean
+clean: 
+	rm -f *.d
+	rm -f *.o 
+	rm -f *.h.gch
+
+help: 
+	echo "Available targets are: all, clean and help"
+
+-include $(DEPS)
+
+</pre>
+
+}}
+
+As seen in the Makefile, we are using pattern matching rule with the wildcard syntax.
+
+h2. Exercise 2.4 - Problem...
+
+_Given is the following Makefile:_
+
+<pre>
+EXE=prog
+	OBJECTS=server.o data.o connection.o
+
+	$(EXE): $(OBJECTS)
+	$(CXX) -o $@ $^
+</pre>
+
+*Questions to consider:*
+
+* _How are the source files compiled to object files, what happens?_
+
+The command "-o" also invokes the compiler, resulting in compiling the source files, thus fulfilling the OBJECTS dependancy.
+
+* _When would you expect make to recompile our executable prog - be specific?_
+
+Whenever the object files change. This means that make will not recompile when the source files are edited.
+
+* _Make fails using this particular makefile in that not all dependencies are handled by the chosen approach. Which ones are not?_
+
+Only the object files are handled as a dependency to create the executable. The source files are not listed as one.
+
+* _Why is this dependency issue a serious problem?_
+
+As mentioned earlier, whenever we make changes in the source code, and then run make, it will not recompile!
+
+h2. Exercise 2.5 - Solution
+
+_*Given the following Makefile:*_
+
+<pre>
+SOURCES=main.cpp part1.cpp part2.cpp
+	OBJECTS=$(SOURCES :.cpp=.o)
+	DEPS=$(SOURCES :.cpp=.d)
+	EXE=prog
+	CXXFLAGS=-I.
+
+	$(EXE): $(DEPS) $(OBJECTS) # << Check the $(DEPS) new dependency
+		$(CXX) $(CXXFLAGS) -o $@ $(OBJECTS)
+	
+	# Rule that describes how a .d (dependency) file is created from a .cpp file
+	# Similar to the assigment that you just completed %.cpp -> %.o
+
+	%.d: %.cpp
+		$(CXX) -MT$(@:.d=.o) -MM $(CXXFLAGS) $^ > $@
+
+ -include $(DEPS)
+</pre>
+
+* _Describe and verify what it does and how it alleviates our prior dependency problems!_
+
+This Makefile insures a recompilation whenever the source is edited.
+Introduced in this makefile is the DEPS variable, creating .d (dependancy files) for every source file.
+
+* _In particular what does the command $(CXX) -MT$(@:.d=.o) -MM $(CXXFLAGS) $(SOURCES)
+do?_
+
+According to the CPP man files, the -MM command which is used creating the dependancy-target, outputs a rule that make uses, which includes all header and source files. The MM command omits system headers. The MT command is used together the MM command to set the target name to the exact "target string" specified.
+
+h1. Exercise 3 - Cross compiling  & Makefiles
+
+_Its important that you have completed the “Connecting to target” before commencing onward
+from here!_
+
+h2. Exercise 3.1 - First Try - KISS
+
+_Cross compiling is simple in the sense that gcc, in our case, is exchanged with another gcc that
+supports the desired target, e.g. arm-devkit-gcc. That being said lets revisit exercise 2.2 in
+which a simple makefile was made.
+Start by making a copy of this makefile called makefile.target and change it such that it
+uses the target compiler. Having done that invoke it using make._
+
+*Consider this*
+
+* _Do you have to do something special to invoke this particular makefile?_
+
+There are several ways to do this. We can either create a new makefile, that has other makefiles as targets or, we can invoke a specific makefile using the command:
+
+<pre>
+$ make -f Makefile.<name>
+</pre>
+
+We have renamed our makefiles to makefile.host and makefile.target. We can now use them with the command _make -f makefile.name>_
+
+* _At this point we have two makefiles in the same dir. How does this present a problem in
+the current setup and how are you forced to handle it?_
+
+We handle it with the _make Makefile.<name>_ command
+
+h2. Exercise 3.2 - The full Monty - Bye bye KISS
+
+_At this point we want to develop the final makefile that handles all the issues encountered in
+one go.
+Take your starting point in the listing 3.1 and finalize the missing parts such that we get a
+makefile that attains the desired functionality_
+
+We modify our own makefile so it fulfills these requirements.
+
+{{collapse(Makefile)
+<pre>
+OBJECTS=$(patsubst %,$(BUILD_DIR)/%,$(SOURCES:.cpp=.o))
+DEPS=$(patsubst %,$(BUILD_DIR)/%,$(SOURCES:.cpp=.d))
+SOURCES=$(wildcard *.cpp)
+CXXFLAGS=-I.
+EXE=prog
+
+# > make
+ifeq (${ARCH},)
+BUILD_DIR=build/host
+BIN_DIR=bin/host
+EXE=host_prog
+GXX=g++
+endif
+
+# > make ARCH=target
+ifeq (${ARCH},target)
+BUILD_DIR=build/target
+BIN_DIR=bin/target
+GXX=arm-devkit-g++
+EXE=target_prog
+endif
+
+$(BIN_DIR)/$(EXE): $(DEPS) $(OBJECTS) 
+	mkdir -p $(BIN_DIR)
+	$(CXX) $(CXXFLAGS) -o $@ $(OBJECTS)
+
+$(BUILD_DIR)/%.o: %.cpp
+	mkdir -p $(BUILD_DIR)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+.PHONY: clean
+clean:
+	rm -rf build
+	rm -rf bin
+
+$(BUILD_DIR)/%.d: %.cpp
+	mkdir -p $(BUILD_DIR)
+	$(CXX) -MT $(@:.d=.o) -MM $(CXXFLAGS) $^ > $@
+
+-include $(DEPS)
+</pre>
+}}
+
+h1. Exercise 4 - Libraries
+
+h2. Exercise 4.1 Using libraries
+
+_In numerous situations the functionality you need to use is placed in a library for everyone to
+use.
+A lot of commandline programs are pretty boring from a TUI6 point of view. Just simple read
+lines and printfs nothing fancy. Sometimes, though, one would like it to be more fancy. This is
+where ncurses may help out._
+
+_Find the hello world program or something similar on their web page http://tldp.org/HOWTO/
+NCURSES-Programming-HOWTO/ and remember to link with their library (how, is also shown on
+their web page). Their hello world program is nothing fancy, but it illustrates some simple
+features and importantly forces you to link a library to your program._
+
+_Pick out one of your already created makefiles and modify it such that you may link and
+afterwards run the program_
+
+We found an "ncurses-oriented" hello_world program, which we use to test the library.
+
+{{collapse(Show source)
+<pre>
+#include <ncurses.h>
+
+int main()
+{	
+	initscr();			/* Start curses mode 		  */
+	printw("Hello World !!!");	/* Print Hello World		  */
+	refresh();			/* Print it on to the real screen */
+	getch();			/* Wait for user input */
+	endwin();			/* End curses mode		  */
+
+	return 0;
+}
+
+</pre>
+
+}}
+
+* _How do you link a library to a program?_
+
+When directly invoking the g++/gcc compiler in the terminal we use _-lncurses_ 
+
+In our makefile we have created a new variable LIBS, that contains the library. If an external library is used. This is where to specify its filesystem path.
+
+{{collapse(Makefile)
+<pre>
+OBJECTS=$(patsubst %,$(BUILD_DIR)/%,$(SOURCES:.cpp=.o))
+DEPS=$(patsubst %,$(BUILD_DIR)/%,$(SOURCES:.cpp=.d))
+SOURCES=$(wildcard *.cpp)
+LIBS=-lncurses
+CXXFLAGS=-I.
+EXE=prog
+
+# > make
+ifeq (${ARCH},)
+BUILD_DIR=build/host
+BIN_DIR=bin/host
+EXE=host_prog
+GXX=g++
+endif
+
+# > make ARCH=target
+ifeq (${ARCH},target)
+BUILD_DIR=build/target
+BIN_DIR=bin/target
+GXX=arm-devkit-g++
+EXE=target_prog
+endif
+
+$(BIN_DIR)/$(EXE): $(DEPS) $(OBJECTS) 
+	mkdir -p $(BIN_DIR)
+	$(CXX) $(CXXFLAGS) -o $@ $(OBJECTS) $(LIBS)
+
+$(BUILD_DIR)/%.o: %.cpp
+	mkdir -p $(BUILD_DIR)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+.PHONY: clean
+clean:
+	rm -rf build
+	rm -rf bin
+
+$(BUILD_DIR)/%.d: %.cpp
+	mkdir -p $(BUILD_DIR)
+	$(CXX) -MT $(@:.d=.o) -MM $(CXXFLAGS) $^ > $@
+
+-include $(DEPS)
+</pre>
+}}
+
+<pre>
+$g++ <source_file> -lncurses
+</pre>
+
+* _When linking a library to a given program one obviously need to know the name of the
+file. However, is the name of the file as found on the disk exactly the same characterwise
+as when supplying it to gcc?_
+
+If the used library is installed into the system, it can be linked by using -l<library_name>
+
+h2. Exercise 4.2 - Creating your own static library (OPTIONAL)
+
+* _How do you make a static library?_
+
+* _Why would you do it?_
+
+* _Which changes are needed in our makefile to facilitate this?_
+
+* _In this exercise the static library is an integral of the same makefile. How do you think
+a more realistic solution would like? And which changes to the makefiles would this
+encompass?_

@@ -1,0 +1,201 @@
+h1. Evercise 02 - Posix Threads
+
+{{>toc}}
+
+h2. Introduction
+
+In this exercise you will gain experience in creating and handling threads in Linux using Posix threads. You will also experience some of the problems involved in multiprogramming, particularly the shared data problem.
+
+h2. Prerequisites
+
+Have access to Kubuntu on the VMware Golden Image and the DevKit8000 target.
+
+h1. Exercise 1 - Creating Posix Threads
+
+Write a program that creates two threads. When created, the threads must be passed an ID which they will print to stdout every second along with the number of times the thread has printed to stdout . When the threads have written to stdout 10 times each, they shall terminate.
+The main() function must wait for the two threads to terminate before continuing (hint: Look up pthread_join()).
+
+*What happens if function main() returns immediately after creating the threads? Why?*
+
+Hvis ikke _pthread_join()_ kaldes for hver tråd, vil _main_ bare forsætte gennem programmet og afslutte når den møder _return 0;_ 
+Ved brug af _pthread_join()_ vil main vente på at trådene selv kalder _pthread_exit()_. Når tråden(e) så har "joinet" vil _main_ forsætte og afslutte når den igen møder _return 0;_.
+
+*The seemingly easy tast of passing the ID to the thread may present a challange; In your chosen solution what have you done? Have you useed a pointer or a scalar?*
+
+<pre><code class="cpp">
+// oprettelse af tråde nummer 1, hvor id_1 sende med som argument
+pthread_create(&threads[0], NULL, &func, (void*)&id_1);
+</code></pre>
+
+
+<pre><code class="cpp">
+// re-castning af id
+int id = *(int*)ptr;
+</code></pre>
+
+Når dette ID skal sende med gør vi det ved at _caste_ ID'ets adresse til en void-pointer. Inde i funktionen laver vi så en _int id_ som sættes lig _ptr_. Da _ptr_ ikke kan bruges i sig selv (det er indtil videre en void-pointer, som peger på et "tilfældigt" sted i hukommelsen), er vi nød til at fortælle _ptr_ at den er en int-pointer OG at vi ikke skal bruge integerens adresse, men dens værdi.
+
+h1. Exercise 2 - Sharing data between threads
+
+_Create a program that creates two threads, incrementer and reader. The two threads share an
+unsigned integer variable named shared which is initially 0. incrementer increments shared
+every second while reader reads it every second and outputs it to stdout ._
+
+{{collapse(View code..)
+
+<pre><code class="cpp">
+
+void* incrementer(void * arg);
+void* reader(void * arg);
+
+int main()
+{
+  pthread_t threads[2];
+
+  unsigned int shared = 0;
+
+  std::cout << "Creating threads..\n";
+  pthread_create(&threads[0], NULL, &incrementer, (void*)&shared);
+  pthread_create(&threads[1], NULL, &reader, (void*)&shared);
+
+  std::cout << "Threads doing their thing..\n";
+
+  std::cout << "Joining threads\n";
+  pthread_join(threads[0], NULL);
+  pthread_join(threads[1], NULL);
+
+  std::cout << "Done! Process exiting..\n";
+  return 0;
+}
+
+void* incrementer(void* arg)
+{
+  while(1)
+    {
+      //Incrementing casted arg
+      (*(unsigned int*)arg)++;
+      sleep(1);
+    }
+}
+
+void* reader(void* arg)
+{
+  while(1)
+    {
+      //Printing casted arg
+      std::cout << "Shared = " << (*(unsigned int*)arg) << "\n";
+      sleep(1);
+    }
+}
+
+</code class></pre>
+
+}}
+* Are there any problems in this program? Do you see any? Why (not)?
+
+When running the executable we see how the reader function sometimes skips a number. The reason for this, is that we are only using the _sleep()_
+function to synchronize between the two threads. This is a problem as it is the CPU scheduler that determines each threads CPU time.
+
+h1. Exercise 3 - Sharing a vector class between threads
+
+{{collapse(The task..)
+
+_The supplied class Vector holds 10.000 elements per default, which at all times must have
+the same value. Vector::setAndTest() sets the value of all the elements and then immediately
+checks that the Vector object is consistent (all elements hold the expected value)._
+
+_Create a thread function writer that uses Vector::setAndTest() to set and test the value of
+a shared Vector object. Then create a main() function that creates a user-defined number of
+writer threads (between 1 and 100), each with their own unique ID. Let each writer set and
+test the shared Vector object to its ID every second. If a writer detects an inconsistency in the
+shared Vector object (i.e. setAndTest() returns false ), it should write an error message._
+
+_Run the program with different number of threads. Do your writers detect any problems? Are
+there any problems in this program? Do you see them? Why do you (not) see them?_
+
+}}
+
+
+We instantiate an object of the Vector class, which we use to call the setAndTest() function. The threads are passed an ID, that is used to identify which thread reports success and which to report failure. See the repo for the full source code.
+
+{{collapse(Program output sample..)
+
+!https://redmine.iha.dk/courses/projects/i3isu-e2015_blackboardsux/repository/revisions/master/entry/2-lecture/0-mainpage/images/ex3.png!
+
+}}
+
+
+{{collapse(Code sample from thread function: writer)
+<pre>
+<code class="cpp">
+void * writer(void *arg) {
+	int id = *(int *)arg;
+	while(1){
+		sleep(1);
+		if (!v.setAndTest(id)){
+			std::cout << "Failure from thread: " << id << std::endl;
+		}
+		else {
+			std::cout << "succes from thread: " << id << std::endl;
+		}
+	}
+}
+</pre>
+
+}}<pre>
+$make ARCH=target
+</pre>
+
+Below is a snippet of the output
+
+{{collapse(Show snippet..)
+
+!https://redmine.iha.dk/courses/projects/i3isu-e2015_blackboardsux/repository/revisions/master/entry/2-lecture/0-mainpage/images/ex5.png!
+
+}}</code class>
+
+The more threads we create the more errors we get. This can be caused by the threads "stumbling" upon  each other while trying to call the setAndTest function.
+
+h1. Exercise 4 - Tweaking parameters
+
+{{collapse(The task..)
+
+_Modify your program from exercise 3 so that the writers loop time is no longer one second but
+a user-defined number of microseconds. Experiment with the number of writers created and
+shorter loop time as well as the number of elements in the Vector - do you see any problems?
+Explain when and why they start to occur, and why you did not see them in exercise 3._
+
+}}
+
+
+We modified the program by changing the sleep function to _usleep()_. The usleep() function provides the possibility to use microseconds instead of seconds.
+
+The changes we experience are:
+
+* The more threads we make at the same time, the more errors we get. If we put a delay inside the thread creation loop, the amount of errors decrease.
+
+* When we increase the amount of time the loop inside writer function sleeps, the amount of errors also decrease.
+
+See the source code in the repository for a closer look. You can try to tweak it yourself by setting the global variable _sleepTime_
+
+h1. Exercise 5 - Testing on target
+
+{{collapse(The task)
+
+_Recompile the solution from exercise 3 and test it on target following the same line of thinking
+as in exercise 4. Compare your findings with those in that of exercise 4.
+Are the parameters that you found to present problems on the host the same that yield problems
+on the target?
+Why do you experience what you do?_
+
+}}
+
+We used our makefile with _make ARCH=target_ to compile our program for the target architecture.
+
+After inspecting the output, we come to the conclusion that we get the same kind of errors on the target as we did on our host system. The difference is that errors are less frequent on the target system than it is on the host. This could be the result of a smaller amount of CPU cores on the target system, and therefore less cores availible for the CPU scheduler.
+
+If you would like to try compiling our source code to the target yourself, please use the following make command: 
+
+<pre>
+$ make ARCH=target
+</pre>

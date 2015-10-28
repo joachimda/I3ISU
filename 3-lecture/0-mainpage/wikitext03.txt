@@ -1,0 +1,141 @@
+h1. Exercise 03 - Thread Synchronization I
+
+{{>toc}}
+
+{{collapse(Introduction)
+In this exercise you will get some routine using thread synchronization mechanisms. First, you
+will rectify the shared data problem you experienced in Exercise Posix Threads, by creating a
+mutex and a semaphore solution. Then, you will write the ScopeLocker class that utilizes the
+RAII idiom to ensure that locks are always relinquished.
+
+The problem in Exercises Sharing data between threads and Sharing a Vector class between
+threads from Posix Threads is that all threads share and utilize a resource and that resource is
+not protected. This is illustrated in the fact that a thread could not necessarily complete its read
+or write operation uninterrupted. For write operations the consequence could be inconsistent
+data in the shared resource, whereas a reader operation could return inconsistent data due to
+either an \in-between update" or a write being interrupted as mentioned above resulting in an
+error.
+This problem can be rectifed using a mutex/semaphore.
+}}
+
+h2. Exercise 1 Using the synchronization primitives
+
+Fix the Vector problem twice, once using a mutex and secondly using a semaphore.
+
+h3. Questions to consider
+
+*_Does it matter, which of the two you use in this scenario? Why, why not?_*
+
+No it does not matter which one we use. Because we use the semaphore as a mutex with the following 
+declaration:
+
+<pre><code class="cpp">
+sem_init(&sem, 0, 1);
+</code></pre>
+
+If the third argument (semaphoreValue) was different from 1, it would have made a differnce.
+
+*_Where have you placed the mutex/semaphore and why and ponder what the consequences
+are for your particular design solution?_*
+
+We declared the mutex and semaphore globally. If they were to be declared in the _main()_ they would have to be passed along to the thread when _pthread_create()_ was called. We could also have placed them in the class, which would have been a better solution, because then whoever wrote the _main()_ would'nt have to remember to lock and unlock the mutex/semaphore.
+
+{{collapse(Terminal print for mutex)
+!https://redmine.iha.dk/courses/projects/i3isu-e2015_blackboardsux/repository/revisions/master/entry/3-lecture/0-mainpage/img/ex1mutex.png!
+}}
+
+{{collapse(Terminal print for semaphore)
+!https://redmine.iha.dk/courses/projects/i3isu-e2015_blackboardsux/repository/revisions/master/entry/3-lecture/0-mainpage/img/ex1semaphore.png!
+}}
+
+h2. Exercise 2 Mutexes & Semaphores
+
+At this point you have used both mutexes and semaphores and you have been introduced to
+their merits. 
+For each of the two there are 2 main characteristics that hold true. Specify these 2 for both.
+
+With mutexes a block of code can only be accessed by *one* thread at a time. There is also ownership, 
+meaning that the mutex can only be released by the "holder", which is not the case with semaphores.
+
+If a semaphore is used. The semaphore can be assigned a value, which determines how many threads
+can access the block of code at any given time.
+
+h2. Exercise 3 Ensuring proper unlocking 
+
+{{collapse(Assignment)
+The method for data protection in Exercise 1 has one problem namely that the programmer
+is not forced to release the mutex/semaphore after he updates the shared data. This scenario
+poses a risc since a mutex or a semaphore can unintentionally be left in a locked state. This can
+be rectied by using the Scoped Locking idiom.
+The idea behind the Scoped Locking idiom2 is that you create a class ScopedLocker which is
+passed a mutex on construction. The ScopedLocker takes the mutex object in its constructor and
+holds it until its destruction - thus, it holds the mutex as long as it is in scope.
+Implement the class ScopedLocker and use it in class Vector to protect the resource. Verify that
+this improvement works. You only need to make it work with a mutex.
+}}
+
+The idea of the _Scoped Locking Idiom_ is that the class ScopedLocker, upon creation will lock the given 
+mutex. This however will only work if you also unlock it in the destructor.
+
+We have included snippets of our ScopedLock and Vector class. Otherwise everything can be found in our repo.
+
+{{collapse(ScopedLock.hpp)
+
+<pre><code class="cpp">
+#include <pthread.h>
+
+class Scoped_Lock 
+{
+public:
+	Scoped_Lock(pthread_mutex_t &mtx)
+	{
+		_mtx = &mtx;
+		pthread_mutex_lock(_mtx);
+	}
+	
+	~Scoped_Lock()
+	{
+		pthread_mutex_unlock(_mtx);
+	}
+
+	pthread_mutex_t *_mtx;
+};
+</code></pre>
+
+}}
+
+{{collapse(Vector.hpp)
+<pre><code class="cpp">
+.
+.
+.
+   bool setAndTest(int n)
+      {
+         Scoped_Lock myLock(mtx_);
+         set(n);
+         return test(n);
+      }
+.
+.
+.
+   int*           vector_;
+   unsigned int   size_;
+   pthread_mutex_t mtx_ = PTHREAD_MUTEX_INITIALIZER;
+.
+.
+.
+</code></pre>
+}}
+
+{{collapse(Terminal print for scopedLock on host)
+!https://redmine.iha.dk/courses/projects/i3isu-e2015_blackboardsux/repository/revisions/master/entry/3-lecture/0-mainpage/img/ex3scopedlock.png!
+}}
+
+h2. Exercise 3 On target
+
+Finally recompile your solution for Exercise 3 for target and verify that it actually works here
+as well.
+
+{{collapse(Running on target)
+!https://redmine.iha.dk/courses/projects/i3isu-e2015_blackboardsux/repository/revisions/master/entry/3-lecture/0-mainpage/img/ex4target.png!
+}}

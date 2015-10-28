@@ -1,0 +1,19 @@
+SOURCES=$(wildcard *.cpp)
+OBJECTS=$(SOURCES:.cpp=.o)
+EXECUTABLE=main.target
+CXX=arm-devkit-g++
+
+all: $(OBJECTS)
+	$(CXX) -o $(EXECUTABLE) $(OBJECTS)
+
+$(OBJECTS):
+	$(CXX) -c $(SOURCES)
+
+.PHONY: clean
+clean:
+	rm -f *.o 
+	rm -f *.h.gch
+	rm main.target
+
+help:
+	echo "Available targets are: all, clean and help"

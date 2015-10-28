@@ -1,0 +1,60 @@
+_Create a program that creates two threads, incrementer and reader. The two threads share an
+unsigned integer variable named shared which is initially 0. incrementer increments shared
+every second while reader reads it every second and outputs it to stdout ._
+
+{{collapse(View code..)
+
+<pre><code class="cpp">
+
+void* incrementer(void * arg);
+void* reader(void * arg);
+
+int main()
+{
+  pthread_t threads[2];
+
+  unsigned int shared = 0;
+
+  std::cout << "Creating threads..\n";
+  pthread_create(&threads[0], NULL, &incrementer, (void*)&shared);
+  pthread_create(&threads[1], NULL, &reader, (void*)&shared);
+
+  std::cout << "Threads doing their thing..\n";
+
+  std::cout << "Joining threads\n";
+  pthread_join(threads[0], NULL);
+  pthread_join(threads[1], NULL);
+
+  std::cout << "Done! Process exiting..\n";
+  return 0;
+}
+
+void* incrementer(void* arg)
+{
+  while(1)
+    {
+      //Incrementing casted arg
+      (*(unsigned int*)arg)++;
+      sleep(1);
+    }
+}
+
+void* reader(void* arg)
+{
+  while(1)
+    {
+      //Printing casted arg
+      std::cout << "Shared = " << (*(unsigned int*)arg) << "\n";
+      sleep(1);
+    }
+}
+
+</code class></pre>
+
+}}
+*Are there any problems in this program? Do you see any? Why (not)?
+
+When running the executable we see how the reader function sometimes skips a number. The reason for this, is that we are only using the _sleep()_
+function to synchronize between the two threads. This is a problem as it is the CPU scheduler that determines each threads CPU time.
+
+ 
