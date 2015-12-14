@@ -63,13 +63,6 @@ Der findes tre forskellige modeller:
 	\item Hybrid level threading.
 \end{itemize}
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=0.7\linewidth]{figs/userthreads}
-	\caption{User level threading illusteret.}
-	\label{fig:userthreads}
-\end{figure}
-
 \subsubsection*{User level threading}
 \begin{itemize}
 	\item Simpel implementering, ingen kernel support for threads.
@@ -79,9 +72,9 @@ Der findes tre forskellige modeller:
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.7\linewidth]{figs/kernelthreads}
-	\caption{Kernel level threading illusteret.}
-	\label{fig:kernelthreads}
+	\includegraphics[width=0.7\linewidth]{figs/userthreads}
+	\caption{User level threading illusteret.}
+	\label{fig:userthreads}
 \end{figure}
 
 \subsubsection*{Kernel level threading}
@@ -89,6 +82,19 @@ Der findes tre forskellige modeller:
 	\item Brug for thead bevisthed i kernel.
 	\item Mapper direkte til threads som \textit{scheduleren} kan kontrollere.
 	\item Effektiv brug af flere kerner.
+\end{itemize}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\linewidth]{figs/kernelthreads}
+	\caption{Kernel level threading illusteret.}
+	\label{fig:kernelthreads}
+\end{figure}
+
+\subsubsection*{Hybrid level threading}
+\begin{itemize}
+	\item Komplex implementering\todo{why?}.
+	\item Kræver god coordination mellem userspace og kernelspace scheduleren - ellers ikke optimal brug af resources.
 \end{itemize}
 
 \begin{figure}[h]
