@@ -130,6 +130,14 @@ Der findes tre forskellige modeller:
 	\item Kernel space er flagged i pagetable med privileged code, så kun kernel space programmer kan tilgå det memory. Page fault \todo{uddyb hvad der sker} hvis user-space process forsøger at tilgå.
 \end{itemize}
 
+\begin{figure}
+	\centering
+	\includegraphics[width=0.7\linewidth]{figs/pagetable}
+	\caption{Virtual mapping via pagetable.}
+	\label{fig:pagetable}
+\end{figure}
+
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\linewidth]{figs/memorydiagram}
