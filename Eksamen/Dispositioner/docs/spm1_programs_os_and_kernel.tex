@@ -130,6 +130,13 @@ Der findes tre forskellige modeller:
 	\item Kernel space er flagged i pagetable med privileged code, så kun kernel space programmer kan tilgå det memory.Der forekommer Page fault hvis en user-space process ulovigt forsøger at tilgå dette hukommelse.
 \end{itemize}
 
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\linewidth]{figs/pagetable}
+	\caption{Virtual mapping via pagetable.}
+	\label{fig:pagetable}
+\end{figure}
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\linewidth]{figs/memorydiagram}
@@ -138,6 +145,14 @@ Der findes tre forskellige modeller:
 \end{figure}
 
 Når der mappes virtuel memory til processer er der af sikkerhedshensyn indført random offsets for startaddressen på det virtuelle memory.\\
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.7\linewidth]{figs/virtualaddressspace}
+	\caption{Typical memory layout of a process on Linux/x86-32.}
+	\label{fig:virtualaddressspace}
+\end{figure}
+
 
 Resten, udover kernel space processens egen.\\
 
