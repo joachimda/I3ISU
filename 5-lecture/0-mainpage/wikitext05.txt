@@ -4,7 +4,9 @@ h1. Exercise 05 - Inter Thread Communication
 
 h3. Introduction
 
-In this exercise you will learn the basics of thread communication using the message queue concept presented in class. You will create a system consisting of two threads that communicate, one sending information that the other receives. You will hereby acquire knowledge of how to create a message, send it via a message queue and, receive and handle it in another thread.
+In this exercise you will learn the basics of thread communication using the message queue concept presented in class. 
+You will create a system consisting of two threads that communicate, one sending information that the other receives. 
+You will hereby acquire knowledge of how to create a message, send it via a message queue and, receive and handle it in another thread.
 These are key stone elements in Event Driven Programming which is very typical for embedded systems.
 There are numerous design considerations that you will be exposed to, thus widening your toolbox.
 
@@ -20,7 +22,9 @@ h3. Absolute requirements
 h2. Exercise 1 Creating a message queue
 
 {{collapse(Description)
-To have something tangible for our upcoming message queue, we start out creating the class Message. This class will from now on serve as the basis (parent) of all messages that are passed around in our system. In other words all other messages must inherit from this class. Remember that the destructor must be virtual.
+To have something tangible for our upcoming message queue, we start out creating the class Message. 
+This class will from now on serve as the basis (parent) of all messages that are passed around in our system. 
+In other words all other messages must inherit from this class. Remember that the destructor must be virtual.
 _Why is this last bit very important? Explain!_
 
 <pre> <code class="cpp">
@@ -31,8 +35,12 @@ public:
 };
 </code> </pre>
 
-Next we create the MsgQueue class itself. One of its aggregated variables is a container; this container is the one that will hold all incoming messages, before the receiving thread processes them one at a time.
-We must remember that the usage scenario is one where we have multiple writers and a single reader, which is why appropriate protection is vital. This protection must be implemented via the use of conditionals. Furthermore, as specified in the constructor call, a limit is set on the number of messages in our queue. Handling this limitation is likewise to be achieved using the use of the aforementioned conditionals.
+Next we create the MsgQueue class itself. One of its aggregated variables is a container; 
+this container is the one that will hold all incoming messages, before the receiving thread processes them one at a time.
+We must remember that the usage scenario is one where we have multiple writers and a single reader, 
+which is why appropriate protection is vital. This protection must be implemented via the use of conditionals. 
+Furthermore, as specified in the constructor call, a limit is set on the number of messages in our queue. 
+Handling this limitation is likewise to be achieved using the use of the aforementioned conditionals.
 
 <pre> <code class="cpp">
 class MsgQueue
@@ -54,12 +62,92 @@ Further demands:
 
 As stated earlier the incoming message must be placed in a container, which one to choose?
 Check your nearest STL vendor and see what he believes would be the right choice...
-Before you google for the container to use think about what you specifically need. A hint; www.cplusplus.com can provide you with guidance.
+Before you google for the container to use think about what you specifically need. 
+A hint; www.cplusplus.com can provide you with guidance.
 Please do note that there are numerous code examples of STL container uses on the net, so JFGI.
-As a last note: The class interface for MsgQueue in regard to methods is complete! This means you are not to add any yourselves! Your message handler is NOT part of this class nor are you supposed to sub-class it. Your message handler is a simple function that is called from your thread function... For more information see presentation.
+As a last note: The class interface for MsgQueue in regard to methods is complete! 
+This means you are not to add any yourselves! Your message handler is NOT part of this class nor are you supposed to sub-class it. 
+Your message handler is a simple function that is called from your thread function... For more information see presentation.
 }}
 
-*Before you implement anything write out your solution in pseudo code or flowcharts.*
+Our final implementation of the message queue:
+
+{{collapse(MsgQueue.h)
+<pre><code class="cpp">
+#ifndef MSGQUEUE_H
+#define MSGQUEUE_H
+#include <queue>
+#include "Message.h"
+#include <pthread.h>
+
+struct qItem {
+	unsigned long id_;
+	Message* msg_;
+};
+
+class MsgQueue : public Message {
+public:
+	MsgQueue(unsigned long maxSize)	{
+		maxSize_ = maxSize;
+	}
+
+	~MsgQueue()	{
+		pthread_mutex_destroy(&mutex);
+		pthread_cond_destroy(&notEmptySignal);
+		pthread_cond_destroy(&notFullSignal);
+	}
+
+	void send(unsigned long id, Message* msg) {
+		pthread_mutex_lock(&mutex);
+
+			// Block if queue is full
+		while (messageQueue.size() >= maxSize_) {
+			pthread_cond_wait(&notFullSignal, &mutex);
+		}
+
+		qItem item = { .id_ = id, .msg_ = msg};
+		messageQueue.push(item);
+
+		pthread_cond_signal(&notEmptySignal);
+		pthread_mutex_unlock(&mutex);
+	}
+
+	Message* receive(unsigned long &id) {
+		pthread_mutex_lock(&mutex);
+
+		// Block if queue is empty
+		while (messageQueue.empty()) {
+			pthread_cond_wait(&notEmptySignal, &mutex);
+		}
+
+		qItem item = messageQueue.front();
+		messageQueue.pop();
+		
+		id = item.id_;
+		pthread_cond_signal(&notFullSignal);
+		pthread_mutex_unlock(&mutex);
+
+		return item.msg_;
+	}
+private:
+	std::queue<qItem> messageQueue;
+	unsigned long maxSize_;
+	pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+	pthread_cond_t notEmptySignal = PTHREAD_COND_INITIALIZER;
+	pthread_cond_t notFullSignal = PTHREAD_COND_INITIALIZER;
+};
+
+#endif // MSGQUEUE_H
+</pre></code>
+}}
+
+As you can see on the message queue class above. We are using an std::queue to hold the queue items. 
+All thread protection is done within the class.
+The maximum size of the queue is passed along when instantiating a message queue object.
+
+In our implementation we make sure that the reciever blocks if the queue is empty, 
+and that the sender also blocks if the queue has reached its maximum size. Conditionals are 
+used to signal when an an item is popped and/or pushed via the sender/reciever.
 
 h2. Exercise 2 Sending data from one thread to another
 
@@ -76,27 +164,73 @@ struct Point3D : public Message
 };
 </code> </pre>
 
-Create two threads Sender and Receiver, where the Sender creates an object Point3D every second or so and sends it to the Receiver. The Receiver should continuously wait for new messages and, on reception, print the x , y , and z coordinates of the received Point3D object to the console.
+Create two threads Sender and Receiver, where the Sender creates an object Point3D every 
+second or so and sends it to the Receiver. The Receiver should continuously wait for new 
+messages and, on reception, print the x , y , and z coordinates of the received Point3D object to the console.
 
 !https://redmine.iha.dk/courses/projects/i3isu-e2015_blackboardsux/repository/revisions/master/entry/5-lecture/0-mainpage/img/seqdiag01.png!
 
-Create a function main() that creates a message queue and then spawns the two said threads running Sender and Receiver respectively that communicate via this message queue.
-Test your system - does the receiver thread receive what the sender sends?
-Questions to answer:
-* Who is responsible for disposing any given message?
-* Who should be the owner of the object instance of class MsgQueue ; Is it relevant in this particular scenario?
-* How are the threads brought to know about the object instance of MsgQueue ?
+Create a function main() that creates a message queue and then spawns the two said threads 
+running Sender and Receiver respectively that communicate via this message queue.
+
 }}
+
+h3. Questions to answer:
+
+* Test your system - does the receiver thread receive what the sender sends?
+
+Yes it does. We use a random number generator to assign values to the points. 
+See the console window below
+
+{{collapse(picture)
+
+!https://redmine.iha.dk/courses/attachments/download/10152/ex2DoesItWorkYesItDoes.PNG!
+
+}}
+
+* Who is responsible for disposing any given message?
+
+The one responsible for deleting the message is the last one handling it. 
+This would be the *recieving thread* after the messageHandler() function is called:
+
+{{collapse(code)
+<pre><code class="cpp">
+void* receiver(void* ptr)
+{
+	MsgQueue* myMsgQueue = static_cast<MsgQueue*>(ptr);
+
+	// wait for new point
+	while(true)
+	{
+		unsigned long mId;
+		Message* msg = myMsgQueue->recieve(mId);
+
+		// Handle the message
+		messageHandler(mId, msg);
+		delete msg;
+	}
+}
+</pre></code>
+}}
+
+* Who should be the owner of the object instance of class MsgQueue ; Is it relevant in this particular scenario?
+
+Everyone using the messagequeue has a pointer to it, but the messagequeue object is declared *globally*.
+
+* How are the threads brought to know about the object instance of MsgQueue ?
+
+As we just described, the threads using the queue has a pointer to it. 
+It is passed as the last parameter in _pthread_create()_ and casted with static cast. See the code snippet above for the use of static_cast
 
 h2. Exercise 3 Enhancing the PLCS with Message Queues
 
 {{collapse(Description)
-Reimplement your PLCS solution using Message Queues and thus messages as a means to communicate between car thread(s) and door controller thread.
+Reimplement your PLCS solution using Message Queues and thus messages as a means to 
+communicate between car thread(s) and door controller thread.
 The following are must have requirement for your is solution:
 * A thread for the entry guard, one for the exit guard and for each car instance.
 * Each thread’s thread function, named threadFunction() here, must resemble the code example shown in Listing 3.1. This means keeping to the same structure, but having the freedom to add extra input parameters to say the function handleMsg().
-* Your design and implementation must be able to handle multiple cars, but it is optional whether there is a maximum amount allowed in at any given time.
-Before you start any coding what so ever, you must either create a sequence or a state chart diagram! This diagram must be depicted in your solution, and you must state why you chose this particular diagram.
+* Your design and implementation must be able to handle multiple cars, but it is optional whether there is a maximum amount allowed in at any given time. Before you start any coding what so ever, you must either create a sequence or a state chart diagram! This diagram must be depicted in your solution, and you must state why you chose this particular diagram.
 
 <pre> <code class="cpp">
 void threadFunction ()
@@ -112,13 +246,79 @@ void threadFunction ()
 	/* Clean up , if needed */
 }
 </code> </pre>
-
-Questions to answer:
-* What is an event driven system?
-* How and where do you start this event driven system? (remember it is purely reactive!)
-* Explain your design choice in the specific situation where a given car is parked inside the carpark and waiting before leaving. Specifically how is the waiting situation handled?
-* Why is it important that each car has its own MsgQueue?
-* Compare the original Mutex/Conditional solution to the Message Queue solution.
-** In which ways do they resemble each other? Consider stepwise what happens in the original code and what happens in your new implementation based on Message Queues.
-** What do you consider to be the most important benefit achieved by using the EDP approach, elaborate.
 }}
+
+We have implemnted our PLCS with the newly implemented message queue class.
+
+A you can see on the picture from the test below, the cars now longer cut in line.
+
+{{collapse(Test)
+
+!https://redmine.iha.dk/courses/projects/i3isu-e2015_blackboardsux/repository/revisions/master/entry/5-lecture/0-mainpage/img/ex3one.png!
+
+}}
+
+{{collapse(CarThread implementation)
+
+<pre><code class="cpp">
+static void* carThreadFunction(void* idPtr)
+{
+	// deal with cast first
+    data_s* car = static_cast<data_s*>(idPtr);
+
+    // make request
+    entryOpenRequestMessage* open_Req = new entryOpenRequestMessage;
+    open_Req->car_id = car->car_id;
+    open_Req->from = car->car_messageQueue;
+    
+    // send initial req
+    car->car_messageQueue->send(REQ_ENTRY_OPEN, open_Req);
+    
+    // commence loop
+    while(true)
+    {
+        unsigned long id;
+        Message* msg = car->car_messageQueue->receive(id);
+        messageHandlerFunction(msg, id);
+        delete msg;
+    }
+}
+
+</pre></code>
+}}
+
+h3. Questions to answer:
+
+* What is an event driven system?
+
+An event driven system is a system that only reacts and executes upon events. 
+An example could be a graphical user interface with buttons. When the user presses these buttons, 
+an event is sent somewhere within the system, which causes the program to act accordingly.
+
+* How and where do you start this event driven system? (remember it is purely reactive!)
+
+In this exercise, this event driven system starts, when a message that is passed around and causes the program to act upon this.
+
+* Explain your design choice in the specific situation where a given car is parked inside the carpark and waiting before leaving. Specifically how is the waiting situation handled?
+
+When the car enters and parks it will wait for a number of seconds, before heading for the exit.
+
+* Why is it important that each car has its own MsgQueue?
+
+If each car didnt have its own queue, we would again be in a situation where multiple cars were 
+trying to drive through the parking lots entry point. This way we cannot be sure that the message is 
+really delivered, as the wrong recipient will throw it out.
+ 
+* Compare the original Mutex/Conditional solution to the Message Queue solution.
+
+This solution makes it "easier" or safer to write the code, as all thread safety is handled by the queue. 
+
+** In which ways do they resemble each other? Consider stepwise what happens in the original code and what happens in your new implementation based on Message Queues.
+
+They resemble each other in the way that they basically does the same thing. The "client" using 
+the queue system, does not need to worry about locking/unlocking, and therefore making the client job easier.
+
+** What do you consider to be the most important benefit achieved by using the EDP approach, elaborate.
+
+Clearly it is making programming easier, and provides abstraction as we do not need to worry 
+about signaling/broadcasting locking or unlocking mutexes to protect our shared data.

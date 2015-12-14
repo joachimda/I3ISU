@@ -1,0 +1,289 @@
+h1. Exercise 07 - Resource Handling
+
+{{>toc}}
+
+h2. Introduction
+
+_In embedded system and systems in general one of the most challenging tasks is to keep track
+of resources and relinquish them when they are not needed anymore. This is especially the case
+with dynamically allocated memory_
+
+h2. Prerequisites
+
+Before you can start on this exercise, you have to have:
+
+* Basic understanding of classes, constructors, destructors and operator overloading.
+
+* “Rule of 3”
+
+* Know what the different terms RAII, Smart Pointer and Counted Smart Pointer signify
+
+h2. Exercise 1 - Ensuring garbage collection on a dynamically allocated std::string
+
+_In this basic exercise we revisit the RAII idiom once more, however this time in an enhanced
+form, where our goal is to extend it with the SmartPointer idiom_
+
+_Recap: If we inspect the code from the ScopedLock class (or idiom) - see below - it becomes apparent
+that we have no way of accessing the data residing inside the class. These are considered
+private and, in the specific use case, sacred in order for the idiom to work as intended._
+
+<pre><code class="cpp">
+class ScopedLock {
+
+   ScopedLock(Mutex &mut);
+   ~ScopedLock();
+   void unlock();
+   void lock();
+};
+</code></pre>
+
+_In this exercise your task is to combine the above two mentioned idioms and write a class that
+encapsulates a std::string, such that garbage collection is enforced when leaving scope and
+that we get pointer like semantic and syntax usage.
+Implement the below shown UML class SmartString:_
+
+We wrote a class and tested it with the provided class.
+
+{{collapse(Code solution)
+
+<pre><code class="cpp">
+class SmartString
+{
+public:
+	SmartString(string* str)
+	{
+		str_ = str;	
+	}
+
+	~SmartString()
+	{
+		delete str_;
+	}
+
+	string* get()
+	{
+		return str_;
+	}
+
+	string* operator->()
+	{
+		return str_;
+	}
+
+	string& operator*()
+	{
+		return *str_;
+	}
+
+private:
+	string* str_;
+	SmartString(const SmartString&);
+	SmartString& operator=(const SmartString& other);
+};
+</code></pre>
+
+}}
+
+*The code snippet below can be used to verify that your solution works*
+
+{{collapse(main to verify)
+
+<pre><code class="cpp">
+int main (int argc , char * argv [])
+{
+   SmartString ss (new std :: string (" Hello world ") ) ;
+   std :: cout << " String length : " << ss - > length () << std :: endl ;
+
+   if( ss - > find (" world ") != std :: string :: npos )
+      std :: cout << "The ’ss ’ string does contain ’world ’" << std :: endl ;
+   else
+      std :: cout << "The ’ss ’ string does NOT contain ’world ’" << std ::
+         endl;
+
+   SmartString ss2 = ss ; // <- Deliberately why ? What happens ?
+}
+</code></pre>
+
+}}
+
+When using the provided main, we get the output shown below:
+
+{{collapse(Console output)
+!https://redmine.iha.dk/courses/attachments/download/10929/ex1_test.png!
+}}
+
+h3. Questions to answer
+
+* Why must the copy constructor and assignment operator be private with no implementation?
+and what is the consequence when these are private?
+Hint: Whats wrong with the default editions of the constructor/assignment operator and
+destructor methods for this particular class?
+
+When the copy constructor and the assignment operator over load is declared private it cannot be used. Though we do not use them, we declare them anyway, so that the compiler wont create its own.
+
+* What exactly does the operator->() do?
+
+It returns an object. In our case, this is the string. Accsessing the string in this manner, we have encapsulated it inside the smartstring.
+
+* See code for more question(s)?
+
+We have removed the following line in the provided code as the compiler reports an error.
+
+<pre><code class="cpp">
+SmartString ss2 = ss;
+</code></pre>
+
+This error occurs because the copy contructor and the assignment operator overload is declared private.
+
+
+
+
+
+
+
+
+
+h2. Exercise 2 - The counted Pointer
+
+_In this exercise we are going to extend our fine SmartString, such that multiple parties may
+have a “reference” to it.
+Since we want sharing of the data as opposed to what we did in Exercise 1, the assignment
+operator and copy constructor must now be implemented_
+
+h3. Things to be aware and consider
+
+* Why must the counter be dynamically allocated? Where should this happen?
+
+It must be the exact same variable that instances of the class use. This cannot be achieved if memory is allocated on the stack.
+
+* How is the copy constructor to be implemented?
+
+The copy constructor must assign a the object given as a parameter to the one we are working on. In our implementation the counter increment, is done in the assignment operator overload. When the assignment operator is used in the copy constructor, the counter is incremented.
+
+<pre><code class="cpp">
+SmartString(const SmartString& other)
+{
+	*this = other;   //using the assignment operator overload
+
+	cout << __PRETTY_FUNCTION__ << ", counter is: " << *counter_ << "." << endl;
+}
+</code></pre>
+
+* How is the assignment operator to be implemented?
+
+As we wrote before, the assignment operator overload is implemented so that it assigns its own the string pointer, to be the same as the SmartString& it was given as a parameter. Our overload also makes sure the counter is incremented.
+
+<pre><code class="cpp">
+SmartString& operator=(const SmartString& other)
+{
+	str_ = other.str_;
+	counter_ = other.counter_;
+	(*counter_)++;
+
+	cout << __PRETTY_FUNCTION__ << ", counter is: " << *counter_ << "." << endl;
+}
+</code></pre>
+
+* What happens in the destructor and how should it be implemented?
+
+Basically the destructor decrements the counter, and deletes both the string pointer and the counter if it reaches 0.
+
+_Create appropriate test harnesses to validate that your solution works. These test harnesses
+must be part of your documentation on the wiki._
+
+We created a main to test our code. See below:
+
+<pre><code class="cpp">
+int main(int argc, char* argv[])
+{
+	SmartString ss (new std::string("Hello world"));
+
+	SmartString ss2 = ss;
+}
+</code></pre>
+
+See the console output from the test below.
+
+{{collapse(Console output)
+
+!https://redmine.iha.dk/courses/attachments/download/10928/ex2_test.png!
+
+}}
+
+h2. Exercise 3 - Templated Counted Smart Pointer (OPTIONAL)
+
+no..
+
+h2. Exercise 4 - Discarding our solution in favor of boost::shared_ptr<>
+
+_During the different exercises we have embarked on a journey where each and every step improves/enhances
+our previous solution. More over we have gained a better understanding of the
+language that we utilize.
+In Exercise 3 we succeeded in creating a viable solution that in reality would improve our
+programs by making them less error-prone. However instead of reinventing the wheel, we will
+make a rather large jump and start using the boost library, in particular we will be using boost
+::shared_ptr<>_
+
+h3. Exercise 4.1 - Using boost::shared_ptr<>
+
+_The template class boost::shared_ptr<> incorporates the different aspects that we have covered
+and then some.
+Use the boost::shared_ptr<> and get to know it. Utilize the different test harnesses that you
+have concocted and create a new one that verifies that boost::shared_ptr<> works as intended,
+and that it can be used in the use-cases discussed above.
+As stated earlier the test harnesses must be presented on your wikis._
+
+We have created a main, that tests and verifies that the shared_ptr<> in the boost library, works as intended. See code and console output below.
+
+<pre><code class="cpp">
+int main(int argc, char* argv[])
+{
+	// ctor
+	cout << "\nTest of " << "Constructor." << endl;
+	boost::shared_ptr<string> sp1(new string("Hello world"));
+	cout << "sp1: " << *sp1 << endl;
+	cout << "Use count: " << sp1.use_count() << endl;
+
+	// copy ctor
+	{
+		cout << "\nTest of " << "Copy constructor and Destructor." << endl;
+		boost::shared_ptr<string> sp2(sp1);
+		cout << "sp2: " << *sp2 << endl;
+		cout << "Use count: " << sp2.use_count() << endl;
+	}
+	
+	// assign operator
+	cout << "\nTest of " << "Assignment operator." << endl;
+	boost::shared_ptr<string> sp3(new string("Derp"));
+	cout << "sp3: " << *sp3 << endl;
+	cout << "Use count: " << sp3.use_count() << endl;
+
+	// dtor
+        //cout << "sp2: " << *sp2 << endl;
+	//cout << "Use count: " << sp2.use_count() << endl;
+}
+
+</code></pre>
+
+We know that the destructor works, as a compiler error will occur if the commenting on the last two lines is removed. This error occurs because the sp2 only exists in the ctor scope.
+
+h3. Exercise 4.2 - 2 Messages wrapped in a boost::shared ptr<> (OPTIONAL)
+
+no...
+
+h2. Exercise 5 - Resource Handling
+
+*Perspective of this particular exercises:*
+
+* What do you consider a resource?
+
+CPU time, RAM, Storage, power,
+
+* In which situations do you foresee challenges with resources and how could they be handled?
+
+Memory leaks are handled well with this smartpointer  thing. Concurrency problems and their solutions, makes handling CPU time easier.
+
+* In particular regarding memory, when would you be able eliminate the need for allocations.
+Or when is it a must that something is allocated(on the heap)?
+
+When multiple objects needs to access the same memory, we generally want to allocate it on the heap (dynamically). Runtime allcoation also needs to be dynamic. 

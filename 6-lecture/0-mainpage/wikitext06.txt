@@ -1,0 +1,286 @@
+h1. Exercise 06 - OS API
+
+{{>toc}}
+
+h2. Exercise 1 - Completing the Linux skeleton of the OO OS Api
+ 
+_In this exercise you will be tasked with completing the OSApi library. The following files are
+missing or have not been completed._
+
+* inc/osapi/linux/Mutex.hpp - Missing 
+
+* linux/Mutex.cpp - Missing 
+
+* linux/Conditional.cpp - Already started 
+
+* linux/Utility.cpp - Missing
+
+* linux/Thread.cpp - Already started
+
+* linux/ThreadFunctor.cpp - Already started
+
+h3. Code snippets and code clarification
+
+{{collapse(Mutex.hpp)
+
+<pre><code class="cpp">
+namespace osapi
+{
+	class Conditional;
+
+	class Mutex : Notcopyable
+	{
+	public:
+		Mutex();
+		~Mutex();
+		void lock();
+		void unlock();
+	private:
+		friend class Conditional;
+		pthread_mutex_t mutte;
+	};
+}
+</pre></code>
+
+Please note the friended class "Conditional". This is necessary for the Linux oriented conditional to work correctly, as it uses the pthread_mutex_t member. If you take a look at the conditional class, you will see that the _wait()_ function takes a mutex as a single parameter.
+
+}}
+
+{{collapse(Mutex.cpp)
+
+<pre><code class="cpp">
+
+Mutex::Mutex()
+  { 
+    pthread_mutex_init(&mutte, NULL);
+  }
+
+    Mutex::~Mutex()
+  {
+    pthread_mutex_destroy(&mutte);
+  }
+    
+  void Mutex::lock()
+  {
+    pthread_mutex_lock(&mutte);
+  }
+    
+  void Mutex::unlock()
+  {
+    pthread_mutex_unlock(&mutte);
+  }
+
+</pre></code>
+
+This is the linux implementation of the Mutex class. Nothing fancy..
+
+}}
+
+{{collapse(Conditional.cpp)
+
+This one is quite large. For the full implementation, please go to the repository.
+
+<pre><code class="cpp">
+/*Added a destructor*/
+Conditional::~Conditional()
+  {
+      pthread_cond_destroy(&cond_);
+      pthread_condattr_destroy(&condattr_);
+  }
+...
+...
+/*Using PRECISE to get time, caused an error, so we changed it*/
+clock_gettime(CLOCK_MONOTONIC, &ts);
+</pre></code>
+}}
+
+{{collapse(Utility.cpp)
+
+When looking at the header file for Utility, we can see that only the method _sleep()_ needed implmentation.
+
+<pre><code class="cpp">
+void sleep(unsigned long msecs)
+    {
+        usleep(msecs*1000);
+    }
+</pre></code>
+
+}}
+
+{{collapse(Thread.cpp)
+
+We implemented a line of code in the _setpriority()_ method, thus setting the threads priority.
+
+Furthermore we implemented the missing _getPriority()_ method, and made sure that threads were created properly.
+
+<pre><code class="cpp">
+/* Missing thread creation */
+      pthread_create(&threadId_, NULL, ThreadFunctor::threadMapper, tf_);
+      pthread_attr_destroy(&attr);
+    }
+    else
+    {
+      /* Missing thread creation */
+    pthread_create(&threadId_, NULL, ThreadFunctor::threadMapper, tf_);
+
+    }
+    // If ok no exception was thrown thus we have a valid thread and its attached!
+    attached_ = true;
+  }
+...
+...
+if(!attached_) throw ThreadError();
+
+    /* Missing contents...*/
+    /*Setting the priority*/
+    priority_ = priority;
+...
+...
+Thread::ThreadPriority Thread::getPriority() const
+  {
+    return priority_;
+  }
+</pre></code>
+
+}}
+
+{{collapse(ThreadFunctor.cpp)
+
+The thing that were missing here, was the cast of thread:
+
+<pre><code class="cpp">
+ void* ThreadFunctor::threadMapper(void* thread)
+  {
+    /* Something is missing here - Determine what! */
+    /* Missing a cast!*/
+    ThreadFunctor* tf = static_cast<ThreadFunctor*>(thread);
+    tf->run();
+    tf->threadDone_.signal();
+    return NULL;
+  }
+</pre></code>
+
+}}
+
+h3. Questions to answer
+
+*Inspecting the OSApi library, describe the chosen setup and how it works.*
+Hint: The chosen: Directory structure, define usage, platform handling (e.g. windows,
+linux etc.) etc.
+
+Header files for OSAPI use is located in the /inc folder. 
+Platform dependant implementations is found in the respective windows and linux folders in the root directory. 
+When including headers in the /inc folder the compiler will use the platform specific implementation found in the /inc/osapi/<OS>.
+
+When using the libraries, one must include the necessary header in /inc.
+
+When using the POSIX thread API one must provide a free C function as the thread
+function. This means that some glue is inserted such that it is possible to have a method of a class as the thread function (run()). 
+
+*Describe which classes are involved, their responsibilitiesand how they interact.* 
+Hint: A good approach could be show a call stack or asequence diagram.
+
+The classes would be ThreadFunctor and Thread. Because using threads in linux requires one to use a method with a specific signature, we instead use ThreadFunctor to be inheirited from, thus forcing an implementation of the virtual run() method. So in order to create a thread you use a a object which inherits from the Functor and pass this to the Thread object. 
+
+*In the windows implementation the so-called pimpl/cheshire cat idiom is used. Explain
+how it is used and what is achieved in this particular situation.*
+
+By using a pointer to implementation we no longer have to recompile our solution in order to apply changes in our actual implementation. It also means that the user won't be able to see the source for the implementation, but will still be able to use the implementation. This is good because of multiple reasons. First of you never have to show your valuable code and this way more money is earned. Second, it will be easier to work in paralell as someone can work with the interface to your implementation without the actual implementation being finished. 
+
+*Why is the class Conditional a friend to class Mutex? What does it mean to be a friend?*
+Hint: See the interface for class Mutex as coded for the windows platform.
+
+If a class is friend to another, it will have access to its friends "private parts" as in methods and members.
+
+h2. Exercise 2 - On Target
+
+_Verify that your OSApi library can compile for both Linux host and target. The same applies
+to your test applications._
+
+After the completion of the above assignment, we were able to succesfully compile the library for both our host and for our DevKit target.
+
+Below you can see the output after running the makefile
+
+{{collapse(Compiling for host...)
+
+!https://redmine.iha.dk/courses/attachments/download/10788/OSAPIcompileForHost.PNG!
+
+}}
+
+{{collapse(Compiling for target...)
+
+!https://redmine.iha.dk/courses/attachments/download/10789/OSAPIcompileForTarget.png!
+
+}}
+
+h3. Compiling and running the test programs
+
+{{collapse(TestLog)
+!https://redmine.iha.dk/courses/attachments/download/10804/testlog.png!
+}}
+
+{{collapse(TestThread)
+!https://redmine.iha.dk/courses/attachments/download/10803/testthread.png!
+}}
+
+{{collapse(TestTime)
+!https://redmine.iha.dk/courses/attachments/download/10805/testtime.png!
+}}
+
+{{collapse(TestTimer)
+!https://redmine.iha.dk/courses/attachments/download/10806/testtimer.png!
+}}
+
+h3. Question to answer
+
+*Did you do need to change code for this to work, if so what?*
+
+Nothing, it worked out of the box.
+
+h2. Exercise 3 - PLCS now the OS API
+
+_At this point we have created the PLCS system and it works great with Message and Message queues :-).
+The next natural step would obviously be to port your PLCS application such that it now it uses your newly created OS Api.
+Before you start coding you must make a class diagram as well as a sequence state/event
+diagram. Elaborate on your chosen design. Diagrams and design considerations must be part of your handin.
+Again remember that the loop in the thread method run() must resemble the below code
+snippet in Listing 3.1._
+
+{{collapse(Listing 3.1)
+
+<pre><code class="cpp">
+
+void MyThread :: run ()
+ {
+ /* Whatever code you want */
+ while ( running_ )
+ {
+ unsigned long id ;
+ osapi :: Message * msg = mq_ . receive ( id ) ;
+ handleMsg ( msg , id ) ;
+ delete msg ;
+}
+/* Whatever code you want */
+
+</pre></code>
+}}
+
+_What is important here is that the receive() function must be in this loop and NOT anywhere
+else!_
+
+{{collapse(Sequence diagram)
+!https://redmine.iha.dk/courses/attachments/download/10790/seqDiagram.PNG!
+}}
+
+{{collapse(Class diagram)
+
+}}
+
+
+
+h3. Questions to answer
+
+* Which changes did you make and why?
+
+* Does this modification whereby you utilize the OSApi library improve your program
+or not. Substantiate you answer with reasoning.

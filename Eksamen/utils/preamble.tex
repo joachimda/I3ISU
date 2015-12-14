@@ -28,6 +28,18 @@ a4paper, % papirtype
 \usepackage{tikz}
 \usepackage[pages=some]{background}
 \usepackage{lastpage}
+\usepackage{tocloft} % needed for dotfill in contents
+\usepackage{url}
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks,
+	linkcolor={red!50!black}, % used to be: 'red!50!black', men det fuckede indholdsfortegnelsen...
+	citecolor={blue!50!black},
+	urlcolor={blue!80!black}
+}
+
+\usepackage[perpage]{footmisc} %% nulstiller footnote counter på hver side
+\usepackage{todonotes} %% tillader "to-do"-liste vha. \todo{opgave}
 
 %============================================================%
 %=== Package settings========================================%
@@ -45,26 +57,26 @@ a4paper, % papirtype
 
 %=== Indstillinger til kodestykker ==========================%
 \usepackage{listings} % kode
-	\lstset{
-		language = C++, 
-		backgroundcolor=\color{black!5},
-		basicstyle=\footnotesize,
-		commentstyle=\color{mygreen},
-		%frame=single, 						% laver en ramme om koden
-		keepspaces=true, 					% beholde indrykning
-		keywordstyle=\color{blue},
-		numbers=left, 
-		numbersep=5pt, 						% afstand fra nummer til kode
-		numberstyle=\color{mygray}, 		% linjenummer farve
-		stringstyle=\color{mymauve}, 		% string farve
-		tabsize=5,
-		otherkeywords={Node, Graph, NULL}, 	% til keywords 
+\lstset{
+	language = C++, 
+	backgroundcolor=\color{black!5},
+	basicstyle=\footnotesize,
+	commentstyle=\color{mygreen},
+	%frame=single, 						% laver en ramme om koden
+	keepspaces=true, 					% beholde indrykning
+	keywordstyle=\color{blue},
+	numbers=left, 
+	numbersep=5pt, 						% afstand fra nummer til kode
+	numberstyle=\color{mygray}, 		% linjenummer farve
+	stringstyle=\color{mymauve}, 		% string farve
+	tabsize=5,
+	otherkeywords={Node, Graph, NULL}, 	% til keywords 
 }
 
 % === Farver til kode =======================================%
-		\definecolor{mygreen}{rgb}{0,0.6,0}
-		\definecolor{mygray}{rgb}{0.5,0.5,0.5}
-		\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
 
 % === Header og footer indstillinger ========================%
 \pagestyle{fancy}	% sætter nyt headerformat i brug
@@ -73,9 +85,6 @@ a4paper, % papirtype
 % === Indholdsfortegnelse ===================================%
 \usepackage[english]{babel}	% bruges til at skrive ihft. på dansk
 \addto\captionsenglish{\renewcommand{\contentsname}{Indholdsfortegnelse}} % skriver inholdfortegnelse på dansk
-
-%\renewcommand{\thesection}{} % fjerner nummer fra sections, men beholder dem i indhodsfortegnelsen
-%\renewcommand{\thesubsection}{}
 
 \addtolength{\jot}{1em} % gør rowspacing med align større
 
