@@ -172,10 +172,25 @@ Vigtige grunde til at vi bruger virtuel hukommelse:
 \end{itemize}
 
 \subsection{Threads being executed on CPU, associated scheduler and cache}
+\textbf{Scheduleren} sætter processer op til eksekvering på CPU og sørger for at skifte (switche) mellem processer:
 
+\begin{enumerate}
+	\item Interrupt.
+	\item Save context.
+	\item Restore context.
+	\item Resume execution.
+\end{enumerate}
 
+Der er to måde at schedule på:
 
+\begin{itemize}
+	\item Preemptive - Preemptive modtager interrupt regulært og skifter proces.
+	\item Non-preemptive - Non-preemptive kræver at processen selv siger ''Nu må der skiftes''.
+\end{itemize}
 
+\subsubsection{Cache}
+Cache bruges i form af TLB\footnote{Transaction lookaside buffer}.
+Hver gang en virtual-to-physic translation sker, så gemmes det i TLB’en. Dette forøger hastigheden på næste lookup til samme addresse.
 
 
 
