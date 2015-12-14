@@ -7,24 +7,23 @@
 \BOOKMARK [2][-]{subsection.1.6}{Process anatomy}{section.1}% 7
 \BOOKMARK [2][-]{subsection.1.7}{Virtual memory}{section.1}% 8
 \BOOKMARK [2][-]{subsection.1.8}{Threads being executed on CPU, associated scheduler and cache}{section.1}% 9
-\BOOKMARK [3][-]{subsubsection.1.8.1}{Cache}{subsection.1.8}% 10
-\BOOKMARK [1][-]{section.2}{Synchronization and protection}{}% 11
-\BOOKMARK [2][-]{subsection.2.1}{Sub topics}{section.2}% 12
-\BOOKMARK [2][-]{subsection.2.2}{Curriculum}{section.2}% 13
-\BOOKMARK [2][-]{subsection.2.3}{Exercises}{section.2}% 14
-\BOOKMARK [1][-]{section.3}{Thread communication}{}% 15
-\BOOKMARK [2][-]{subsection.3.1}{Sub topic}{section.3}% 16
-\BOOKMARK [2][-]{subsection.3.2}{Curriculum}{section.3}% 17
-\BOOKMARK [2][-]{subsection.3.3}{Exercises}{section.3}% 18
-\BOOKMARK [1][-]{section.4}{OS API}{}% 19
-\BOOKMARK [2][-]{subsection.4.1}{Sub topics}{section.4}% 20
-\BOOKMARK [2][-]{subsection.4.2}{Curriculum}{section.4}% 21
-\BOOKMARK [2][-]{subsection.4.3}{Exercises}{section.4}% 22
-\BOOKMARK [1][-]{section.5}{Message Distribution System \(MDS\)}{}% 23
-\BOOKMARK [2][-]{subsection.5.1}{Sub topics}{section.5}% 24
-\BOOKMARK [2][-]{subsection.5.2}{Curriculum}{section.5}% 25
-\BOOKMARK [2][-]{subsection.5.3}{Exercises}{section.5}% 26
-\BOOKMARK [1][-]{section.6}{Resource handling}{}% 27
-\BOOKMARK [2][-]{subsection.6.1}{Sub topics}{section.6}% 28
-\BOOKMARK [2][-]{subsection.6.2}{Curriculum}{section.6}% 29
-\BOOKMARK [2][-]{subsection.6.3}{Exercises}{section.6}% 30
+\BOOKMARK [1][-]{section.2}{Synchronization and protection}{}% 10
+\BOOKMARK [2][-]{subsection.2.1}{Sub topics}{section.2}% 11
+\BOOKMARK [2][-]{subsection.2.2}{Curriculum}{section.2}% 12
+\BOOKMARK [2][-]{subsection.2.3}{Exercises}{section.2}% 13
+\BOOKMARK [1][-]{section.3}{Thread communication}{}% 14
+\BOOKMARK [2][-]{subsection.3.1}{Sub topic}{section.3}% 15
+\BOOKMARK [2][-]{subsection.3.2}{Curriculum}{section.3}% 16
+\BOOKMARK [2][-]{subsection.3.3}{Exercises}{section.3}% 17
+\BOOKMARK [1][-]{section.4}{OS API}{}% 18
+\BOOKMARK [2][-]{subsection.4.1}{Sub topics}{section.4}% 19
+\BOOKMARK [2][-]{subsection.4.2}{Curriculum}{section.4}% 20
+\BOOKMARK [2][-]{subsection.4.3}{Exercises}{section.4}% 21
+\BOOKMARK [1][-]{section.5}{Message Distribution System \(MDS\)}{}% 22
+\BOOKMARK [2][-]{subsection.5.1}{Sub topics}{section.5}% 23
+\BOOKMARK [2][-]{subsection.5.2}{Curriculum}{section.5}% 24
+\BOOKMARK [2][-]{subsection.5.3}{Exercises}{section.5}% 25
+\BOOKMARK [1][-]{section.6}{Resource handling}{}% 26
+\BOOKMARK [2][-]{subsection.6.1}{Sub topics}{section.6}% 27
+\BOOKMARK [2][-]{subsection.6.2}{Curriculum}{section.6}% 28
+\BOOKMARK [2][-]{subsection.6.3}{Exercises}{section.6}% 29
