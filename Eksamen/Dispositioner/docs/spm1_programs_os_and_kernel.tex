@@ -30,6 +30,8 @@
 	\item Posix Threads.
 \end{itemize}
 
+\newpage
+
 \subsection{Processes and threads}
 \begin{itemize}
 	\item En \textbf{process} er en instans af et program, som eksekveres.
@@ -46,12 +48,13 @@
 
 \subsubsection*{Threads}
 \begin{itemize}
-	\item Alle tråde i en process dele hukommelse på heap'en.
+	\item Alle tråde i en process deler hukommelse på heap'en.
 	\item Alle tråde har hver sin stack og \todo{hvad vil program counter sige?}program counter.
 	\item Kan fucke med hinanden
 	\begin{itemize}
 		\item Skal passe på at man ikke sletter de øvrige trådes data.
 	\end{itemize}
+	Tråde er forskellige fra processer selvom de deler flere egenskaber og kendetegn. En tråd eksekveres i en process
 \end{itemize}
 
 \subsection{Threading model}
@@ -70,12 +73,12 @@ Der findes tre forskellige modeller:
 	\item Ikke muligt at håndtere flere kerner\todo{hvorfor?}.
 \end{itemize}
 
-\begin{figure}[H]
-	\centering
-	\includegraphics{figs/userthreads}
-	\caption{User level threading illusteret.}
-	\label{fig:userthreads}
-\end{figure}
+%\begin{figure}[H]
+%	\centering
+%	\includegraphics{figs/userthreads}
+%	\caption{User level threading illusteret.}
+%	\label{fig:userthreads}
+%\end{figure}
 
 \subsubsection*{Kernel level threading}
 \begin{itemize}
@@ -84,12 +87,12 @@ Der findes tre forskellige modeller:
 	\item Effektiv brug af flere kerner.
 \end{itemize}
 
-\begin{figure}[H]
-	\centering
-	\includegraphics{figs/kernelthreads}
-	\caption{Kernel level threading illusteret.}
-	\label{fig:kernelthreads}
-\end{figure}
+%\begin{figure}[H]
+%	\centering
+%	\includegraphics{figs/kernelthreads}
+%	\caption{Kernel level threading illusteret.}
+%	\label{fig:kernelthreads}
+%\end{figure}
 
 \subsubsection*{Hybrid level threading}
 \begin{itemize}
@@ -97,12 +100,12 @@ Der findes tre forskellige modeller:
 	\item Kræver god koordination mellem userspace og kernelspace scheduleren - ellers ikke optimal brug af resources.
 \end{itemize}
 
-\begin{figure}[H]
-	\centering
-	\includegraphics{figs/hybridthreads}
-	\caption{Hybrid level threading illusteret.}
-	\label{fig:hybridthreads}
-\end{figure}
+%\begin{figure}[H]
+%	\centering
+%	\includegraphics{figs/hybridthreads}
+%	\caption{Hybrid level threading illusteret.}
+%	\label{fig:hybridthreads}
+%\end{figure}
 
 \subsection{Process anatomy}
 \begin{itemize}
@@ -110,9 +113,9 @@ Der findes tre forskellige modeller:
 	\item En process kører i sin egen memory sandbox, som et \textit{virtual address space} (4GB på 32-bit platform).
 	\item Hver process har sin egen \textbf{pagetable/virtual address space}.
 	\item Den virtuelle memory mapper til fysisk memory addresser vha. pagetables.
-	\item Alle processer har \bfseries{virtual address space}, hvor en del er bestemt til kernel space.
+	\item Alle processer har \textbf{virtual address space}, hvor en del er bestemt til kernel space.
 	\item Kernel space er ens for alle processor og mapper til samme fysiske hukommelse.
-	\item Kernel space er flagged i pagetable med privileged code\todo{udbydning}, så kun kernel space programmer kan tilgå det memory. Page fault hvis user-space process forsøger at tilgå.
+	\item Kernel space er flagged i pagetable med privileged code\todo{uddybning}, så kun kernel space programmer kan tilgå det memory. Page fault hvis user-space process forsøger at tilgå.
 \end{itemize}
 
 \subsection{Virtual memory}
