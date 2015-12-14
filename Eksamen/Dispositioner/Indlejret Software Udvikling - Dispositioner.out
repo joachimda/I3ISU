@@ -6,7 +6,7 @@
 \BOOKMARK [2][-]{subsection.1.5}{Threading model}{section.1}% 6
 \BOOKMARK [2][-]{subsection.1.6}{Process anatomy}{section.1}% 7
 \BOOKMARK [2][-]{subsection.1.7}{Virtual memory}{section.1}% 8
-\BOOKMARK [2][-]{subsection.1.8}{Threads being executed on CPU, associated scheduler and cache}{section.1}% 9
+\BOOKMARK [2][-]{subsection.1.8}{Threads being executed on CPU, associated Scheduler and Cache}{section.1}% 9
 \BOOKMARK [3][-]{subsubsection.1.8.1}{Cache}{subsection.1.8}% 10
 \BOOKMARK [1][-]{section.2}{Synchronization and protection}{}% 11
 \BOOKMARK [2][-]{subsection.2.1}{Sub topics}{section.2}% 12
