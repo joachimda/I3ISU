@@ -31,7 +31,58 @@
 \end{itemize}
 
 \subsection{Processes and threads}
+\begin{itemize}
+	\item En \textbf{process} er en instans af et program, som eksekveres.
+	\item En \textbf{thread} er en del af eksekveringen, alle processer har mindst én thread.
+\end{itemize}
+
+\subsubsection*{Processes}
+\begin{itemize}
+	\item Har hver sit memory space.
+	\item Process A kan ikke skrive i Process B's hukommelse.
+	\item Kan kun kommunikere gennem IPC\footnote{Inter-Process Communication, mekanismer kontrolleret af OS.}
+	\item Kan skabe andre processer som kan eksekvere det samme eller andre programmer.
+\end{itemize}
+
+\subsubsection*{Threads}
+\begin{itemize}
+	\item Alle tråde i en process dele hukommelse på heap'en.
+	\item Alle tråde har hver sin stack og \todo{hvad vil program counter sige?}program counter.
+	\item Kan fucke med hinanden
+	\begin{itemize}
+		\item Skal passe på at man ikke sletter de øvrige trådes data.
+	\end{itemize}
+\end{itemize}
+
 \subsection{Threading model}
+Der findes tre forskellige modeller:
+
+\begin{itemize}
+	\item User level threading.
+	\item Kernel level threading.
+	\item Hybrid level threading.
+\end{itemize}
+
+\subsubsection*{User level threading}
+\begin{itemize}
+	\item Simpel implementering, ingen kernel support for threads.
+	\item Ekstremt hurtig thread kontekst skift (\todo{woot?}ikke brug for kernel handling).
+	\item Ikke muligt at håndtere flere kerner\todo{hvorfor?}.
+\end{itemize}
+
+\subsubsection*{Kernel level threading}
+\begin{itemize}
+	\item Brug for thead bevisthed i kernel.
+	\item Mapper
+\end{itemize}
+
 \subsection{Process anatomy}
 \subsection{Virtual memory}
-\subsection{Threads being executed on CPU, the associated scheduler and cache}
+\subsection{Threads being executed on CPU, associated scheduler and cache}
+
+
+
+
+
+
+
