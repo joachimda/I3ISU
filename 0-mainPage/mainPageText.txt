@@ -12,7 +12,7 @@ h1. Exercises
 |[[Exercise 01 - Building C++ programs for host and Target]]	|%{background:lightgreen}Done%	        |%{background:lightgreen}OK%         |
 |[[Exercise 02 - Posix Threads]]				|%{background:lightgreen}Done%	        |%{background:lightgreen}OK%         |
 |[[Exercise 03 - Thread Synchronization I]]			|%{background:lightgreen}Done%	        |%{background:lightgreen}OK%         |
-|[[Exercise 04 - Thread Synchronization II]]			|%{background:lightgreen}Done%		|%{background:red}Not reviewed yet%  |
+|[[Exercise 04 - Thread Synchronization II]]			|%{background:lightgreen}Done%		|%{background:lightgreen}OK%         |
 |[[Exercise 05 - Thread Communication]]				|%{background:yellow}In progress...%	|%{background:red}Not reviewed yet%  |
 |[[Exercise 06 - OS API]]					|%{background:red}Not begun yet%	|%{background:red}Not reviewed yet%  |
 |[[Exercise 07 - Resource Handling]]				|%{background:red}Not begun yet%	|%{background:red}Not reviewed yet%  |

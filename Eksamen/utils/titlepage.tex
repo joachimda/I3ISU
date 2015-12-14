@@ -1,23 +1,58 @@
 % titlepage
 
-\newcommand{\myTitle}{Indlejret Software Udvikling Dispositioner}
+\newcommand{\myTitle}{
+	Indlejret Software Udvikling\\
+	Eksamens Dispositioner
+}
 
-%%%%%%%%%%%%%%%%%%%%
+\title{\myTitle}
 
 \begin{titlepage}
-	
 	\begin{center}
-		\line(1,0){400} \\
-		[0.5cm]
-		\huge{\bfseries \myTitle} \\
-		[0cm]
-		\line(1,0){300} \\
-		[1.5cm]
-		\textsc{\LARGE Aarhus School of Engineering} \\
-		[1cm]
-		\includegraphics[width=0.4\linewidth]{figs/tux} \\
-		[0.1cm]
-		\textsc{\large Eksamensnoter} \\
+		\bfseries{
+		\huge UNIVERSITY OF AARHUS
+		\vskip.2in
+		\textsc{\LARGE Faculty of Science}
+		\vskip.2in
+		\large Department of Engineering
+		\vskip1cm
+		
+		\begin{figure}[h]
+			\centering
+			\includegraphics[width=0.4\linewidth]{figs/tux}
+			\label{fig:tux}
+		\end{figure}
+
+		\huge \myTitle}
 	\end{center}
 	
+	\vskip1.5cm
+	
+	\begin{minipage}{.30\textwidth}
+		\begin{center}
+			\large 	
+			Bjørn Nørgaard\\
+			IKT\\
+			201370248\\
+			bjornnorgaard@post.au.dk
+		\end{center}
+	\end{minipage}
+	\hskip.3\textwidth
+	\begin{minipage}{.30\textwidth}
+		\begin{center}
+			\large 	
+			Joachim Andersen\\
+			IKT\\
+			20137032\\
+			joachimdam@post.au.dk
+		\end{center}
+	\end{minipage}
+	
+	\vskip3cm
+	
+	\centering
+	\bfseries{
+	\Large Sidste ændring: \today}
+	
+	\LaTeX-koden kan findes \href{https://github.com/BjornNorgaard/I4SWD/tree/master/Eksamen/Disposition}{her\footnote{\url{https://github.com/BjornNorgaard/I3ISU/tree/master/Eksamen}}}
 \end{titlepage}
