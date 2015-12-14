@@ -149,6 +149,27 @@ Indeholder statisk initialiserede variabler, dette område er \textbf{ikke} anon
 For eksempel, indholdet af en pointer er i data segmentet \todo{data og text segment??} men selve det den peger på ligger i \textbf{text segmentet}, som er \textit{read-only} og indeholder alt din kode \todo{min hvordan}. Text segmentet kortlægger ens binære filer i hukommelsen.
 
 \subsection{Virtual memory}
+Linux processer bliver eksekveret i et virtuelt miljø. På denne måde tror hver process at den har al hukommelsen for sig selv.\\
+
+Vigtige grunde til at vi bruger virtuel hukommelse:
+
+\begin{itemize}
+	\item Resource virtualization.
+	\begin{itemize}
+		\item En process skal ikke tænke på hvor meget hukommelse der er tilgængeligt.
+		\item Virtuel hukommelse gør en begrænset mængde fysisk hukommelse til en stor ressource.
+	\end{itemize}
+	\item Information isolation.
+	\begin{itemize}
+		\item Hver process arbejder i sit eget miljø, derved kan den ikke læse (eller skrive i) en anden process's hukommelse.
+		\item Forbedre sikkerheden, da en process således ikke kan ''spionere'' på en anden process.
+	\end{itemize}
+	\item Fault isolation.
+	\begin{itemize}
+		\item Kan ikke fucke andre processer op, da den ikke har adgang der deres hukommelse.
+		\item Hvis en process crasher/fejler/etc. ødelægger det ikke resten af systemet - problemet er isoleret i processen.
+	\end{itemize}
+\end{itemize}
 
 \subsection{Threads being executed on CPU, associated scheduler and cache}
 
