@@ -108,7 +108,11 @@ Der findes tre forskellige modeller:
 \begin{itemize}
 	\item Når et program startes, starter en ny process.
 	\item En process kører i sin egen memory sandbox, som et \textit{virtual address space} (4GB på 32-bit platform).
-	\item Hver process har sin egen \textbf{page table/virtual address space}.
+	\item Hver process har sin egen \textbf{pagetable/virtual address space}.
+	\item Den virtuelle memory mapper til fysisk memory addresser vha. pagetables.
+	\item Alle processer har \bfseries{virtual address space}, hvor en del er bestemt til kernel space.
+	\item Kernel space er ens for alle processor og mapper til samme fysiske hukommelse.
+	\item Kernel space er flagged i pagetable med privileged code\todo{udbydning}, så kun kernel space programmer kan tilgå det memory. Page fault hvis user-space process forsøger at tilgå.
 \end{itemize}
 
 \subsection{Virtual memory}
