@@ -50,7 +50,7 @@
 \begin{itemize}
 	\item Alle tråde i en process deler hukommelse på heap'en.
 	\item Alle tråde har hver sin stack og program counter. (Tæller instruktioner så CPU ved hvor i koden vi er kommet til).
-	\item Tråde er \textit{ikke} individuelle som processer, og deler derfor deres kode, data og ressourcer med hinanden. \todo{Kan tråde i separate processer kommunikere med hinanden uden IPC?}
+	\item Tråde er \textit{ikke} individuelle, som processer er, og deler derfor deres kode, data og ressourcer med hinanden, internt i processen. Da hver process' memory er virtuelt og ejet af processen, kan der ikke pilles heri udefra. Der kan med undtagelse kommunikeres med IPC.
 	\begin{itemize}
 		\item Skal passe på at man ikke sletter de øvrige trådes data.
 	\end{itemize}
@@ -127,7 +127,7 @@ Der findes tre forskellige modeller:
 	\item Den virtuelle memory mapper til fysisk memory addresser vha. pagetables.
 	\item Alle processer har \textbf{virtual address space}, hvor en del er bestemt til kernel space.
 	\item Kernel space er ens for alle processor og mapper til samme fysiske hukommelse.
-	\item Kernel space er flagged i pagetable med privileged code, så kun kernel space programmer kan tilgå det memory. Page fault \todo{uddyb hvad der sker} hvis user-space process forsøger at tilgå.
+	\item Kernel space er flagged i pagetable med privileged code, så kun kernel space programmer kan tilgå det memory.Der forekommer Page fault hvis en user-space process ulovigt forsøger at tilgå dette hukommelse.
 \end{itemize}
 
 \begin{figure}[H]
@@ -137,7 +137,7 @@ Der findes tre forskellige modeller:
 	\label{fig:memorydiagram}
 \end{figure}
 
-Alle processors mapping af virtual address space er den samme. Af sikkerhedshensyn er der indført random-størrelse offsets \todo{bedre forklaring} mellem de forskellige enheder (stack, heap, etc.).\\
+Når der mappes virtuel memory til processer er der af sikkerhedshensyn indført random offsets for startaddressen på det virtuelle memory.\\
 
 Resten, udover kernel space processens egen.\\
 
@@ -150,7 +150,7 @@ Her findes: Stack, heap, memory mapping, BSS, data og text/code segment.
 	\label{fig:memoryspace}
 \end{figure}
 
-Alle processor har deres eget virtual address space, som bliver skiftet ved context switches, se figur~\ref{fig:memoryspace}.\todo{wai?} 
+Alle processer har deres eget virtual address space, som der skiftes mellem ved context switches, se figur~\ref{fig:memoryspace}.
 
 \paragraph{BSS}
 Indeholder \textbf{ikke} initialiserede statiske variabler\todo{mere om dette?}. Dette område er anonymt\todo{udbyd!}.
