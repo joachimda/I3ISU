@@ -118,8 +118,6 @@ Der findes tre forskellige modeller:
 	\item Kernel space er flagged i pagetable med privileged code\todo{uddybning}, så kun kernel space programmer kan tilgå det memory. Page fault hvis user-space process forsøger at tilgå.
 \end{itemize}
 
-\subsection{Virtual memory}
-
 %\begin{figure}[H]
 %	\centering
 %	\includegraphics[width=\linewidth]{figs/memorydiagram}
@@ -127,9 +125,9 @@ Der findes tre forskellige modeller:
 %	\label{fig:memorydiagram}
 %\end{figure}
 
-Alle processors mapning ad virtual space er den samme. Af sikkerhedshensyn er der indført random-størrelse offsets mellem de forskellige enheder (stack, heap, etc.).\todo{bedre forklaring}.
+Alle processors mapning ad virtual space er den samme. Af sikkerhedshensyn er der indført random-størrelse offsets mellem de forskellige enheder (stack, heap, etc.).\todo{bedre forklaring}\\
 
-Resten, udover kernel space processens egen.
+Resten, udover kernel space processens egen.\\
 
 Her findes: Stack, heap, memory mapping, BSS, data og text/code segment.
 
@@ -147,7 +145,10 @@ Indeholder \textbf{ikke} initialiserede statiske variabler\todo{mere om dette?}.
 
 \paragraph{Data segment}
 Indeholder statisk initialiserede variabler, dette område er \textbf{ikke} anonymt, det er dog privat\todo{vil sige?}. Dette på kortlægger de initialiserede statiske værdier givet i source koden, fordi det er privat bliver ændringer ikke gemt i dette område\todo{igen, privat?}.\\
+
 For eksempel, indholdet af en pointer er i data segmentet \todo{data og text segment??} men selve det den peger på ligger i \textbf{text segmentet}, som er \textit{read-only} og indeholder alt din kode \todo{min hvordan}. Text segmentet kortlægger ens binære filer i hukommelsen.
+
+\subsection{Virtual memory}
 
 \subsection{Threads being executed on CPU, associated scheduler and cache}
 
