@@ -70,9 +70,9 @@ Der findes tre forskellige modeller:
 	\item Ikke muligt at håndtere flere kerner\todo{hvorfor?}.
 \end{itemize}
 
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
-	\includegraphics[width=0.7\linewidth]{figs/userthreads}
+	\includegraphics{figs/userthreads}
 	\caption{User level threading illusteret.}
 	\label{fig:userthreads}
 \end{figure}
@@ -84,9 +84,9 @@ Der findes tre forskellige modeller:
 	\item Effektiv brug af flere kerner.
 \end{itemize}
 
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
-	\includegraphics[width=0.7\linewidth]{figs/kernelthreads}
+	\includegraphics{figs/kernelthreads}
 	\caption{Kernel level threading illusteret.}
 	\label{fig:kernelthreads}
 \end{figure}
@@ -94,17 +94,23 @@ Der findes tre forskellige modeller:
 \subsubsection*{Hybrid level threading}
 \begin{itemize}
 	\item Komplex implementering\todo{why?}.
-	\item Kræver god coordination mellem userspace og kernelspace scheduleren - ellers ikke optimal brug af resources.
+	\item Kræver god koordination mellem userspace og kernelspace scheduleren - ellers ikke optimal brug af resources.
 \end{itemize}
 
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
-	\includegraphics[width=0.7\linewidth]{figs/hybridthreads}
+	\includegraphics{figs/hybridthreads}
 	\caption{Hybrid level threading illusteret.}
 	\label{fig:hybridthreads}
 \end{figure}
 
 \subsection{Process anatomy}
+\begin{itemize}
+	\item Når et program startes, starter en ny process.
+	\item En process kører i sin egen memory sandbox, som et \textit{virtual address space} (4GB på 32-bit platform).
+	\item Hver process har sin egen \textbf{page table/virtual address space}.
+\end{itemize}
+
 \subsection{Virtual memory}
 \subsection{Threads being executed on CPU, associated scheduler and cache}
 
