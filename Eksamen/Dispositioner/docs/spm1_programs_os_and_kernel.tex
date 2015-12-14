@@ -50,11 +50,21 @@
 \begin{itemize}
 	\item Alle tråde i en process deler hukommelse på heap'en.
 	\item Alle tråde har hver sin stack og \todo{hvad vil program counter sige?}program counter.
-	\item Kan fucke med hinanden
+	\item Tråde er \textit{ikke} individuelle som processer, og deler derfor deres kode, data og ressourcer med hinanden.
 	\begin{itemize}
 		\item Skal passe på at man ikke sletter de øvrige trådes data.
 	\end{itemize}
-	Tråde er forskellige fra processer selvom de deler flere egenskaber og kendetegn. En tråd eksekveres i en process
+\end{itemize}
+
+Tråde er forskellige fra processer selvom de deler flere egenskaber og kendetegn. En tråd eksekveres i en process. Man kan sige at en process er en enkelt sekvensstrøm inde i en process.
+Tråde gør det muligt at eksekvere flere sekvensstrømme ad gangen, og er derved en måde af effektivisere parallelisering.
+	
+\paragraph{Thread states}
+\begin{itemize}
+	\item Running
+	\item Blocked
+	\item Ready
+	\item Terminated
 \end{itemize}
 
 \subsection{Threading model}
