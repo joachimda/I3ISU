@@ -49,16 +49,15 @@
 \subsubsection*{Threads}
 \begin{itemize}
 	\item Alle tråde i en process deler hukommelse på heap'en.
-	\item Alle tråde har hver sin stack og \todo{hvad vil program counter sige?}program counter. (Tæller instruktioner så CPU ved hvor i koden vi er kommet til)
+	\item Alle tråde har hver sin stack og \todo{hvad vil program counter sige?}program counter.
 	\item Tråde er \textit{ikke} individuelle som processer, og deler derfor deres kode, data og ressourcer med hinanden.
 	\begin{itemize}
 		\item Skal passe på at man ikke sletter de øvrige trådes data.
 	\end{itemize}
-	\item Kan skabe andre child-threads.
 \end{itemize}
 
 Tråde er forskellige fra processer selvom de deler flere egenskaber og kendetegn. En tråd eksekveres i en process. Man kan sige at en process er en enkelt sekvensstrøm inde i en process.
-Tråde gør det muligt at eksekvere flere sekvensstrømme ad gangen, og er derved en måde af effektivisere parallelisering. OS's kernel giver gennem system calls mulighed for at oprette og nedlægge tråde.
+Tråde gør det muligt at eksekvere flere sekvensstrømme ad gangen, og er derved en måde af effektivisere parallelisering.
 	
 \paragraph{Thread states}
 \begin{itemize}
@@ -129,10 +128,41 @@ Der findes tre forskellige modeller:
 	\item Kernel space er flagged i pagetable med privileged code\todo{uddybning}, så kun kernel space programmer kan tilgå det memory. Page fault hvis user-space process forsøger at tilgå.
 \end{itemize}
 
+%\begin{figure}[H]
+%	\centering
+%	\includegraphics[width=\linewidth]{figs/memorydiagram}
+%	\caption{Diagram over virtual address space allokering.}
+%	\label{fig:memorydiagram}
+%\end{figure}
+
+Alle processors mapning ad virtual space er den samme. Af sikkerhedshensyn er der indført random-størrelse offsets mellem de forskellige enheder (stack, heap, etc.).\todo{bedre forklaring}\\
+
+Resten, udover kernel space processens egen.\\
+
+Her findes: Stack, heap, memory mapping, BSS, data og text/code segment.
+
+%\begin{figure}[H]
+%	\centering
+%	\includegraphics[width=\linewidth]{figs/memoryspace}
+%	\caption{Diagram for process switch.}
+%	\label{fig:memoryspace}
+%\end{figure}
+
+Alle processor har deres eget virtual address space, som bliver skiftet ved context switches, se figur~\ref{fig:memoryspace}. 
+
+\paragraph{BSS}
+Indeholder \textbf{ikke} initialiserede statiske variabler\todo{mere om dette?}. Dette område er anonymt\todo{udbyd!}.
+
+\paragraph{Data segment}
+Indeholder statisk initialiserede variabler, dette område er \textbf{ikke} anonymt, det er dog privat\todo{vil sige?}. Dette på kortlægger de initialiserede statiske værdier givet i source koden, fordi det er privat bliver ændringer ikke gemt i dette område\todo{igen, privat?}.\\
+
+For eksempel, indholdet af en pointer er i data segmentet \todo{data og text segment??} men selve det den peger på ligger i \textbf{text segmentet}, som er \textit{read-only} og indeholder alt din kode \todo{min hvordan}. Text segmentet kortlægger ens binære filer i hukommelsen.
+
 \subsection{Virtual memory}
 Linux processer bliver eksekveret i et virtuelt miljø. På denne måde tror hver process at den har al hukommelsen for sig selv.\\
 
 Vigtige grunde til at vi bruger virtuel hukommelse:
+
 \begin{itemize}
 	\item Resource virtualization.
 	\begin{itemize}
@@ -153,6 +183,20 @@ Vigtige grunde til at vi bruger virtuel hukommelse:
 
 \subsection{Threads being executed on CPU, associated Scheduler and Cache}
 \textbf{Scheduleren} sætter processer op til eksekvering på CPU og sørger for at skifte (switche) mellem processer:
+
+\begin{enumerate}
+	\item Interrupt.
+	\item Save context.
+	\item Restore context.
+	\item Resume execution.
+\end{enumerate}
+
+Der er to måde at schedule på:
+
+\begin{itemize}
+	\item Preemptive - Preemptive modtager interrupt regulært og skifter proces.
+	\item Non-preemptive - Non-preemptive kræver at processen selv siger ''Nu må der skiftes''.
+\end{itemize}
 
 \subsubsection{Cache}
 Cache bruges i form af TLB\footnote{Transaction lookaside buffer}.
