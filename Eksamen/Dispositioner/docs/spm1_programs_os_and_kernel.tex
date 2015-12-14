@@ -87,7 +87,7 @@ Der findes tre forskellige modeller:
 
 \begin{figure}[H]
 	\centering
-	\includegraphics{figs/userthreads}
+	\includegraphics[width=0.5\linewidth]{figs/userthreads}
 	\caption{User level threading illusteret.}
 	\label{fig:userthreads}
 \end{figure}
@@ -101,7 +101,7 @@ Der findes tre forskellige modeller:
 
 \begin{figure}[H]
 	\centering
-	\includegraphics{figs/kernelthreads}
+	\includegraphics[width=0.5\linewidth]{figs/kernelthreads}
 	\caption{Kernel level threading illusteret.}
 	\label{fig:kernelthreads}
 \end{figure}
@@ -114,7 +114,7 @@ Der findes tre forskellige modeller:
 
 \begin{figure}[H]
 	\centering
-	\includegraphics{figs/hybridthreads}
+	\includegraphics[width=0.5\linewidth]{figs/hybridthreads}
 	\caption{Hybrid level threading illusteret.}
 	\label{fig:hybridthreads}
 \end{figure}
@@ -168,12 +168,13 @@ Her findes: Stack, heap, memory mapping, BSS, data og text/code segment.
 Alle processer har deres eget virtual address space, som der skiftes mellem ved context switches, se figur~\ref{fig:memoryspace}.
 
 \paragraph{BSS}
-Indeholder \textbf{ikke} initialiserede statiske variabler\todo{mere om dette?}. Dette område er anonymt\todo{udbyd!}.
+Indeholder \textbf{ikke} initialiserede statiske variabler. Dette område er anonymt (mapper ikke til nogen fil, men er blok "reseveret").
 
 \paragraph{Data segment}
-Indeholder statisk initialiserede variabler, dette område er \textbf{ikke} anonymt, det er dog privat\todo{vil sige?}. Dette på kortlægger de initialiserede statiske værdier givet i source koden, fordi det er privat bliver ændringer ikke gemt i dette område\todo{igen, privat?}.\\
+Indeholder statisk allokerede og initialiserede variabler. Dette område er \textbf{ikke} anonymt og mapper til en fil på disken. Data segmentet kortlægger de initialiserede statiske værdier der er givet i source koden. Da dette er privat bliver ændringer ikke gemt i det mappede område.
 
-For eksempel, indholdet af en pointer er i data segmentet \todo{data og text segment??} men selve det den peger på ligger i \textbf{text segmentet}, som er \textit{read-only} og indeholder alt din kode \todo{min hvordan}. Text segmentet kortlægger ens binære filer i hukommelsen.
+\paragraph{Text segment}
+Tag et eksempel: indholdet af en pointer (X-bit addresse) er i data segmentet men selve det den peger på ligger i \textbf{text segmentet}, som er \textit{read-only} og indeholder alt din kode samt literals. Text segmentet mapper ens binære filer i hukommelsen (dette er read only, og forsøg på adgang resulterer i Segmentation fault).
 
 \subsection{Virtual memory}
 Linux processer bliver eksekveret i et virtuelt miljø. På denne måde tror hver process at den har al hukommelsen for sig selv.\\
@@ -216,5 +217,10 @@ Der er to måde at schedule på:
 \end{itemize}
 
 \subsubsection{Cache}
-Cache bruges i form af TLB\footnote{Transaction lookaside buffer}.
-Hver gang en virtual-to-physic translation sker, så gemmes det i TLB’en. Dette forøger hastigheden på næste lookup til samme address. \todo{uddyb TLB}
+De fleste CPU'er har minimum 3 typer caches:
+\begin{itemize}
+	\item Instruction cache - fremskynder instruction fetching.
+	\item Data cache - fremskynder fetch and store, og deles op i cache levels (L1, L2 osv.).
+	\item TLB (Translation Lookaside Buffer) - fremskynder oversættelse af virtuel til fysiske addresser (TLB er en del af MMU'en\footnote{Memory Management Unit})
+\end{itemize}
+TLB cache bruges hver gang en virtuel til fysisk oversættelse sker. De seneste data gemmes da i TLB’en. Dette forøger hastigheden på næste lookup til samme addresse.
