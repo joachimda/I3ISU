@@ -35,7 +35,16 @@
 
 \subsection{Data integrity - Concurrency challenge}
 
+Selvom informations deling tråde imellem er en af de væsentligste fordele ved multitrådede applikationer, er det vigtigt at se sig for når flere tråde behandler den samme data.
+Man bruger termet \textit{critical section} til at referere til et stykke kode der benytter en delt ressource, hvor dette bør gøres \textit{atomic}. Vi har derfor brug for en måde at sikre os eksklusiv adgang når der arbejdes på delte data.
+
 \subsection{Mutex and Semaphore}
+
+En ovenfornævnt kritisk sektion kan defineres ved hjælp af mutexes og semaphorer.
+
+\subsubsection{Mutexes}
+
+\subsubsection{Semaphores}
 
 \subsection{Mutex and Conditionals}
 
