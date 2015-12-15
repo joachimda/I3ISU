@@ -49,7 +49,7 @@ En tråd kan tage ejerskab over en mutex, dvs at mutexen låses, og ikke kan tag
 En mutex skal initialiseres og destrueres.
 
 \begin{itemize}
-	\item textit{lock(mut)} - tråden forsøger at tage mutexen. Funktionen er blokerende hvis mutexen er taget.
+	\item \textit{lock(mut)} - tråden forsøger at tage mutexen. Funktionen er blokerende hvis mutexen er taget.
 	\item \textit{trylock(mut)} - samme som \textit{lock()}, men i stedet for at blokere, returneres EBUSY
 	\item \textit{timedlock(mut, timeOut)} - samme som \textit{lock()}, hvor der dog her gives et timeout med som parameter, dvs. en tidsbegrænsing for hvor længe tråden skal vente på at få mutexen.
 	\item \textit{unlock(mut)} - tråden låser mutexen op. 
@@ -73,9 +73,21 @@ En named semaphor kan benyttes på tværs af urelaterede processer ved brug af d
 
 En unnamed semaphor bruges som udgangspunkt kun inden for samme process med mindre den er gemt i delt hukommelse. 
 
-Om en semaphor er named eller unnamed defineres i semaphorens initiering.
+Om en semaphor er named eller unnamed defineres i semaphorens initiering (anden parameter - flag).
 
-unnamed: 
+\begin{enumerate}
+\item unnamed: \textit{sem\_init(ptr\_sem, 0, init\_val)}
+\item named: \textit{sem\_init(ptr\_sem, 1, init\_val)}
+\end{enumerate}
+
+\paragraph{Eksempler på brugen af semaphorer}
+
+\begin{itemize}
+	\item Et eksempel på brugen af en en semaphor, kunne fx være at begrænse antallet af forbindelser til en database til 5.
+	\item begrænsning af CPU intensive opgaver til et bestemt antal CPU kerner. \todo{hvordan?} \\
+	\item \textit{take(sem)} - Hvis counteren er større end 0 dekrementeres denne og der returneres. Hvis counter er 0 blokeres der indtil den er større, hvorefter der så dekrementeres.
+	<item \textit{release(sem)} - inkrementerer counter med 1 og vækker evt. sovende tråde \todo{vækker sovende tråde?}. Alle tråde/processer kan kalde denne funktion, selvom de ikke har kaldt take.
+\end{itemize}
 
 \subsection{Mutex and Conditionals}
 
