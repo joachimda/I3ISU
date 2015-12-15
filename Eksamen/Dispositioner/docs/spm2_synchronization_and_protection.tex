@@ -217,14 +217,6 @@ item Consumer::get()
 \subsection{Dining philosophers}
 Wikipedia om problemet findes \href{https://en.wikipedia.org/wiki/Dining_philosophers_problem}{her}.
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=0.5\linewidth]{figs/spm2/dining}
-	\caption{Dining philophers problem illustrated. Med uret fra toppen: Platon, Konfuzius, Socrates, Voltaire og Descartes.}
-	\label{fig:dining}
-\end{figure}
-
-\subsubsection{Løsninger}
 I section~\ref{sec:deadlock} er fire betingelser for deadlocks beskrevet. Vores opgave er at bryde mindst én af disse.
 
 \begin{enumerate}
@@ -234,19 +226,26 @@ I section~\ref{sec:deadlock} er fire betingelser for deadlocks beskrevet. Vores 
 	\item \textbf{Circular wait} - Bingo! Vi kan bryde denne cyklus!
 \end{enumerate}
 
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.5\linewidth]{figs/spm2/dining}
+	\caption{Dining philophers problem illustrated. Med uret fra toppen: Platon, Konfuzius, Socrates, Voltaire og Descartes.}
+	\label{fig:dining}
+\end{figure}
+
 Dette kan imidlertid gøres på flere måder:
 
-\paragraph{Ressource hierarchy solution}
+\subsubsection{Ressource hierarchy solution}
 Dette var Dijkstra's originale løsning på probelmet.
 
 Ved at etablere en bestemt rækkefølge som ressourcerne skal ''tages'' i, kan vi bryde cyklen. For vores tilfælde vil gaflerne blive nummereret. Når en filosof så vil spise skal han først tage gaflen med de \textbf{mindste} nummer.
 
-\paragraph{Arbitrator solution}
+\subsubsection{Arbitrator solution}
 Hvis de kun kan samle \textit{begge} eller \textit{ingen} af gaflerne kan samles op kan problemet løses. Dette gøres ved at filosofferne skal spørge en tjener\footnote{Tjeneren kan implementeres som en mutex.} om tilladelse før de tage gaflerne, hvorefter de samler gafler op, indtil de har begge. 
 
 Problemet bliver imidlertid så at kun én filosof kan spise af gangen, selv hvis der er flere gafler ledige.
 
-\paragraph{Chandry/Misra solution}
+\subsubsection{Chandry/Misra solution}
 I 1984 kom K. Mani Chandy og J. Misra med en anden løsning, som tillod at et arbitrært antal ''agents'' kan bruge et arbitrært antal ressourcer.
 
 Den kræver ikke nogen central enhed, men den kræver tilgengæld at enhederne kommunikerer. Se \href{https://en.wikipedia.org/wiki/Dining_philosophers_problem#Chandy.2FMisra_solution}{wiki} for præcis beskrivelse.
