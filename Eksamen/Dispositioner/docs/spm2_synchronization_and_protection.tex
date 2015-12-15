@@ -90,6 +90,46 @@ Om en semaphor er named eller unnamed defineres i semaphorens initiering (anden 
 \end{itemize}
 
 \subsection{Mutex and Conditionals}
+Conditionals gør det muligt for tråde at sende signaler til hinanden.
+
+Vi har brugt det meget sammen med mutexes, for at sikre eksklusiv adgang til delte variabler. Bruges med fordel for ikke at stå og tjekke en variabel hele tiden (spilde CPU).
+
+\begin{itemize}
+	\item $cond\_wait()$\\
+	\begin{itemize}
+		\item Frigiver mutex.
+		\item Blokere den kaldende tråd, indtil den vækkes af signal/broadcast.
+		\item Låser mutex igen.
+	\end{itemize}
+	\item $cond\_timedwait()$\\
+	\begin{itemize}
+		\item Er det samme som $cond\_wait()$, bortset fra at man kan angive en timeout. Når timeout'en er gået, vækkes tråden.
+	\end{itemize}
+	\item $cond\_signal()$\\
+	\begin{itemize}
+		\item Vækker \textit{mindst} én af de sovende tråde. OBS! Man kan risikere at flere tråde vækkes!
+	\end{itemize}
+	\item $cond\_broadcast()$\\
+	Vækker samtlige sovende tråde.
+\end{itemize}
+
+\subsubsection{Conditional variable - Fremgangsmåde}
+
+\begin{lstlisting}[otherkeywords={lock, unlock}]
+// How to use conditional variable
+void someFunction()
+{
+	lock(mtx);
+	
+	while(!door_open)
+		cond_wait(mtx, cond);
+		
+	// do something...
+	
+	unlock(mtx);
+}
+\end{lstlisting}
+Da $cond\_wait()$ først frigiver mutexen skal man altså låse den (mutexen) først.
 
 \subsection{Producer/Consumer problem}
 Også kaldet \textit{bounded-buffer problem}.\\
@@ -108,7 +148,7 @@ Hvis vi lader begge tråde checke om bufferen er tøm/fuld før de gør noget, s
 \subsubsection{Løsning med Mutex}
 
 \begin{lstlisting}[otherkeywords={item, buffer, unlock, lock, signal}]
-// Producers adds item to buffer
+// Producers put function
 void Producer::put(item i)
 {
 	lock(mtx);
@@ -142,8 +182,25 @@ item Comsumer::get()
 \end{lstlisting}
 
 \subsubsection{Løsning med Semaphore}
-\begin{lstlisting}[otherkeywords={}]
-empthySlotsSem = create_semaphore(buffer_size)
+\begin{lstlisting}[otherkeywords={create_semaphore, take, push, release, item}]
+// Solutions with semaphores
+empthySlotsSem = create_semaphore(buffer_size);
+usedSlotsSem   = create_semaphore(0);
+
+void Producer::put(item i)
+{
+	take(emptySlotsSem);
+	buffer.push(i);
+	release(usedSlotsSem);
+}
+
+item Consumer::get()
+{
+	take(usedSlotsSem);
+	item = buffer.pop();
+	release(emptySlotsSem);
+	return item;
+}
 \end{lstlisting}
 
 \subsection{Dining philosophers}
