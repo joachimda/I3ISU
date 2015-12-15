@@ -48,7 +48,21 @@ En tråd kan tage ejerskab over en mutex, dvs at mutexen låses, og ikke kan tag
 
 En mutex skal initialiseres og destrueres.
 
+\begin{itemize}
+	\item textit{lock(mut)} - tråden forsøger at tage mutexen. Funktionen er blokerende hvis mutexen er taget.
+	\item \textit{trylock(mut)} - samme som \textit{lock()}, men i stedet for at blokere, returneres EBUSY
+	\item \textit{timedlock(mut, timeOut)} - samme som \textit{lock()}, hvor der dog her gives et timeout med som parameter, dvs. en tidsbegrænsing for hvor længe tråden skal vente på at få mutexen.
+	\item \textit{unlock(mut)} - tråden låser mutexen op. 
+\end{itemize}
+
 \subsubsection{Semaphores}
+
+To typer semaphorer:
+\begin{enumerate}
+	\item Counted semaphore
+	\item Binær semaphore
+\end{enumerate}
+
 
 \subsection{Mutex and Conditionals}
 
