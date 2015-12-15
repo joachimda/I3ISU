@@ -86,7 +86,7 @@ Om en semaphor er named eller unnamed defineres i semaphorens initiering (anden 
 	\item Et eksempel på brugen af en en semaphor, kunne fx være at begrænse antallet af forbindelser til en database til 5.
 	\item begrænsning af CPU intensive opgaver til et bestemt antal CPU kerner. \todo{hvordan?} \\
 	\item \textit{take(sem)} - Hvis counteren er større end 0 dekrementeres denne og der returneres. Hvis counter er 0 blokeres der indtil den er større, hvorefter der så dekrementeres.
-	<item \textit{release(sem)} - inkrementerer counter med 1 og vækker evt. sovende tråde \todo{vækker sovende tråde?}. Alle tråde/processer kan kalde denne funktion, selvom de ikke har kaldt take.
+	<item \textit{release(sem)} - inkrementerer counter med 1 og vækker evt. blokerende tråde. \todo. Alle tråde/processer kan kalde denne funktion, selvom de ikke har kaldt take.
 \end{itemize}
 
 \subsection{Mutex and Conditionals}
