@@ -133,6 +133,15 @@ Da $cond\_wait()$ først frigiver mutexen skal man altså låse den (mutexen) f�
 
 Grunden til at $cond\_wait()$ er pakket ind i en $while()$ er fordi vi kan risikere at $cond\_wait()$ ''vækker'' tråden uden at det nødvendige signal er ''smidt''. Således hvis den vågner ved et uheld vil $while()$ sikre at den bare ligger sig til at sove igen.\\
 
+\subsection{Priority Inversion}
+Priority inversion er når en høj prioritetstråd bliver "preempted" af en lav prioritetstråd (ved at en lavere-prioritetstråd tager en mutex)
+Vi kan løse dette med de to metoder:
+
+\begin{itemize}
+	\item Priority inheritance - Når en tråd tager en mutex assignes den midlertidigt til at have den højeste prioritet af de tråde der ellers venter på mutexen.
+	\item Priority ceiling - Alle mutexes assignes til høj prioritet (priority ceiling). Denne prioritet assignes til ejeren af mutexen så snart den tages.
+\end{itemize}
+
 \subsection{Producer/Consumer problem}
 Også kaldet \textit{bounded-buffer problem}.\\
 
