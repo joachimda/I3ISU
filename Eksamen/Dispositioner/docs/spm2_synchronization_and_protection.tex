@@ -95,22 +95,26 @@ Conditionals gør det muligt for tråde at sende signaler til hinanden.
 Vi har brugt det meget sammen med mutexes, for at sikre eksklusiv adgang til delte variabler. Bruges med fordel for ikke at stå og tjekke en variabel hele tiden (spilde CPU).
 
 \begin{itemize}
-	\item $cond\_wait()$
+	\item $cond\_wait(cond, mtx)$
 	\begin{itemize}
 		\item Frigiver mutex.
 		\item Blokere den kaldende tråd, indtil den vækkes af signal/broadcast.
 		\item Låser mutex igen.
 	\end{itemize}
-	\item $cond\_timedwait()$
+	\item $cond\_timedwait(cond, mtx, time)$
 	\begin{itemize}
 		\item Er det samme som $cond\_wait()$, bortset fra at man kan angive en timeout. Når timeout'en er gået, vækkes tråden.
 	\end{itemize}
-	\item $cond\_signal()$
+	\item $cond\_signal(cond)$
 	\begin{itemize}
 		\item Vækker \textit{mindst} én af de sovende tråde. OBS! Man kan risikere at flere tråde vækkes!
+		\item Call $cond\_signal()$ if you want to get one thread to process a certain event.
 	\end{itemize}
-	\item $cond\_broadcast()$
-	Vækker samtlige sovende tråde.
+	\item $cond\_broadcast(cond)$
+	\begin{itemize}
+		\item Vækker samtlige sovende tråde.
+		\item Call $cond\_broadcast()$ in case something happens everybody is concerned about.
+	\end{itemize}
 \end{itemize}
 
 \subsubsection{Conditional variable - Fremgangsmåde}
@@ -122,7 +126,7 @@ void someFunction()
 	lock(mtx);
 	
 	while(!door_open)
-		cond_wait(mtx, cond);
+		cond_wait(cond, mtx);
 		
 	// do something...
 	
@@ -131,7 +135,7 @@ void someFunction()
 \end{lstlisting}
 Da $cond\_wait()$ først frigiver mutexen skal man altså låse den (mutexen) først.\\
 
-Grunden til at $cond\_wait()$ er pakket ind i en $while()$ er fordi vi kan risikere at $cond\_wait()$ ''vækker'' tråden uden at det nødvendige signal er ''smidt''. Således hvis den vågner ved et uheld vil $while()$ sikre at den bare ligger sig til at sove igen.\\
+Grunden til at $cond\_wait()$ er pakket ind i en $while()$ er fordi vi kan risikere at $cond\_wait()$ ''vækker'' tråden uden at det nødvendige signal er ''smidt''. Således at hvis den vågner ved et uheld vil $while()$ sikre at den bare ligger sig til at sove igen.\\
 
 \subsection{Priority Inversion}
 Priority inversion er når en høj prioritetstråd bliver "preempted" af en lav prioritetstråd (ved at en lavere-prioritetstråd tager en mutex)
@@ -163,8 +167,8 @@ Også kaldet \textit{bounded-buffer problem}.\\
 Når vi har to tråde som skal tilgå en data buffer.
 
 \begin{itemize}
-	\item En \textbf{Producer} som skal putte data i bufferen.
-	\item En \textbf{Consumer} som skal tage data ud af bufferen.
+	\item En \textbf{producer} som skal putte data i bufferen.
+	\item En \textbf{consumer} som skal tage data ud af bufferen.
 \end{itemize}
 
 Problemet opstår når Produceren forsøger at pushe til en fuld buffer, eller når consumeren forsøger at poppe fra en tom buffer.
