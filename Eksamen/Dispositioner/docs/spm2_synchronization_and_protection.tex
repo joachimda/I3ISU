@@ -137,26 +137,26 @@ Grunden til at $cond\_wait()$ er pakket ind i en $while()$ er fordi vi kan risik
 Priority inversion er når en høj prioritetstråd bliver "preempted" af en lav prioritetstråd (ved at en lavere-prioritetstråd tager en mutex)
 Vi kan løse dette med de to metoder:
 
+\subsubsection{Priority inheritance}
+Når en tråd tager en mutex assignes den midlertidigt til at have den højeste prioritet af de tråde der ellers venter på mutexen. Se figur~\ref{fig:inher}.
+	
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.7\linewidth]{figs/spm2/inher}
+	\includegraphics[width=0.8\linewidth]{figs/spm2/inher}
 	\caption{Eksempel med priority inheritance.}
 	\label{fig:inher}
 \end{figure}
 
+\subsubsection{Priority ceiling}
+Alle mutexes assignes til høj prioritet (priority ceiling). Denne prioritet assignes til ejeren af mutexen så snart den tages. Se figur~\ref{fig:ceili}.
+
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.7\linewidth]{figs/spm2/ceili}
+	\includegraphics[width=0.8\linewidth]{figs/spm2/ceili}
 	\caption{Eksempel med priority ceiling.}
 	\label{fig:ceili}
 \end{figure}
-
-
-\begin{itemize}
-	\item Priority inheritance - Når en tråd tager en mutex assignes den midlertidigt til at have den højeste prioritet af de tråde der ellers venter på mutexen. Se figur~\ref{fig:inher}.
-	\item Priority ceiling - Alle mutexes assignes til høj prioritet (priority ceiling). Denne prioritet assignes til ejeren af mutexen så snart den tages. Se figur~\ref{fig:ceili}.
-\end{itemize}
-
+	
 \subsection{Producer/Consumer problem}
 Også kaldet \textit{bounded-buffer problem}.\\
 
