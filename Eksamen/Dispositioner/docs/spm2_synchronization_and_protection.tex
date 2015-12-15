@@ -19,7 +19,7 @@
 	\item Kerrisk: Chapter 31: Thread Safety and Per-Thread Storage (Speed read)".
 	\item Kerrisk: Chapter 32: Thread Safety and Per-Thread Storage (Speed read)".
 	\item Kerrisk: Chapter 53: Posix Semaphores (Named not in focus for this exercise)".
-	\item OLA: "pthread-Tutorial" - chapters 4-6.
+	\item OLA: "Pthread-Tutorial" - chapters 4-6.
 	\item OLA: "Producer/Consumer problem".
 	\item OLA: "Dining Philosophers problem".
 \end{itemize}
@@ -48,7 +48,34 @@ En tråd kan tage ejerskab over en mutex, dvs at mutexen låses, og ikke kan tag
 
 En mutex skal initialiseres og destrueres.
 
-\subsubsection{Semaphores}
+\begin{itemize}
+	\item textit{lock(mut)} - tråden forsøger at tage mutexen. Funktionen er blokerende hvis mutexen er taget.
+	\item \textit{trylock(mut)} - samme som \textit{lock()}, men i stedet for at blokere, returneres EBUSY
+	\item \textit{timedlock(mut, timeOut)} - samme som \textit{lock()}, hvor der dog her gives et timeout med som parameter, dvs. en tidsbegrænsing for hvor længe tråden skal vente på at få mutexen.
+	\item \textit{unlock(mut)} - tråden låser mutexen op. 
+\end{itemize}
+
+\subsubsection{Semaphorer}
+En semaphor kan beskrives som en counter der tæller hvor meget af en ressource der tilgængelig.
+En mutex er det samme som en semaphor der er begrænset til værdierne 0 og 1 (binær).
+To typer semaphorer:
+
+\begin{enumerate}
+	\item Counted semaphore
+	\item Binær semaphore
+\end{enumerate}
+
+En semaphor kan ved at inkrementere/dekrementere en counter, holde styr på og begrænse antallet af klienter der opererer på en ressource. En semaphor kan deles på tværs af processer. I en semaphor er der ikke ejerskab, hvilket medfører at en semaphor kan frigives af en client selvom denne ikke taget den.
+
+\paragraph{Named og unnamed semaphorer}
+En named semaphor kan benyttes på tværs af urelaterede processer ved brug af dens navn.\todo{Se kommentar i latex koden}
+%Er det ikke noget med sem_open(\"name" som parameter?? hvad så når den er unnamed?
+
+En unnamed semaphor bruges som udgangspunkt kun inden for samme process med mindre den er gemt i delt hukommelse. 
+
+Om en semaphor er named eller unnamed defineres i semaphorens initiering.
+
+unnamed: 
 
 \subsection{Mutex and Conditionals}
 
