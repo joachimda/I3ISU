@@ -64,8 +64,29 @@ Wikipedia om problemet findes \href{https://en.wikipedia.org/wiki/Dining_philoso
 	\label{fig:dining}
 \end{figure}
 
-\subsubsection{Løsning}
+\subsubsection{Løsninger}
 I section~\ref{sec:deadlock} er fire betingelser for deadlocks beskrevet. Vores opgave er at bryde mindst én af disse.
+
+\begin{enumerate}
+	\item \textbf{Mutual exclution} - Nope, de skal have hver deres egen gaffel.
+	\item \textbf{Hold and Wait} eller \textbf{Resource holding} - Heller ikke, de skal have to gafler for at spise.
+	\item \textbf{No preemption\footnote{Læs om preemption i section~\ref{sec:execpu}}} - Nix, de må ikke tage hinandens gafler.
+	\item \textbf{Circular wait} - Bingo! Vi kan bryde denne cykel!
+\end{enumerate}
+
+Dette kan imidlertid gøres på flere måder:
+
+\paragraph{Ressource hierarchy solution}
+Dette var Dijkstra's originale løsning på probelmet.
+
+Ved at etablere en bestemt rækkefølge som ressourcerne skal ''tages'' i, kan vi bryde cyklen. For vores tilfælde vil gaflerne blive nummereret. Når en filosof så vil spise skal han først tage gaflen med de \textbf{mindste} nummer.
+
+\paragraph{Arbitrator solution}
+Hvis de kun kan samle \textit{begge} eller \textit{ingen} af gaflerne kan samles op kan problemet løses. Dette gøres ved at filosofferne skal spørge en tjener\footnote{Tjeneren kan implementeres som en mutex.} om tilladelse før de tage gaflerne, hvorefter de samler gafler op, indtil de har begge. 
+
+Problemet bliver imidlertid så at kun én filosof kan spise af gangen, selv hvis der er flere gafler ledige.
+
+
 
 \subsection{Dead locks}\label{sec:deadlock}
 Deadlock er en situation hvor tråde ikke frigiver deres ressourcer fordi de venter på ressourcer som andre tråde ligeledes holder mens de venter på samme ting.\\
