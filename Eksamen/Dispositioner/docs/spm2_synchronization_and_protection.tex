@@ -83,21 +83,21 @@ Conditionals gør det muligt for tråde at sende signaler til hinanden.
 Vi har brugt det meget sammen med mutexes, for at sikre eksklusiv adgang til delte variabler. Bruges med fordel for ikke at stå og tjekke en variabel hele tiden (spilde CPU).
 
 \begin{itemize}
-	\item $cond\_wait()$\\
+	\item $cond\_wait()$
 	\begin{itemize}
 		\item Frigiver mutex.
 		\item Blokere den kaldende tråd, indtil den vækkes af signal/broadcast.
 		\item Låser mutex igen.
 	\end{itemize}
-	\item $cond\_timedwait()$\\
+	\item $cond\_timedwait()$
 	\begin{itemize}
 		\item Er det samme som $cond\_wait()$, bortset fra at man kan angive en timeout. Når timeout'en er gået, vækkes tråden.
 	\end{itemize}
-	\item $cond\_signal()$\\
+	\item $cond\_signal()$
 	\begin{itemize}
 		\item Vækker \textit{mindst} én af de sovende tråde. OBS! Man kan risikere at flere tråde vækkes!
 	\end{itemize}
-	\item $cond\_broadcast()$\\
+	\item $cond\_broadcast()$
 	Vækker samtlige sovende tråde.
 \end{itemize}
 
