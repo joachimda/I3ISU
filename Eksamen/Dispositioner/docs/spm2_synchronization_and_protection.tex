@@ -54,6 +54,7 @@ En mutex skal initialiseres og destrueres.
 
 \subsection{Producer / Consumer problem}
 
+
 \subsection{Dining philosophers}
 Wikipedia om problemet findes \href{https://en.wikipedia.org/wiki/Dining_philosophers_problem}{her}.
 
@@ -86,7 +87,10 @@ Hvis de kun kan samle \textit{begge} eller \textit{ingen} af gaflerne kan samles
 
 Problemet bliver imidlertid så at kun én filosof kan spise af gangen, selv hvis der er flere gafler ledige.
 
+\paragraph{Chandry/Misra solution}
+I 1984 kom K. Mani Chandy og J. Misra med en anden løsning, som tillod at et arbitrært antal ''agents'' kan bruge et arbitrært antal ressourcer.
 
+Den kræver ikke nogen central enhed, men den kræver tilgengæld at enhederne kommunikerer. Se \href{https://en.wikipedia.org/wiki/Dining_philosophers_problem#Chandy.2FMisra_solution}{wiki} for præcis beskrivelse.
 
 \subsection{Dead locks}\label{sec:deadlock}
 Deadlock er en situation hvor tråde ikke frigiver deres ressourcer fordi de venter på ressourcer som andre tråde ligeledes holder mens de venter på samme ting.\\
