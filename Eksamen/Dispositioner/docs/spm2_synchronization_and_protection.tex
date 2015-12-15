@@ -203,7 +203,7 @@ item Comsumer::get()
 	while(size == 0)
 		wait(mtx, consumer_cond);
 		
-	get_from_buffer();
+	buffer.pop();
 	size--;
 	
 	unlock(mtx);
