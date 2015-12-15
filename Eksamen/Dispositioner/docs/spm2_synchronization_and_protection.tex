@@ -79,8 +79,60 @@ unnamed:
 
 \subsection{Mutex and Conditionals}
 
-\subsection{Producer / Consumer problem}
+\subsection{Producer/Consumer problem}
+Også kaldet \textit{bounded-buffer problem}.\\
 
+Når vi har to tråde som skal tilgå en data buffer.
+
+\begin{itemize}
+	\item En \textbf{Producer} som skal putte data i bufferen.
+	\item En \textbf{Consumer} som skal tage data ud af bufferen.
+\end{itemize}
+
+Problemet opstår når Produceren forsøger at pushe til en fuld buffer, eller når consumeren forsøger at poppe fra en tom buffer.
+
+Hvis vi lader begge tråde checke om bufferen er tøm/fuld før de gør noget, spilder vi kostbar CPU tid.
+
+\subsubsection{Løsning med Mutex}
+
+\begin{lstlisting}[otherkeywords={item, buffer, unlock, lock, signal}]
+// Producers adds item to buffer
+void Producer::put(item i)
+{
+	lock(mtx);
+	
+	while(size == max_size)
+		wait(mtx, producer_cond);
+		
+	buffer.push(i);
+	size++;
+	
+	unlock(mtx);
+	signal(consumer_cond);
+}
+\end{lstlisting}
+
+\begin{lstlisting}
+// Consumers get function
+item Comsumer::get()
+{
+	lock(mtx);
+	
+	while(size == 0)
+		wait(mtx, consumer_cond);
+		
+	get_from_buffer();
+	size--;
+	
+	unlock(mtx);
+	signal(producer_cond);
+}
+\end{lstlisting}
+
+\subsubsection{Løsning med Semaphore}
+\begin{lstlisting}[otherkeywords={}]
+empthySlotsSem = create_semaphore(buffer_size)
+\end{lstlisting}
 
 \subsection{Dining philosophers}
 Wikipedia om problemet findes \href{https://en.wikipedia.org/wiki/Dining_philosophers_problem}{her}.
