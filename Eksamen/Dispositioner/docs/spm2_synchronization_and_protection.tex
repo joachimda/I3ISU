@@ -96,7 +96,7 @@ Hvis vi lader begge tråde checke om bufferen er tøm/fuld før de gør noget, s
 \subsubsection{Løsning med Mutex}
 
 \begin{lstlisting}[otherkeywords={item, buffer, unlock, lock, signal}]
-// Producers adds item to buffer
+// Producers put function
 void Producer::put(item i)
 {
 	lock(mtx);
@@ -130,8 +130,25 @@ item Comsumer::get()
 \end{lstlisting}
 
 \subsubsection{Løsning med Semaphore}
-\begin{lstlisting}[otherkeywords={}]
-empthySlotsSem = create_semaphore(buffer_size)
+\begin{lstlisting}[otherkeywords={create_semaphore, take, push, release, item}]
+// Solutions with semaphores
+empthySlotsSem = create_semaphore(buffer_size);
+usedSlotsSem   = create_semaphore(0);
+
+void Producer::put(item i)
+{
+	take(emptySlotsSem);
+	buffer.push(i);
+	release(usedSlotsSem);
+}
+
+item Consumer::get()
+{
+	take(usedSlotsSem);
+	item = buffer.pop();
+	release(emptySlotsSem);
+	return item;
+}
 \end{lstlisting}
 
 \subsection{Dining philosophers}
