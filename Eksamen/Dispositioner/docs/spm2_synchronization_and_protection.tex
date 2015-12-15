@@ -44,6 +44,10 @@ En ovenfornævnt kritisk sektion kan defineres ved hjælp af mutexes og semaphor
 
 \subsubsection{Mutexes}
 
+En tråd kan tage ejerskab over en mutex, dvs at mutexen låses, og ikke kan tages af andre tråde før den frigives af ejertråden og derved låses op. \\
+
+En mutex skal initialiseres og destrueres.
+
 \subsubsection{Semaphores}
 
 \subsection{Mutex and Conditionals}
