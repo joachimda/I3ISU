@@ -129,7 +129,9 @@ void someFunction()
 	unlock(mtx);
 }
 \end{lstlisting}
-Da $cond\_wait()$ først frigiver mutexen skal man altså låse den (mutexen) først.
+Da $cond\_wait()$ først frigiver mutexen skal man altså låse den (mutexen) først.\\
+
+Grunden til at $cond\_wait()$ er pakket ind i en $while()$ er fordi vi kan risikere at $cond\_wait()$ ''vækker'' tråden uden at det nødvendige signal er ''smidt''. Således hvis den vågner ved et uheld vil $while()$ sikre at den bare ligger sig til at sove igen.\\
 
 \subsection{Producer/Consumer problem}
 Også kaldet \textit{bounded-buffer problem}.\\
