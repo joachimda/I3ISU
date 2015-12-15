@@ -35,8 +35,8 @@
 
 \subsection{Data integrity - Concurrency challenge}
 
-Selvom informations deling tråde imellem er en af de væsentligste fordele ved multitrådede applikationer, er det vigtigt at se sig for når flere tråde behandler den samme data.
-Man bruger termet \textit{critical section} til at referere til et stykke kode der benytter en delt ressource, hvor dette bør gøres \textit{atomic}. Vi har derfor brug for en måde at sikre os eksklusiv adgang når der arbejdes på delte data.
+Selvom informationsdeling tråde imellem er en af de væsentligste fordele ved multitrådede applikationer, er det vigtigt at se sig for når flere tråde behandler den samme data.
+Man bruger termen \textit{critical section} til at referere til et stykke kode der benytter en delt ressource, hvor dette bør gøres \textit{atomic}\footnote{Kerrisk: side 631}. Vi har derfor brug for en måde at sikre os eksklusiv adgang når der arbejdes på delte data.
 
 \subsection{Mutex and Semaphore}
 
@@ -44,13 +44,13 @@ En ovenfornævnt kritisk sektion kan defineres ved hjælp af mutexes og semaphor
 
 \subsubsection{Mutexes}
 
-En tråd kan tage ejerskab over en mutex, dvs at mutexen låses, og ikke kan tages af andre tråde før den frigives af ejertråden og derved låses op. \\
+En tråd kan tage ejerskab over en mutex, dvs. at mutexen låses, og ikke kan tages af andre tråde, før den frigives af ejertråden og derved låses op. \\
 
 En mutex skal initialiseres og destrueres.
 
 \begin{itemize}
 	\item \textit{lock(mut)} - tråden forsøger at tage mutexen. Funktionen er blokerende hvis mutexen er taget.
-	\item \textit{trylock(mut)} - samme som \textit{lock()}, men i stedet for at blokere, returneres EBUSY
+	\item \textit{trylock(mut)} - samme som \textit{lock()}, men i stedet for at blokere, returneres EBUSY.
 	\item \textit{timedlock(mut, timeOut)} - samme som \textit{lock()}, hvor der dog her gives et timeout med som parameter, dvs. en tidsbegrænsing for hvor længe tråden skal vente på at få mutexen.
 	\item \textit{unlock(mut)} - tråden låser mutexen op. 
 \end{itemize}
@@ -61,19 +61,19 @@ En mutex er det samme som en semaphor der er begrænset til værdierne 0 og 1 (b
 To typer semaphorer:
 
 \begin{enumerate}
-	\item Counted semaphore
-	\item Binær semaphore
+	\item Counted semaphore.
+	\item Binær semaphore.
 \end{enumerate}
 
 En semaphor kan ved at inkrementere/dekrementere en counter, holde styr på og begrænse antallet af klienter der opererer på en ressource. En semaphor kan deles på tværs af processer. I en semaphor er der ikke ejerskab, hvilket medfører at en semaphor kan frigives af en client selvom denne ikke taget den.
 
 \paragraph{Named og unnamed semaphorer}
-En named semaphor kan benyttes på tværs af urelaterede processer ved brug af dens navn. Gøres med funktionen \textit{sem\_open()}\todo{Se kommentar i latex koden}
+En named semaphor kan benyttes på tværs af urelaterede processer ved brug af dens navn. Gøres med funktionen \textit{sem\_open()}.\todo{Se kommentar i latex koden}
 %Er det ikke noget med sem_open(\"name" som parameter?? hvad så når den er unnamed?
 
 En unnamed semaphor bruges som udgangspunkt kun inden for samme process med mindre den er gemt i delt hukommelse. 
 
-Om en semaphor er named eller unnamed defineres i semaphorens initiering (anden parameter - flag).
+Om en semaphor er named eller unnamed defineres i semaphorens initiering (anden parameter - sharing level).
 
 \begin{enumerate}
 \item unnamed: \textit{sem\_init(ptr\_sem, 0, init\_val)}
@@ -83,7 +83,7 @@ Om en semaphor er named eller unnamed defineres i semaphorens initiering (anden 
 \paragraph{Eksempler på brugen af semaphorer}
 
 \begin{itemize}
-	\item Et eksempel på brugen af en en semaphor, kunne fx være at begrænse antallet af forbindelser til en database til et bestem antal.
+	\item Et eksempel på brugen af en en semaphor, kunne fx være at begrænse antallet af forbindelser til en database til et bestemt antal.
 	\item begrænsning af CPU intensive opgaver til et bestemt antal CPU kerner.
 	\item \textit{take(sem)} - Hvis counteren er større end 0 dekrementeres denne og der returneres. Hvis counter er 0 blokeres der indtil den er større, hvorefter der så dekrementeres.
 	\item \textit{release(sem)} - inkrementerer counter med 1 og vækker evt. blokerende tråde.
