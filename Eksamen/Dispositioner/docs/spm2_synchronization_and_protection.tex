@@ -42,5 +42,31 @@
 \subsection{Producer / Consumer problem}
 
 \subsection{Dining philosophers}
+Wikipedia om problemet findes \href{https://en.wikipedia.org/wiki/Dining_philosophers_problem}{her}.
 
-\subsection{Dead locks}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.5\linewidth]{figs/spm2/dining}
+	\caption{Dining philophers problem illustrated. Med uret fra toppen: Platon, Konfuzius, Socrates, Voltaire og Descartes.}
+	\label{fig:dining}
+\end{figure}
+
+\subsubsection{Løsning}
+I section~\ref{sec:deadlock} er fire betingelser for deadlocks beskrevet. Vores opgave er at bryde mindst én af disse.
+
+\subsection{Dead locks}\label{sec:deadlock}
+Deadlock er en situation hvor tråde ikke frigiver deres ressourcer fordi de venter på ressourcer som andre tråde ligeledes holder mens de venter på samme ting.\\
+
+På wikipedia om \href{https://en.wikipedia.org/wiki/Deadlock}{deadlock} kan man læse om de fire betingelser som skal være overholdt for at en deadlock kan opstå:
+\begin{enumerate}
+	\item \textbf{Mutual exclution}\\
+	Mindst én ressource skal være ''holdt'' i et \textit{non-shareable mode}\footnote{Kun én tråd kan bruge ressourcen af gangen.}.
+	\item \textbf{Hold and Wait} eller \textbf{Resource holding}\\
+	En tråd ''holder'' mindst én ressource og anmoder om flere ressourcer, hvor disse ''holdes'' af andre tråde.
+	\item \textbf{No preemption\footnote{Læs om preemption i section~\ref{sec:execpu}}}\\
+	En ressource kan kun frigives af tråden som holder den.
+	\item \textbf{Circular wait}\\
+	En tråd/process venter på en ressource som på tidspunktet holdes af en anden tråd/process. Denne anden tråd venter ligeledes på at den første tråd frigiver sin ressource.
+\end{enumerate}
+
+For at deadlocks ikke skal opstå, skal mindst én af de ovenstående betingelser brydes.

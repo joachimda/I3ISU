@@ -22,20 +22,21 @@
 \BOOKMARK [2][-]{subsection.2.6}{Mutex and Conditionals}{section.2}% 22
 \BOOKMARK [2][-]{subsection.2.7}{Producer / Consumer problem}{section.2}% 23
 \BOOKMARK [2][-]{subsection.2.8}{Dining philosophers}{section.2}% 24
-\BOOKMARK [2][-]{subsection.2.9}{Dead locks}{section.2}% 25
-\BOOKMARK [1][-]{section.3}{Thread communication}{}% 26
-\BOOKMARK [2][-]{subsection.3.1}{Sub topic}{section.3}% 27
-\BOOKMARK [2][-]{subsection.3.2}{Curriculum}{section.3}% 28
-\BOOKMARK [2][-]{subsection.3.3}{Exercises}{section.3}% 29
-\BOOKMARK [1][-]{section.4}{OS API}{}% 30
-\BOOKMARK [2][-]{subsection.4.1}{Sub topics}{section.4}% 31
-\BOOKMARK [2][-]{subsection.4.2}{Curriculum}{section.4}% 32
-\BOOKMARK [2][-]{subsection.4.3}{Exercises}{section.4}% 33
-\BOOKMARK [1][-]{section.5}{Message Distribution System \(MDS\)}{}% 34
-\BOOKMARK [2][-]{subsection.5.1}{Sub topics}{section.5}% 35
-\BOOKMARK [2][-]{subsection.5.2}{Curriculum}{section.5}% 36
-\BOOKMARK [2][-]{subsection.5.3}{Exercises}{section.5}% 37
-\BOOKMARK [1][-]{section.6}{Resource handling}{}% 38
-\BOOKMARK [2][-]{subsection.6.1}{Sub topics}{section.6}% 39
-\BOOKMARK [2][-]{subsection.6.2}{Curriculum}{section.6}% 40
-\BOOKMARK [2][-]{subsection.6.3}{Exercises}{section.6}% 41
+\BOOKMARK [3][-]{subsubsection.2.8.1}{L\370sning}{subsection.2.8}% 25
+\BOOKMARK [2][-]{subsection.2.9}{Dead locks}{section.2}% 26
+\BOOKMARK [1][-]{section.3}{Thread communication}{}% 27
+\BOOKMARK [2][-]{subsection.3.1}{Sub topic}{section.3}% 28
+\BOOKMARK [2][-]{subsection.3.2}{Curriculum}{section.3}% 29
+\BOOKMARK [2][-]{subsection.3.3}{Exercises}{section.3}% 30
+\BOOKMARK [1][-]{section.4}{OS API}{}% 31
+\BOOKMARK [2][-]{subsection.4.1}{Sub topics}{section.4}% 32
+\BOOKMARK [2][-]{subsection.4.2}{Curriculum}{section.4}% 33
+\BOOKMARK [2][-]{subsection.4.3}{Exercises}{section.4}% 34
+\BOOKMARK [1][-]{section.5}{Message Distribution System \(MDS\)}{}% 35
+\BOOKMARK [2][-]{subsection.5.1}{Sub topics}{section.5}% 36
+\BOOKMARK [2][-]{subsection.5.2}{Curriculum}{section.5}% 37
+\BOOKMARK [2][-]{subsection.5.3}{Exercises}{section.5}% 38
+\BOOKMARK [1][-]{section.6}{Resource handling}{}% 39
+\BOOKMARK [2][-]{subsection.6.1}{Sub topics}{section.6}% 40
+\BOOKMARK [2][-]{subsection.6.2}{Curriculum}{section.6}% 41
+\BOOKMARK [2][-]{subsection.6.3}{Exercises}{section.6}% 42

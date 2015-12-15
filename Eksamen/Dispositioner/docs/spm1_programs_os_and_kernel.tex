@@ -87,7 +87,7 @@ Der findes tre forskellige modeller:
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.5\linewidth]{figs/userthreads}
+	\includegraphics[width=0.5\linewidth]{figs/spm1/userthreads}
 	\caption{User level threading illusteret.}
 	\label{fig:userthreads}
 \end{figure}
@@ -101,7 +101,7 @@ Der findes tre forskellige modeller:
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.5\linewidth]{figs/kernelthreads}
+	\includegraphics[width=0.5\linewidth]{figs/spm1/kernelthreads}
 	\caption{Kernel level threading illusteret.}
 	\label{fig:kernelthreads}
 \end{figure}
@@ -114,7 +114,7 @@ Der findes tre forskellige modeller:
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.5\linewidth]{figs/hybridthreads}
+	\includegraphics[width=0.5\linewidth]{figs/spm1/hybridthreads}
 	\caption{Hybrid level threading illusteret.}
 	\label{fig:hybridthreads}
 \end{figure}
@@ -132,14 +132,14 @@ Der findes tre forskellige modeller:
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.7\linewidth]{figs/pagetable}
+	\includegraphics[width=0.7\linewidth]{figs/spm1/pagetable}
 	\caption{Virtual mapping via pagetable.}
 	\label{fig:pagetable}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\linewidth]{figs/memorydiagram}
+	\includegraphics[width=\linewidth]{figs/spm1/memorydiagram}
 	\caption{Diagram over standard segment layout.}
 	\label{fig:memorydiagram}
 \end{figure}
@@ -148,7 +148,7 @@ Når der mappes virtuel memory til processer er der af sikkerhedshensyn indført
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.7\linewidth]{figs/virtualaddressspace}
+	\includegraphics[width=0.7\linewidth]{figs/spm1/virtualaddressspace}
 	\caption{Typical memory layout of a process on Linux/x86-32.}
 	\label{fig:virtualaddressspace}
 \end{figure}
@@ -160,7 +160,7 @@ Her findes: Stack, heap, memory mapping, BSS, data og text/code segment.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\linewidth]{figs/memoryspace}
+	\includegraphics[width=\linewidth]{figs/spm1/memoryspace}
 	\caption{Diagram for process switch.}
 	\label{fig:memoryspace}
 \end{figure}
@@ -199,7 +199,7 @@ Vigtige grunde til at vi bruger virtuel hukommelse:
 	\end{itemize}
 \end{itemize}
 
-\subsection{Threads being executed on CPU, associated Scheduler and Cache}
+\subsection{Threads being executed on CPU, associated Scheduler and Cache}\label{sec:execpu}
 \textbf{Scheduleren} sætter processer op til eksekvering på CPU og sørger for at skifte (switche) mellem processer:
 
 \begin{enumerate}
@@ -209,7 +209,7 @@ Vigtige grunde til at vi bruger virtuel hukommelse:
 	\item Resume execution.
 \end{enumerate}
 
-Der er to måde at schedule på:
+Der er to måder at schedule på:
 
 \begin{itemize}
 	\item Preemptive - Preemptive modtager interrupt regulært og skifter proces.
