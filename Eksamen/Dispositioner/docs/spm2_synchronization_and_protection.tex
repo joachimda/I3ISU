@@ -68,8 +68,7 @@ To typer semaphorer:
 En semaphor kan ved at inkrementere/dekrementere en counter, holde styr på og begrænse antallet af klienter der opererer på en ressource. En semaphor kan deles på tværs af processer. I en semaphor er der ikke ejerskab, hvilket medfører at en semaphor kan frigives af en client selvom denne ikke taget den.
 
 \paragraph{Named og unnamed semaphorer}
-En named semaphor kan benyttes på tværs af urelaterede processer ved brug af dens navn. Gøres med funktionen \textit{sem\_open()}.\todo{Se kommentar i latex koden}
-%Er det ikke noget med sem_open(\"name" som parameter?? hvad så når den er unnamed?
+En named semaphor kan benyttes på tværs af urelaterede processer ved brug af dens navn. Gøres med funktionen \textit{sem\_open()}.
 
 En unnamed semaphor bruges som udgangspunkt kun inden for samme process med mindre den er gemt i delt hukommelse. 
 
