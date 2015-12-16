@@ -19,43 +19,39 @@ Optimalt vil vi forsøge at lave en løsning hvor følgende gælder:
 	\item Tråde kan kommunikere med hinanden.
 	\item Kommunikation mellem tråde skal kunne indeholde data.
 	\item Tråde skal kunne sende disse beskeder når de vil. De skal altså ikke være bundet af noget bestemt flow i programmet.
-	\item Mange tråde kan kommunikere med flere andre tråde.\\
+	\item Mange tråde kan kommunikere med flere andre tråde.
 	\item Event-drevet programmering!.\todo{har andreas skrevet, men kan ikke lige se hvad det laver her?} 
 \end{itemize}
 
 \subsection{Message queue}
 Disse beskedkøer skal fungere som ''mellemstation'' hvor besked kan opbevares før tråden er klar til at håndtere beskeden. Brugte vi ikke en sådan mekanisme ville beskeden ''gå tabt''. Alternativt skal vi bruge ressourcer på at synkronisere den sendende og modtagende part, således at beskeden sendes og modtages på ''samme tid''.
 
-\todo{lav en short caption til dining phin.kjoij.}
-
+\subsubsection{The premises for designing it}
+Producer/consumer problemet\footnote{Yderligere beskrevet i afsnit~\ref{sec:producer_consumer_probelm}} skal løses:
 \begin{itemize}
-	\item FIFO kø, eventuelt med max på antal beskeder.
-	\item Implementeret med STL \textit{queue}.
-	\item Forskellige implementeringer:
-	\begin{itemize}
-		\item Asynkrone køer:
-		\begin{itemize}
-			\item Modtageren skal ikke have svar med det samme.
-			\item I sekvensdiagrammet tegnes besked som en åben pil, se figur~\ref{fig:msq_seqdia}.
-			\item Afsenderen kan forsætte operationer uden svar fra modtager.
-		\end{itemize}
-		\item Synkrone køer:
-		\begin{itemize}
-			\item Modtageren skal have svar med det samme.
-			\item I sekvensdiagrammet tegnes besked som en lukket pil, figur~\ref{fig:msq_seqdia}.
-			\item Afsenderen afventer svar fra modtageren før den kan forsætte operation.
-		\end{itemize}
-	\end{itemize}
 	\item \textit{send()}
-	\begin{itemize}
-		\item Putter en besked i køen.
-		\item Blokere hvis køen er fuld.
-	\end{itemize}
+	putter en besked i køen og blokere hvis køen er fuld.
+	
 	\item \textit{receive()}
-	\begin{itemize}
-		\item Henter en besked fra køen.
-		\item Blokere hvis køen er tom.
-	\end{itemize}
+	henter en besked fra køen og blokere hvis køen er tom.
+\end{itemize}
+Her kommer conditionals ind i billedet. To conditions - QueueFull og QueueEmpty.
+
+\subsubsection{Various design solutions - Which one chosen and why}
+Implementeres med en FIFO kø af typen STL \textit{queue}, eventuelt med max på antal beskeder.
+
+\paragraph{Asynkrone køer}
+\begin{itemize}
+	\item Modtageren skal ikke have svar med det samme.
+	\item I sekvensdiagrammet tegnes besked som en åben pil, se figur~\ref{fig:msq_seqdia}.
+	\item Afsenderen kan forsætte operationer uden svar fra modtager.
+\end{itemize}
+
+\paragraph{Synkrone køer}
+\begin{itemize}
+	\item Modtageren skal have svar med det samme.
+	\item I sekvensdiagrammet tegnes besked som en lukket pil, figur~\ref{fig:msq_seqdia}.
+	\item Afsenderen afventer svar fra modtageren før den kan forsætte operation.
 \end{itemize}
 
 \begin{figure}[h]
@@ -64,10 +60,6 @@ Disse beskedkøer skal fungere som ''mellemstation'' hvor besked kan opbevares f
 	\caption[Syntax for sekvensdiagram med syn -og asynkron msq.]{Sekvensdiagram for syntax ved brug af synkron og asynkron besked køer.}
 	\label{fig:msq_seqdia}
 \end{figure}
-
-\subsubsection{The premises for designing it}
-
-\subsubsection{Various design solutions - Which one chosen and why}
 
 \subsubsection{Its design and implementation}
 \textit{MessageQueue} implementering med psudokode:
