@@ -1,4 +1,4 @@
-\subsubsection{The challenges performing Intra-Process Communication}\label{sec:ipc}
+\subsection{The challenges performing Intra-Process Communication}\label{sec:ipc}
 Ulemper ved at implementere IPC med mutex\footnote{Mere om mutexes, se afsnit~\ref{sec:mutex}.} og conditional\footnote{Conditionals i samspil med mutexes, se afsnit~\ref{sec:mtxcond}.} variable, eller semephore\footnote{Semaphore, se afsnit~\ref{sec:semaphore}.}.
 
 \begin{itemize}
@@ -23,7 +23,7 @@ Optimalt vil vi forsøge at lave en løsning hvor følgende gælder:
 	\item Event-drevet programmering!.\todo{har andreas skrevet, men kan ikke lige se hvad det laver her?} 
 \end{itemize}
 
-\subsubsection{Message queue}
+\subsection{Message queue}
 Disse beskedkøer skal fungere som ''mellemstation'' hvor besked kan opbevares før tråden er klar til at håndtere beskeden. Brugte vi ikke en sådan mekanisme ville beskeden ''gå tabt''. Alternativt skal vi bruge ressourcer på at synkronisere den sendende og modtagende part, således at beskeden sendes og modtages på ''samme tid''.
 
 \todo{lav en short caption til dining phin.kjoij.}
@@ -65,17 +65,17 @@ Disse beskedkøer skal fungere som ''mellemstation'' hvor besked kan opbevares f
 	\label{fig:msq_seqdia}
 \end{figure}
 
-\paragraph{The premises for designing it}
+\subsubsection{The premises for designing it}
 
-\paragraph{Various design solutions - Which one chosen and why}
+\subsubsection{Various design solutions - Which one chosen and why}
 
-\paragraph{Its design and implementation}
+\subsubsection{Its design and implementation}
 
 \subsubsection{Impact on design/implementation between before and after the Message Queue}
 
-\subsubsection{Event Driven Programming}
+\subsection{Event Driven Programming}
 
-\paragraph{Basic idea}
+\subsubsection{Basic idea}
 Event drevet programmering er opgjort af event producenter og event subscribers.
 Tråde reagerer på indkommende events, og sover når der ikke sker noget.
 Event drevet programmeret er specielt egnet til GUI applikationer hvor user inputs ofte bruges. \\
@@ -100,6 +100,6 @@ Implementering kommer derfor til at følge dette mønster:
 	\item De-alloker besked.
 \end{itemize}
 
-\paragraph{Reactiveness}
+\subsubsection{Reactiveness}
 
-\paragraph{Design - e.g. from sequence diagrams to code (or vice versa)}
+\subsubsection{Design - e.g. from sequence diagrams to code (or vice versa)}
