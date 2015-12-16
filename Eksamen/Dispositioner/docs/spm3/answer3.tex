@@ -24,6 +24,22 @@ Optimalt vil vi forsøge at lave en løsning hvor følgende gælder:
 \end{itemize}
 
 \subsubsection{Message queue}
+Disse beskedkøer skal fungere som ''mellemstation'' hvor besked kan opbevares før tråden er klar til at håndtere beskeden. Brugte vi ikke en sådan mekanisme ville beskeden ''gå tabt''. Alternativt skal vi bruge ressourcer på at synkronisere den sendende og modtagende part, således at beskeden sendes og modtages på ''samme tid''.
+
+\todo{lav en short caption til dining phin.kjoij.}
+
+\begin{itemize}
+	\item FIFO\footnote{First in, First out.} kø, eventuelt med max på antal beskeder.
+	\item Implementeret med STL\footnote{Standard Template Library.} \textit{queue}.
+	\item Forskellige implementeringer:
+	\begin{itemize}
+		\item Asynkrone køer:
+		\begin{itemize}
+			\item Modtageren skal ikke have svar med det samme.
+			\item I sekvensdiagrammet tegnes besked som en åben pil.\todo{indsæt ref til billede med eksempel}
+		\end{itemize}
+	\end{itemize}
+\end{itemize}
 
 \paragraph{The premises for designing it}
 
