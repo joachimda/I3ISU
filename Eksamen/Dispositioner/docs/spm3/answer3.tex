@@ -117,6 +117,8 @@ return msg;
 
 \subsubsection{Impact on design/implementation between before and after the Message Queue}
 
+Brugen af vores MessageQueue har betydet at vi udenfor køens implementering ikke har skulle bekymre os om at huske mutexes, conditionals etc. Man kan sige at vores MessageQueue tilbyder et ekstra abstraktionslag.
+
 \subsection{Event Driven Programming}
 
 \subsubsection{Basic idea}
