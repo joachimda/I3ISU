@@ -1,5 +1,27 @@
-\subsubsection{The challenges performing intra-process communication}
+\subsubsection{The challenges performing Intra-Process Communication}\label{sec:ipc}
+Ulemper ved at implementere IPC med mutex\footnote{Mere om mutexes, se afsnit~\ref{sec:mutex}.} og conditional\footnote{Conditionals i samspil med mutexes, se afsnit~\ref{sec:mtxcond}.} variable, eller semephore\footnote{Semaphore, se afsnit~\ref{sec:semaphore}.}.
 
+\begin{itemize}
+	\item Det er en udfordring at undgå deadlocks\footnote{Mere i afsnit~\ref{sec:deadlock}.} og timing issues (race conditions).\todo{link til forklaring af raceconditions.}
+	\item Programmer bliver svære at læse og gennemskue (readability).
+	\item Hvis en tråd venter på en bestemt betingelse (fx. condition variable), så laver den ikke noget fornuftigt i mellemtiden.
+	\item Hvis tråde deler ressourcer:
+	\begin{itemize}
+		\item Rækkefølgen hvori de tager/låser ressourcen skal planlægges grundigt for at undgå deadlocks.
+		\item Der skal muligvis låses flere mutexes, hvilket kan være meget tidskrævende.\todo{hvor tidskrævende er det at låse en mutex?}
+	\end{itemize}
+\end{itemize}
+
+Optimalt vil vi forsøge at lave en løsning hvor følgende gælder:
+
+\begin{itemize}
+	\item Processering i en tråd kræver ikke noget lås (mutex etc). 
+	\item Tråde kan kommunikere med hinanden.
+	\item Kommunikation mellem tråde skal kunne indeholde data.
+	\item Tråde skal kunne sende disse beskeder når de vil. De skal altså ikke være bundet af noget bestemt flow i programmet.
+	\item Mange tråde kan kommunikere med flere andre tråde.\\
+	\item Event-drevet programmering!.\todo{har andreas skrevet, men kan ikke lige se hvad det laver her?} 
+\end{itemize}
 
 \subsubsection{Message queue}
 
