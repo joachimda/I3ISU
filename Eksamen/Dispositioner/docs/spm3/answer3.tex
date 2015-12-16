@@ -57,7 +57,7 @@ Tråde reagerer på indkommende events, og sover når der ikke sker noget.
 Event drevet programmeret er specielt egnet til GUI applikationer hvor user inputs ofte bruges. \\
 
 Der er flere måder at implementere EDP på. I vores ISU øvelse har vi brugt en MessageQueue hvis funktionalitet er beskrevet ovenfor.
-Hvis vi ser på figur~\ref{fig:handlPat} vil vores MessageQueue være være mellemledet før dispatcheren. Det<e er smart da det ikke er sikkert at \textit{dispatcher} kan nå at videresende alle events til deres respektive handlers. MessageQueue'en funger derfor som en buffer. 
+Hvis vi ser på figur~\ref{fig:handlPat} vil vores MessageQueue være være mellemledet før dispatcheren. Det<e er smart da det ikke er sikkert at \textit{dispatcher} kan nå at videresende alle events til deres respektive handlers. MessageQueue'en fungerer derfor som en buffer.
 
 \begin{figure}[h]
 	\centering
@@ -65,6 +65,16 @@ Hvis vi ser på figur~\ref{fig:handlPat} vil vores MessageQueue være være mell
 	\caption{Illustration af et handler pattern}
 	\label{fig:handlPat}
 \end{figure}
+
+Implementering kommer derfor til at følge dette mønster:
+
+\begin{itemize}
+	\item Genereing af beskeden?? \todo{skal man ikke det??}
+	\item Get message fra MsgQueue.
+	\item Kør dispatch.
+	\item Handle event.
+	\item De-alloker besked.
+\end{itemize}
 
 \paragraph{Reactiveness}
 
