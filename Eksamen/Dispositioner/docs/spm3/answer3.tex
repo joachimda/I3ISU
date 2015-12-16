@@ -40,6 +40,19 @@ Her kommer conditionals ind i billedet. To conditions - QueueFull og QueueEmpty.
 \subsubsection{Various design solutions - Which one chosen and why}
 Implementeres med en FIFO kø af typen STL \textit{queue}, eventuelt med max på antal beskeder.
 
+\paragraph{Beskedtypen}
+
+Vi bruger i opgaven beskeder der arver fra en basisbesked. På denne måde er besked objekterne typesikre idet de kan slettes med deres \textbf{baseklasse pointer}.
+Det er muligt at lave beskeder på andre måder:
+
+\begin{itemize}
+	\item void* - ingen typesikkerhed (delete problemer).
+	
+	\item Templates - For kompleks.
+\end{itemize}
+
+
+
 \paragraph{Asynkrone køer}
 \begin{itemize}
 	\item Modtageren skal ikke have svar med det samme.
