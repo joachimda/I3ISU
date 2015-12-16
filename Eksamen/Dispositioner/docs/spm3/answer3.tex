@@ -36,17 +36,25 @@ Disse beskedkøer skal fungere som ''mellemstation'' hvor besked kan opbevares f
 		\item Asynkrone køer:
 		\begin{itemize}
 			\item Modtageren skal ikke have svar med det samme.
-			\item I sekvensdiagrammet tegnes besked som en åben pil. \todo{indsæt ref til billede med eksempel} 
+			\item I sekvensdiagrammet tegnes besked som en åben pil, se figur~\ref{fig:msq_seqdia}.
 			\item Afsenderen kan forsætte operationer uden svar fra modtager.
 		\end{itemize}
 		\item Synkrone køer:
 		\begin{itemize}
-			\item Modtageren skal have svar med det samme.\todo{står den og venter? sover?}.
-			\item I sekvensdiagrammet tegnes besked som en lukket pil. \todo{ref til eksempel}
+			\item Modtageren skal have svar med det samme.
+			\item I sekvensdiagrammet tegnes besked som en lukket pil, figur~\ref{fig:msq_seqdia}.
 			\item Afsenderen afventer svar fra modtageren før den kan forsætte operation.
 		\end{itemize}
 	\end{itemize}
 \end{itemize}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\linewidth]{figs/spm3/msq_seqdia}
+	\caption[Syntax for sekvensdiagram med syn -og asynkron msq.]{Sekvensdiagram for syntax ved brug af synkron og asynkron besked køer.}
+	\label{fig:msq_seqdia}
+\end{figure}
+
 
 \paragraph{The premises for designing it}
 
