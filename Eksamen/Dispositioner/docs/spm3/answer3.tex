@@ -70,6 +70,39 @@ Disse beskedkøer skal fungere som ''mellemstation'' hvor besked kan opbevares f
 \subsubsection{Various design solutions - Which one chosen and why}
 
 \subsubsection{Its design and implementation}
+\textit{MessageQueue} implementering med psudokode:
+
+\begin{lstlisting}[otherkeywords={un, lock, signal, cond_wait}]
+// send() function
+lock(mtx);
+
+while(num_of_items_in_queue == max_size)
+	cond_wait(cond, mtx);
+	
+put_item_in_queue(msg, id);
+
+unlock(mtx);
+signal(cond);
+\end{lstlisting}
+
+\begin{lstlisting}
+// receive() function
+lock(mtx);
+
+while(num_of_items_in_queue == 0)
+cond_wait(cond, mtx);
+
+item = get_item_from_queue();
+
+unlock(mtx);
+signal(cond);
+
+id = item->id;
+msg = item->msg;
+
+delete item;
+return msg;
+\end{lstlisting}
 
 \subsubsection{Impact on design/implementation between before and after the Message Queue}
 
