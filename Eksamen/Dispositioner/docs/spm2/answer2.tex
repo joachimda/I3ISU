@@ -7,7 +7,7 @@ Man bruger termen \textit{critical section} til at referere til et stykke kode d
 
 En ovenfornævnt kritisk sektion kan defineres ved hjælp af mutexes og semaphorer.
 
-\subsubsection{Mutexes}
+\subsubsection{Mutexes}\label{sec:mutex}
 
 En tråd kan tage ejerskab over en mutex, dvs. at mutexen låses, og ikke kan tages af andre tråde, før den frigives af ejertråden og derved låses op. \\
 
@@ -20,7 +20,7 @@ En mutex skal initialiseres og destrueres.
 	\item \textit{unlock(mut)} - tråden låser mutexen op. 
 \end{itemize}
 
-\subsubsection{Semaphorer}
+\subsubsection{Semaphorer}\label{sec:semaphore}
 En semaphor kan beskrives som en counter der tæller hvor meget af en ressource der tilgængelig.
 En mutex er det samme som en semaphor der er begrænset til værdierne 0 og 1 (binær).
 To typer semaphorer:
@@ -53,7 +53,7 @@ Om en semaphor er named eller unnamed defineres i semaphorens initiering (anden 
 	\item \textit{release(sem)} - inkrementerer counter med 1 og vækker evt. blokerende tråde.
 \end{itemize}
 
-\subsection{Mutex and Conditionals}
+\subsection{Mutex and Conditionals}\label{sec:mtxcond}
 Conditionals gør det muligt for tråde at sende signaler til hinanden.
 
 Vi har brugt det meget sammen med mutexes, for at sikre eksklusiv adgang til delte variabler. Bruges med fordel for ikke at stå og tjekke en variabel hele tiden (spilde CPU).
