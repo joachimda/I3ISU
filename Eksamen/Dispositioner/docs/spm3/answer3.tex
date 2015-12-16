@@ -31,26 +31,26 @@ Disse beskedkøer skal fungere som ''mellemstation'' hvor besked kan opbevares f
 \begin{itemize}
 	\item FIFO kø, eventuelt med max på antal beskeder.
 	\item Implementeret med STL \textit{queue}.
+	\item Forskellige implementeringer:
+	\begin{itemize}
+		\item Asynkrone køer:
+		\begin{itemize}
+			\item Modtageren skal ikke have svar med det samme.
+			\item I sekvensdiagrammet tegnes besked som en åben pil. \todo{indsæt ref til billede med eksempel} 
+			\item Afsenderen kan forsætte operationer uden svar fra modtager.
+		\end{itemize}
+		\item Synkrone køer:
+		\begin{itemize}
+			\item Modtageren skal have svar med det samme.\todo{står den og venter? sover?}.
+			\item I sekvensdiagrammet tegnes besked som en lukket pil. \todo{ref til eksempel}
+			\item Afsenderen afventer svar fra modtageren før den kan forsætte operation.
+		\end{itemize}
+	\end{itemize}
 \end{itemize}
 
 \paragraph{The premises for designing it}
 
 \paragraph{Various design solutions - Which one chosen and why}
-
-\begin{itemize}
-	\item Asynkrone køer:
-	\begin{itemize}
-		\item Modtageren skal ikke have svar med det samme.
-		\item I sekvensdiagrammet tegnes besked som en åben pil. \todo{indsæt ref til billede med eksempel} 
-		\item Afsenderen kan forsætte operationer uden svar fra modtager.
-	\end{itemize}
-	\item Synkrone køer:
-	\begin{itemize}
-		\item Modtageren skal have svar med det samme.\todo{står den og venter? sover?}.
-		\item I sekvensdiagrammet tegnes besked som en lukket pil. \todo{ref til eksempel}
-		\item Afsenderen afventer svar fra modtageren før den kan forsætte operation.
-	\end{itemize}
-\end{itemize}
 
 \paragraph{Its design and implementation}
 
