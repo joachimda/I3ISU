@@ -2,13 +2,13 @@
 Ulemper ved at implementere IPC med mutex\footnote{Mere om mutexes, se afsnit~\ref{sec:mutex}.} og conditional\footnote{Conditionals i samspil med mutexes, se afsnit~\ref{sec:mtxcond}.} variable, eller semephore\footnote{Semaphore, se afsnit~\ref{sec:semaphore}.}.
 
 \begin{itemize}
-	\item Det er en udfordring at undgå deadlocks\footnote{Mere i afsnit~\ref{sec:deadlock}.} og timing issues (race conditions).\todo{link til forklaring af raceconditions.}
+	\item Det er en udfordring at undgå deadlocks\footnote{Mere i afsnit~\ref{sec:deadlock}.} og timing issues (race conditions).
 	\item Programmer bliver svære at læse og gennemskue (readability).
 	\item Hvis en tråd venter på en bestemt betingelse (fx. condition variable), så laver den ikke noget fornuftigt i mellemtiden.
 	\item Hvis tråde deler ressourcer:
 	\begin{itemize}
 		\item Rækkefølgen hvori de tager/låser ressourcen skal planlægges grundigt for at undgå deadlocks.
-		\item Der skal muligvis låses flere mutexes, hvilket kan være meget tidskrævende.\todo{hvor tidskrævende er det at låse en mutex?}
+		\item Der skal muligvis låses flere mutexes, hvilket kan være meget tidskrævende.
 	\end{itemize}
 \end{itemize}
 
@@ -20,7 +20,6 @@ Optimalt vil vi forsøge at lave en løsning hvor følgende gælder:
 	\item Kommunikation mellem tråde skal kunne indeholde data.
 	\item Tråde skal kunne sende disse beskeder når de vil. De skal altså ikke være bundet af noget bestemt flow i programmet.
 	\item Mange tråde kan kommunikere med flere andre tråde.
-	\item Event-drevet programmering!.\todo{har andreas skrevet, men kan ikke lige se hvad det laver her?} 
 \end{itemize}
 
 \subsection{Message queue}
@@ -83,7 +82,7 @@ Dispatcheren kan da switche på QueueItems id, og handleren kan  reagere på bes
 \subsubsection{Its design and implementation}
 \textit{MessageQueue} implementering med psudokode:
 
-\begin{lstlisting}[otherkeywords={un, lock, signal, cond_wait}]
+\begin{lstlisting}[otherkeywords={unlock, lock, signal, cond_wait}]
 // send() function
 lock(mtx);
 
@@ -127,7 +126,15 @@ Tråde reagerer på indkommende events, og sover når der ikke sker noget.
 Event drevet programmeret er specielt egnet til GUI applikationer hvor user inputs ofte bruges. \\
 
 Der er flere måder at implementere EDP på. I vores ISU øvelse har vi brugt en MessageQueue hvis funktionalitet er beskrevet ovenfor.
-Hvis vi ser på figur~\ref{fig:handlPat} vil vores MessageQueue være være mellemledet før dispatcheren. Det<e er smart da det ikke er sikkert at \textit{dispatcher} kan nå at videresende alle events til deres respektive handlers. MessageQueue'en fungerer derfor som en buffer.
+Hvis vi ser på figur~\ref{fig:handlPat} vil vores MessageQueue være mellemledet før dispatcheren. Dette er smart da det ikke er sikkert at \textit{dispatcher} kan nå at videresende alle events til deres respektive handlers. MessageQueue'en fungerer derfor som en buffer.
+Implementering kommer derfor til at følge dette mønster:
+\begin{itemize}
+	\item Genereing af beskeden.
+	\item Get message fra MsgQueue.
+	\item Kør dispatch.
+	\item Handle event.
+	\item De-alloker besked.
+\end{itemize}
 
 \begin{figure}[h]
 	\centering
@@ -135,16 +142,6 @@ Hvis vi ser på figur~\ref{fig:handlPat} vil vores MessageQueue være være mell
 	\caption{Illustration af et handler pattern.}
 	\label{fig:handlPat}
 \end{figure}
-
-Implementering kommer derfor til at følge dette mønster:
-
-\begin{itemize}
-	\item Genereing af beskeden?? \todo{skal man ikke det??}
-	\item Get message fra MsgQueue.
-	\item Kør dispatch.
-	\item Handle event.
-	\item De-alloker besked.
-\end{itemize}
 
 \subsubsection{Design - e.g. from sequence diagrams to code (or vice versa)}
 Vis evt. PLCS sekvensdiagram
