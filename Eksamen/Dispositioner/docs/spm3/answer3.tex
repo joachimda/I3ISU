@@ -29,21 +29,14 @@ Disse beskedkøer skal fungere som ''mellemstation'' hvor besked kan opbevares f
 \todo{lav en short caption til dining phin.kjoij.}
 
 \begin{itemize}
-	\item FIFO kø, eventuelt med max på antal beskeder.
-	\item Implementeret med STL \textit{queue}.
+	\item FIFO\footnote{First in, First out.} kø, eventuelt med max på antal beskeder.
+	\item Implementeret med STL\footnote{Standard Template Library.} \textit{queue}.
 	\item Forskellige implementeringer:
 	\begin{itemize}
 		\item Asynkrone køer:
 		\begin{itemize}
 			\item Modtageren skal ikke have svar med det samme.
-			\item I sekvensdiagrammet tegnes besked som en åben pil. \todo{indsæt ref til billede med eksempel} 
-			\item Afsenderen kan forsætte operationer uden svar fra modtager.
-		\end{itemize}
-		\item Synkrone køer:
-		\begin{itemize}
-			\item Modtageren skal have svar med det samme.\todo{står den og venter? sover?}.
-			\item I sekvensdiagrammet tegnes besked som en lukket pil. \todo{ref til eksempel}
-			\item Afsenderen afventer svar fra modtageren før den kan forsætte operation.
+			\item I sekvensdiagrammet tegnes besked som en åben pil.\todo{indsæt ref til billede med eksempel}
 		\end{itemize}
 	\end{itemize}
 \end{itemize}
@@ -59,19 +52,6 @@ Disse beskedkøer skal fungere som ''mellemstation'' hvor besked kan opbevares f
 \subsubsection{Event Driven Programming}
 
 \paragraph{Basic idea}
-Event drevet programmering er opgjort af event producenter og event subscribers.
-Tråde reagerer på indkommende events, og sover når der ikke sker noget.
-Event drevet programmeret er specielt egnet til GUI applikationer hvor user inputs ofte bruges. \\
-
-Der er flere måder at implementere EDP på. I vores ISU øvelse har vi brugt en MessageQueue hvis funktionalitet er beskrevet ovenfor.
-Hvis vi ser på figur~\ref{fig:handlPat} vil vores MessageQueue være være mellemledet før dispatcheren. Det<e er smart da det ikke er sikkert at \textit{dispatcher} kan nå at videresende alle events til deres respektive handlers. MessageQueue'en funger derfor som en buffer. 
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=0.6\linewidth]{figs/spm3/handlersPattern}
-	\caption{Illustration af et handler pattern}
-	\label{fig:handlPat}
-\end{figure}
 
 \paragraph{Reactiveness}
 
