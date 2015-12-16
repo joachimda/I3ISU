@@ -46,15 +46,24 @@ Disse beskedkøer skal fungere som ''mellemstation'' hvor besked kan opbevares f
 			\item Afsenderen afventer svar fra modtageren før den kan forsætte operation.
 		\end{itemize}
 	\end{itemize}
+	\item \textit{send()}
+	\begin{itemize}
+		\item Putter en besked i køen.
+		\item Blokere hvis køen er fuld.
+	\end{itemize}
+	\item \textit{receive()}
+	\begin{itemize}
+		\item Henter en besked fra køen.
+		\item Blokere hvis køen er tom.
+	\end{itemize}
 \end{itemize}
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.7\linewidth]{figs/spm3/msq_seqdia}
+	\includegraphics[width=0.6\linewidth]{figs/spm3/msq_seqdia}
 	\caption[Syntax for sekvensdiagram med syn -og asynkron msq.]{Sekvensdiagram for syntax ved brug af synkron og asynkron besked køer.}
 	\label{fig:msq_seqdia}
 \end{figure}
-
 
 \paragraph{The premises for designing it}
 
