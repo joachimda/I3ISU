@@ -51,7 +51,13 @@ Det er muligt at lave beskeder på andre måder:
 	\item Templates - For kompleks.
 \end{itemize}
 
+Vi caster vore basis message til den messagetype der ønskes.
 
+\paragraph{Queue items}
+
+De items som køerne indeholde. Kan eksempelvis implementeres med en struct, bestående af et id og et beskedobjekt af basisklassen Message.
+
+Dispatcheren kan da switche på QueueItems id, og handleren kan  reagere på beskeden.
 
 \paragraph{Asynkrone køer}
 \begin{itemize}
