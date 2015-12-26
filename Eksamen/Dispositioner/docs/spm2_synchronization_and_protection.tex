@@ -1,3 +1,36 @@
+\section{Synchronization and protection}
+
+\subsection{Sub topics}
+
+\begin{itemize}
+	\item Data integrity - Concurrency challenge.
+	\item Mutex and Semaphore.
+	\item Mutex and Conditionals.
+	\item Producer / Consumer problem.
+	\item Dining philosophers.
+	\item Dead locks.
+\end{itemize}
+
+\subsection{Curriculum}
+
+\begin{itemize}
+	\item Slides: "Thread Synchronization I and II".
+	\item Kerrisk: Chapter 30: Thread Synchronization.
+	\item Kerrisk: Chapter 31: Thread Safety and Per-Thread Storage (Speed read)".
+	\item Kerrisk: Chapter 32: Thread Safety and Per-Thread Storage (Speed read)".
+	\item Kerrisk: Chapter 53: Posix Semaphores (Named not in focus for this exercise)".
+	\item OLA: "Pthread-Tutorial" - chapters 4-6.
+	\item OLA: "Producer/Consumer problem".
+	\item OLA: "Dining Philosophers problem".
+\end{itemize}
+
+\subsection{Exercises}
+
+\begin{itemize}
+	\item Posix Threads
+	\item Thread Synchronization I \& II
+\end{itemize}
+
 \subsection{Data integrity - Concurrency challenge}
 
 Selvom informationsdeling tråde imellem er en af de væsentligste fordele ved multitrådede applikationer, er det vigtigt at se sig for når flere tråde behandler den samme data.
@@ -40,8 +73,8 @@ En unnamed semaphor bruges som udgangspunkt kun inden for samme process med mind
 Om en semaphor er named eller unnamed defineres i semaphorens initiering (anden parameter - sharing level).
 
 \begin{enumerate}
-\item unnamed: \textit{sem\_init(ptr\_sem, 0, init\_val)}
-\item named: \textit{sem\_init(ptr\_sem, 1, init\_val)}
+	\item unnamed: \textit{sem\_init(ptr\_sem, 0, init\_val)}
+	\item named: \textit{sem\_init(ptr\_sem, 1, init\_val)}
 \end{enumerate}
 
 \paragraph{Eksempler på brugen af semaphorer}
@@ -91,7 +124,7 @@ void someFunction()
 	
 	while(!door_open)
 		cond_wait(cond, mtx);
-		
+	
 	// do something...
 	
 	unlock(mtx);
@@ -107,7 +140,7 @@ Vi kan løse dette med de to metoder:
 
 \subsubsection{Priority inheritance}
 Når en tråd tager en mutex assignes den midlertidigt til at have den højeste prioritet af de tråde der ellers venter på mutexen. Se figur~\ref{fig:inher}.
-	
+
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.8\linewidth]{figs/spm2/inher}
@@ -124,7 +157,7 @@ Alle mutexes assignes til høj prioritet (priority ceiling). Denne prioritet ass
 	\caption{Eksempel med priority ceiling.}
 	\label{fig:ceili}
 \end{figure}
-	
+
 \subsection{Producer/Consumer problem}\label{sec:producer_consumer_probelm}
 Også kaldet \textit{bounded-buffer problem}.\\
 
@@ -149,7 +182,7 @@ void Producer::put(item i)
 	
 	while(size == max_size)
 		wait(mtx, producer_cond);
-		
+	
 	buffer.push(i);
 	size++;
 	
@@ -166,7 +199,7 @@ item Comsumer::get()
 	
 	while(size == 0)
 		wait(mtx, consumer_cond);
-		
+	
 	buffer.pop();
 	size--;
 	

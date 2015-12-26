@@ -1,3 +1,38 @@
+\section{Thread communication}
+
+\subsection{Sub topic}
+
+\begin{itemize}
+	\item The challenges performing intra-process communication.
+	\item Message queue.
+	\begin{itemize}
+		\item The premises for designing it.
+		\item Various design solutions - Which one chosen and why.
+		\item Its design and implementation.
+	\end{itemize}	
+	\item Impact on design/implementation between before and after the Message Queue.
+	\item Event Driven Programming.
+	\begin{itemize}
+		\item Basic idea.
+		\item Reactiveness.
+		\item Design - e.g. from sequence diagrams to code (or vice versa).
+	\end{itemize}
+\end{itemize}
+
+\subsection{Curriculum}
+
+\begin{itemize}
+	\item Slides: "Inter-Thread Communication".
+	\item OLA: "Event Driven Programming: Introduction, Tutorial, History - Pages 1-19 \& 30-51".
+	\item OLA: "Programming with Threads - chapters 4 \& 6".
+\end{itemize}
+
+\subsection{Exercises}
+
+\begin{itemize}
+	\item Thread Communication
+\end{itemize}
+
 \subsection{The challenges performing Intra-Process Communication}\label{sec:ipc}
 Ulemper ved at implementere IPC med mutex\footnote{Mere om mutexes, se afsnit~\ref{sec:mutex}.} og conditional\footnote{Conditionals i samspil med mutexes, se afsnit~\ref{sec:mtxcond}.} variable, eller semephore\footnote{Semaphore, se afsnit~\ref{sec:semaphore}.}.
 
@@ -88,7 +123,7 @@ lock(mtx);
 
 while(num_of_items_in_queue == max_size)
 	cond_wait(cond, mtx);
-	
+
 put_item_in_queue(msg, id);
 
 unlock(mtx);
@@ -100,7 +135,7 @@ signal(cond);
 lock(mtx);
 
 while(num_of_items_in_queue == 0)
-cond_wait(cond, mtx);
+	cond_wait(cond, mtx);
 
 item = get_item_from_queue();
 
