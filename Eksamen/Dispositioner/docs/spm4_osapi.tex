@@ -140,7 +140,7 @@ OS Api'er fungerer som et strategy pattern, hvor der vælges strategi alt efter 
 
 \subsection{Effect on design/implementation}
 
-Igen, har brugen af OS Api'et gjort det lettere for os at bruge threading.
+Igen, har brugen af OS Api'et gjort det lettere for os at bruge tråde, mutex's m.m.
 
 \subsubsection{MQs (Message queues) used with pthreads contra MQ used in OO OS Api}
 Med henyn til pthreads gør vi blot som beskrevet nedenfor i kodeudnsit \ref{code:threads_after}. I forhold til locking og unlocking af mutexes sker dette i vores MessageQueue. Hvis vi ser på MQ koden, bruges der blot et Mutex objekt hvorpå \textit{lock()} og \textit{unlock()} kaldes. \textbf{\textit{Mutex.cpp}} i linux mappen står for at kalde de respektive lock/unlock funktioner der passer til POSIX threads.
@@ -154,6 +154,33 @@ Kendt under flere navne:
 	\item Constructor Acquires, Destructor Releases (CADRe).
 	\item Scope-based Resource Management (SBRM).
 \end{itemize}
+
+Mutex klassen i vores OSAPI er vist i kode udsnit~\ref{code:osapi_mutex} og viser tydeligt hvordan mutexen initialiseres i constructoren og destroy'es i destructoren.
+
+\begin{lstlisting}[
+caption=Mutex implementering i OSAPI,
+label=code:osapi_mutex, 
+morekeywords=Mutex]
+Mutex::Mutex()
+{ 
+	pthread_mutex_init(&mutte, NULL);
+}
+
+Mutex::~Mutex()
+{
+	pthread_mutex_destroy(&mutte);
+}
+
+void Mutex::lock()
+{
+	pthread_mutex_lock(&mutte);
+}
+
+void Mutex::unlock()
+{
+	pthread_mutex_unlock(&mutte);
+}
+\end{lstlisting}
 
 \subsubsection{Using Threads before and now}
 Før når vi skulle anvende tråde ville vi gøre noget i stil med det vist i kode udsnit~\ref{code:threads_before}, hvor en tråd erklæres, startes og blokere til den er færdig.
