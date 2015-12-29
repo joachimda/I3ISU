@@ -63,9 +63,79 @@ OS Api'et sikrer samtidigt at man ikke skal tænke på de lavpraktiske OS-spicif
 
 \subsubsection{The PIMPL / Cheshire Cat idiom - The how and why}
 
-PIMPL - Pointer to Implementation
+PIMPL - Pointer to Implementation er et SW programmerings idiom, der fremmer \textit{implementerings abstraktion} for klasser. Lidt på samme måde som interfaces i C\#. Dette gøres vha. en ekstra pointer og funktionskald.
+
+Et eksempel med en \textit{Book} klasse:
+
+\begin{lstlisting}[caption=Klassen Book uden PIMPL, label=code:noPIMP]
+class Book
+{
+public:
+	void print();
+private:
+	std::string  m_Contents;
+	std::string  m_Title;
+}
+\end{lstlisting}
+
+Som det kan ses i kodeudsnit \ref{code:noPIMP}, skal alle Books klienter recompilere hver gang der tilføjes eller ændres i klassen book.
+
+Vi tilføjer et private medlem, \textbf{\textit{class BookImpl}} samt \textbf{\textit{BookImpl* m\_p}}. Vi har også brug for både destructor og constructor nu, for hhv at slette og sætte m\_p! Med PIMPL implementeret får vi da:
+
+\begin{lstlisting}[caption=Klassen Book med PIMPL implementeret, label=code:PIMP]
+/* public.h */
+class Book
+{
+public:
+	Book();
+	~Book();
+	void print();
+private:
+	class BookImpl;
+	BookImpl* m_p;
+}
+\end{lstlisting}
+
+Flere klienter kan nu have deres egen implementering af klassen book. En \textit{privat} implementering kan se således ud:
+
+\begin{lstlisting}[caption=Privat implementering af klassen Book, label=code:PIMP]
+Book::Book()
+{
+	m_p = new BookImpl();
+}
+
+Book::~Book()
+{
+	delete m_p;
+}
+
+void Book::print()
+{
+	m_p->print();
+}
+
+/* then BookImpl functions */
+
+void Book::BookImpl::print()
+{
+	std::cout << "print from BookImpl" << std::endl;
+}
+\end{lstlisting}
+
+Når vi i vores main ønsker en instans af Book, invokeres det således:
+\begin{lstlisting}[caption=Brug af Book klassen i main(), label=code:mainPimpl]
+int main()
+{
+	Book *b = new Book();
+	b->print();
+	delete b;
+}
+\end{lstlisting}
+
 
 \subsubsection{CPU / OS Architecture}
+
+OS Api'er fungerer som et strategy pattern, hvor der vælges strategi alt efter hvilken platform man er på.
 
 \subsection{Effect on design/implementation}
 
