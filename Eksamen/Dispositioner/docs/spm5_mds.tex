@@ -40,6 +40,23 @@
 
 \subsubsection{GoF Singleton Pattern}
 
+Et singleton pattern er et software design pattern, der gør det muligt at begrænse antallet af instanser af en klasse til 1.
+
+\paragraph{How to Singleton}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.6\linewidth]{figs/spm5/SingletonClass}
+	\caption{En Singleton klasse}
+	\label{fig:SingletonClass}
+\end{figure}
+
+\begin{itemize}
+	\item Private constructor - Sikrer at kun klassen kan oprette en instans, ingen andre kan oprette eller kopiere den!
+	\item statisk \textit{getInstance()} funktion - Statisk så den kan kaldes uden et objekt. Denne funktion returnerer instansen, og laver en ny hvis den private pointer (instansen) til sig selv er NULL.
+	\item Statisk private pointer til sig selv - Den eneste instans\todo{right??}.
+\end{itemize}
+
 \subsubsection{Gof Observer Pattern}
 
 \subsubsection{GoF Mediator Pattern}
