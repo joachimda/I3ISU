@@ -35,11 +35,12 @@
 
 \subsection{The design philosophy - Why OO and OS Api?}
 
-Et OS Api giver et abstraktionslag for operativsystemet. Denne abstraktion gør det muligt at \textit{unify} OS arkitektur, og dermed opnå højere portabilitet for applikationer. med andre ord giver et OS Api os et generelt interface der kan genbruges på tværs af platforme.
+Et OS Api giver et abstraktionslag for operativsystemet. Denne abstraktion gør det muligt at \textit{unify} OS arkitektur, og dermed opnå højere portabilitet for applikationer. \todo{ikke 'med' efter punktum}med andre ord giver et OS Api os et generelt interface der kan genbruges på tværs af platforme.
 
 I vores tilfælde, i arbejdet med POSIX tråde, betyder et OS Api, at vi ikke skal omskrive vores kode, så den kan kompileres til Windows. Se illustration på figur \ref{fig:ApiModel}.
-OS Api'et sikrer samtidigt at man ikke skal tænke på de lavpraktiske OS-spicifikke detaljer, og at man i stedet kan fokusere på brugbarheden af applikationen.
+OS Api'et sikrer samtidigt at man ikke skal tænke på de lavpraktiske OS-spicifikke\todo{another goof} detaljer, og at man i stedet kan fokusere på brugbarheden af applikationen.
 
+\todo{unfuck whitespace in fig}
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.6\linewidth]{figs/spm4/osapiModel}
@@ -145,11 +146,19 @@ Igen, har brugen af OS Api'et gjort det lettere for os at bruge threading.
 Med henyn til pthreads gør vi blot som beskrevet nedenfor i kodeudnsit \ref{code:threads_after}. I forhold til locking og unlocking af mutexes sker dette i vores MessageQueue. Hvis vi ser på MQ koden, bruges der blot et Mutex objekt hvorpå \textit{lock()} og \textit{unlock()} kaldes. \textbf{\textit{Mutex.cpp}} i linux mappen står for at kalde de respektive lock/unlock funktioner der passer til POSIX threads.
 
 \subsubsection{RAII in use}
+Et idiom brugt til sikker brug af ressourcer, for at undgå memory-leaks. Ideen er at ressourcen allokeres under objektets oprettelse og deallokeres ved destruktion.\\
+
+Kendt under flere navne: 
+\begin{itemize}
+	\item Resource Acquisition Is Initialization (RAII).
+	\item Constructor Acquires, Destructor Releases (CADRe).
+	\item Scope-based Resource Management (SBRM).
+\end{itemize}
 
 \subsubsection{Using Threads before and now}
 Før når vi skulle anvende tråde ville vi gøre noget i stil med det vist i kode udsnit~\ref{code:threads_before}, hvor en tråd erklæres, startes og blokere til den er færdig.
 
-\begin{lstlisting}[caption=Anvendelse af tråde før OSAPI, label=code:threads_before, morekeywords={pthread_t, pthread_create, pthread_join}]
+\begin{lstlisting}[caption=Anvendelse af tråde før OSAPI, label=code:threads_before]
 pthread_t thread;
 pthread_create(&thread, NULL, func, (void*)&arg);
 pthread_join(thread, NULL);
