@@ -35,10 +35,10 @@
 
 \subsection{The design philosophy - Why OO and OS Api?}
 
-Et OS Api giver et abstraktionslag for operativsystemet. Denne abstraktion gør det muligt at \textit{unify} OS arkitektur, og dermed opnå højere portabilitet for applikationer. \todo{ikke 'med' efter punktum}med andre ord giver et OS Api os et generelt interface der kan genbruges på tværs af platforme.
+Et OS Api giver et abstraktionslag for operativsystemet. Denne abstraktion gør det muligt at \textit{unify} OS arkitektur, og dermed opnå højere portabilitet for applikationer. Med andre ord giver et OS Api os et generelt interface der kan genbruges på tværs af platforme.
 
 I vores tilfælde, i arbejdet med POSIX tråde, betyder et OS Api, at vi ikke skal omskrive vores kode, så den kan kompileres til Windows. Se illustration på figur \ref{fig:ApiModel}.
-OS Api'et sikrer samtidigt at man ikke skal tænke på de lavpraktiske OS-spicifikke\todo{another goof} detaljer, og at man i stedet kan fokusere på brugbarheden af applikationen.
+OS Api'et sikrer samtidigt at man ikke skal tænke på de lavpraktiske OS-specifikke detaljer, og at man i stedet kan fokusere på brugbarheden af applikationen.
 
 \todo{unfuck whitespace in fig}
 \begin{figure}[h]
