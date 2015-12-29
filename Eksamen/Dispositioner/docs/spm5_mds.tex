@@ -57,6 +57,24 @@ Et singleton pattern er et software design pattern, der gør det muligt at begr�
 	\item Statisk private pointer til sig selv - Den eneste instans\todo{right??}.
 \end{itemize}
 
-\subsubsection{Gof Observer Pattern}
+\paragraph{Singleton pattern i forhold til MDS og postoffice design}
+\todo{her skal der være noget med øvelsen}
+
+\subsubsection{GoF Observer Pattern}
+
+Et GoF observer pattern, også kaldet Publisher/Subscriber pattern består af to primære elementer:
+
+\begin{itemize}
+	\item Publisher (subject) - Kan have flere subscribere(observere) der abonnerer på den.
+	\item Subscriber (observer) - Bliver notificeret når publisher ændrer state. Herefter anmodes publisher om faktiske æmdringer.
+\end{itemize}
+En publisher kender ikke sine subcribere men derimod, kender alle subscribers sin publisher. Dette pattern er brugbart når ændringer i et objekt kræver ændring i andre, og hvor man ikke ved hvilke og hvor mange der er tale om.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.8\linewidth]{figs/spm5/observerUML}
+	\caption{Et Observer pattern}
+	\label{fig:ObserverPattern}
+\end{figure}
 
 \subsubsection{GoF Mediator Pattern}
