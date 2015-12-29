@@ -152,7 +152,32 @@ Kendt under flere navne:
 	\item Scope-based Resource Management (SBRM).
 \end{itemize}
 
+Mutex klassen i vores OSAPI er vist i kode udsnit~\ref{code:osapi_mutex} og viser tydeligt hvordan mutexen initialiseres i constructoren og destroy'es i destructoren.
 
+\begin{lstlisting}[
+caption=Mutex implementering i OSAPI,
+label=code:osapi_mutex, 
+morekeywords=Mutex]
+Mutex::Mutex()
+{ 
+	pthread_mutex_init(&mutte, NULL);
+}
+
+Mutex::~Mutex()
+{
+	pthread_mutex_destroy(&mutte);
+}
+
+void Mutex::lock()
+{
+	pthread_mutex_lock(&mutte);
+}
+
+void Mutex::unlock()
+{
+	pthread_mutex_unlock(&mutte);
+}
+\end{lstlisting}
 
 \subsubsection{Using Threads before and now}
 Før når vi skulle anvende tråde ville vi gøre noget i stil med det vist i kode udsnit~\ref{code:threads_before}, hvor en tråd erklæres, startes og blokere til den er færdig.
