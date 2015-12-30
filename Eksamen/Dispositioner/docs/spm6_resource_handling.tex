@@ -115,17 +115,32 @@ Hvis en shared pointer, p1 peger på variabel a, er dens counter = 1, hvis en an
 Kaldes populært en \textit{reference counted pointer}.
 
 \subsubsection{How to use it}
-\begin{itemize}
-	\item Oprettelse af shared pointer: $boost::shared\_ptr<T> myPointer(new T(InitValue))$.
-	\item Assignment: $myPointer1 = myPointer2$.
-	\item Get references: $myPointer.use\_count()$ returnerer antal referencer.
-	\item Reset: $myPointer.reset()$ dekrementerer counter.
-\end{itemize}
+\begin{lstlisting}[caption=Eksempel på brugen af en shared pointer, label=usOfSharedPtr]
+//Oprettelse af shared pointer
+	boost::shared\_ptr<T> myPointer(new T(InitValue));
 
-\textit{Dangling pointers} kan opstå hvis to shared pointers har cirkulære referencer, og ingen har referencer til dem. Der kan bruges $weak\_ptr$ til at undgå dette.
+//Assignment
+	myPointer1 = myPointer2;
+	
+//Get references - returnerer antal referencer.
+	myPointer.use_count()
+
+//Reset - dekrementerer counter.
+	myPointer.reset()
+\end{lstlisting}
+
+\textit{Dangling pointers} kan opstå hvis to shared pointers har cirkulære referencer, og ingen har referencer til dem. Der kan bruges $weak\_ptr<>$ til at undgå dette.
 
 \paragraph{boost::weak\_ptr}
 kan tildeles en shared\_ptr, som den deler counter med.
 Det som weak pointeren peger på skal ikke være kritisk at have til rådighed, idet garbage collectoren sletter objektet der peges på, hvis der kun er en weak pointer der peger på det (det er her det kan bruges til at undgå cirkulære referencer)
 
 \textit{lock()} funktionen laver en shared pointer \todo{laver en ny eller laver om på weak pointeren??}, der peger på det som weak pointeren peger på. Dette medfører at dennes hukommelse ikke deallokeres før vi går ud af scope.
+
+\paragraph{boost::scoped\_ptr}
+\begin{itemize}
+	\item Boost version af RAII.
+	\item Implementerer en smart pointer.
+	\item Bundet til en funktion eller et objekt.
+	\item Kan ikke kopieres - Hovedpointen!
+\end{itemize}
