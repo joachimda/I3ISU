@@ -5,7 +5,7 @@
 \begin{itemize}
 	\item RAII - What and why?
 	\item Copy construction and the assignment operator.
-	\item What is the concept begind a Counted SmartPointer?
+	\item What is the concept behind a Counted SmartPointer?
 	\item What is $boost::shared\_ptr<>$ and how do you use it?
 \end{itemize}
 
@@ -59,10 +59,14 @@ void f() {
 Men hvis vi wrapper d og c i deres eget objekt, vil de automatisk blive deallokeret når vi har ud af scope - om det så bliver på \textit{return} eller når vi rammer linje 10.
 
 \subsection{Copy construction and the assignment operator}
-I følge \textbf{rule of three} skal vi også lave vores egen udgave af copy-constructor og assignment operatoren.
-Det vigtige ved disse er at de også incrementere \textit{counter_}, som holder styr på hvor mange 
 
-I listing~\ref{code:ss_copy} kan copy-constructoren ses. 
+\subsection{What is the concept behind a Counted SmartPointer?}
+Når vi vil dele en ressource skal ikke ikke længere allokere ny plads i hukommelsen, vi kan bare dele pointeren. Ved hjælp af \textit{counter\_} vil hukommelsen først deallokeres når der ikke er flere som bruger pointeren.\\
+
+I følge \textbf{rule of three} skal vi også lave vores egen udgave af copy-constructor og assignment operatoren.
+Det vigtige ved disse er at de også incrementere \textit{counter\_}, som holder styr på hvor mange referencer der findes til objektet.\\
+
+I listing~\ref{code:ss_copy} kan copy-constructoren ses. Grunden til at \textit{counter\_} ikke incrementeres i denne metode er at assignment operatoren bruges og dén står for incrementeringen. 
 
 \begin{lstlisting}[
 caption=SmartString::Copy-constructor, 
@@ -73,7 +77,7 @@ SmartString(const SmartString& other)
 }
 \end{lstlisting}
 
-\derp
+Videre i listing~\ref{code:ss_assign} findes vores egen udgave af assignment operatoren, hvor incrementering af \textit{counter\_} sker, samt tildeling af variabler.
 
 \begin{lstlisting}[
 caption=SmartString::Assignment operator,
@@ -81,11 +85,12 @@ label=code:ss_assign]
 SmartString& operator=(const SmartString& other)
 {
 	str_ = other.str_;
-	counter_ = other.counter_;
-	(*counter_)++;
+	counter_ = other.counter_;	// deling af ptr
+	(*counter_)++;				// incrementering af ptr value
 }
 \end{lstlisting}
 
-\subsection{What is the concept begind a Counted SmartPointer?}
+Hver gange en 
+Når denne \textit{counter\_} 
 
 \subsection{What is $boost::shared\_ptr<>$ and how do you use it?}
