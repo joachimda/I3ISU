@@ -59,13 +59,14 @@ void f() {
 Men hvis vi wrapper d og c i deres eget objekt, vil de automatisk blive deallokeret når vi har ud af scope - om det så bliver på \textit{return} eller når vi rammer linje 10.
 
 \subsection{Copy construction and the assignment operator}
-I følge \textbf{rule of three} skal vi også lave vores egen copy-constructor og assignment operator
+I følge \textbf{rule of three} skal vi også lave vores egen udgave af copy-constructor og assignment operatoren.
+Det vigtige ved disse er at de også incrementere \textit{counter_}, som holder styr på hvor mange 
 
 I listing~\ref{code:ss_copy} kan copy-constructoren ses. 
 
 \begin{lstlisting}[
-caption=SmartString Copy-constructor, 
-label=ss_copy]
+caption=SmartString::Copy-constructor, 
+label=code:ss_copy]
 SmartString(const SmartString& other)
 {
 	*this = other;
@@ -75,8 +76,8 @@ SmartString(const SmartString& other)
 \derp
 
 \begin{lstlisting}[
-caption=SmartString Assignment operator,
-label=ss_assign]
+caption=SmartString::Assignment operator,
+label=code:ss_assign]
 SmartString& operator=(const SmartString& other)
 {
 	str_ = other.str_;
