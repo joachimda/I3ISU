@@ -26,7 +26,10 @@
 	\item Resource Handling.
 \end{itemize}
 
-\subsection{RAII - What and why?}
+\subsection{RAII - What and why?}\label{sec:raii}
+\textit{''Wrap up all recources in their own object that handles their lifetime and put object on stack''}
+
+Et idiom brugt til sikker brug af ressourcer, for at undgå memory-leaks. Ideen er at ressourcen allokeres under objektets oprettelse og deallokeres ved destruktion.
 
 \subsection{Copy construction and the assignment operator}
 
