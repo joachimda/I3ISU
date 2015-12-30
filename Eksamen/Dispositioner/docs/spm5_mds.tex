@@ -32,11 +32,60 @@
 
 \subsection{Message Distribution system - Why \& how?}
 
+\subsubsection{Why?}
+\begin{itemize}
+	\item Lavere kobling.
+	\begin{itemize}
+		\item Subscriberne kan tilføje/fjerne sig selv, uden at publisheren skal tænke på det.
+	\end{itemize}
+	\item Lade subscriberne bestemmer selv hvad de vil have.
+	\begin{itemize}
+		\item Eksempelvis kan en graf subscribe på data til x og y, men ikke z.
+	\end{itemize}
+\end{itemize}
+
+\subsubsection{How?}
+\begin{itemize}
+	\item Subscriberen sender følgende til MDS ved subscribtion:
+	\begin{itemize}
+		\item Hvilke data den vil subscribe på (Globalt).\todo{hvad mener der med globalt?}
+		\item Pointer til egen MsgQueue.
+		\item Local ID, som skal bruges når den skal modtage. \todo{vigtigheden af local id? tror måske jeg har en optagelse fra timen.. den lange og underlige snak.}
+	\end{itemize}
+	\item Ved opdatering på data \textit{x}, gør Publisher følgende:
+	\begin{itemize}
+		\item Finder alle der subscriber på \textit{x}.
+		\item Sender data \textit{x} til subscribernes MsgQueue, med deres individuelle local ID.
+	\end{itemize}
+\end{itemize}
+
+\todo{insert UML sekvensdiagram over kommunikation}
+
 \subsection{The Postoffice Design - Why and how?}
 
-\subsection{Design considerations and implmentation.}
+\subsubsection{Why?}
+Lavere kobling, som altid. Sender kender kun til modtagers navn og intet andet.
 
-\subsection{Patterns per design and in relation to the MDS and Postoffice design:}
+\subsubsection{How?}
+
+\begin{itemize}
+	\item Bruger navn på modtager.
+	\begin{itemize}
+		\item Sender skriver navn på modtageren.
+		\item PostOffice finder den rigtige MsgQueue på baggrund af dette navn.
+	\end{itemize}
+	\item Bruger arv.
+	\begin{itemize}
+		\item Alle arver det samme enum af ID'er, som sendes med. \todo{not sure of meaning?}
+	\end{itemize}
+\end{itemize}
+
+\todo{muligvis et klassediagram og/eller et sekvens?}
+
+\subsection{Design considerations and implmentation.}
+\todo{covered i det ovenfor? dunno..}
+
+\subsection{Patterns per design and in relation to the MDS and Postoffice design}\todo{dobbelttjek at title navn er korrekt ift. eksamens spm}
 
 \subsubsection{GoF Singleton Pattern}
 
@@ -68,7 +117,8 @@ Et GoF observer pattern, også kaldet Publisher/Subscriber pattern består af to
 	\item Publisher (subject) - Kan have flere subscribere(observere) der abonnerer på den.
 	\item Subscriber (observer) - Bliver notificeret når publisher ændrer state. Herefter anmodes publisher om faktiske æmdringer.
 \end{itemize}
-En publisher kender ikke sine subcribere men derimod, kender alle subscribers sin publisher. Dette pattern er brugbart når ændringer i et objekt kræver ændring i andre, og hvor man ikke ved hvilke og hvor mange der er tale om.
+
+Dette pattern er brugbart når ændringer i et objekt kræver ændring i andre, og hvor man ikke ved hvilke og hvor mange der er tale om.
 
 \begin{figure}[h]
 	\centering
@@ -113,11 +163,9 @@ Definition og identifikation af deltagende klassers type:
 Brugen af et mediator pattern begrænser mængden af afledte klasser i et system, i og med mediatoren centraliserer funktionalitet der ellers ville være spredt ud på mange klasser. Ved at pakke objekters interkonnektivitet ind i et mediator pattern, får man samtidig skabt et ekstra abtraktionsniveau der gør funktionalitet mere overskuelig.
 
 \paragraph{Sammenligning}
-
 Mediator patternet kan sammenlignes med \textbf{publisher-subscriber}. Begge står for at håndtere kommunikationen mellem to eller flere klasser. Hvor publisher-subscriber blot broadcaster til alle subscribers, så har mediatoren i højere grad funktionalitet til at finde ud af, hvilke "colleague" eller "subscribers" der skal udføres noget på. Wiki har et glimrende eksempel på siden om Mediator, som viser, at alt efter hvilken kommando der kaldes, så udfører mediatoren noget forskelligt, og kalder metoderne hos de registrerede objekter med forskellige parametre.
 
 \paragraph{Konsekvenser}
-Mediatoren samler en masse funktionalitet på ét sted, hvilket har den fordel at interaktionen mellem objekter bliver nemmere, men mediatoren får derved større ansvar og bliver mere kompleks. Mediatoren kan derfor hurtigt blive en monolit, som er svær at vedligeholde.
+Mediatoren samler en masse funktionalitet på ét sted, hvilket har den fordel at interaktionen mellem objekter bliver nemmere, men mediatoren får derved større ansvar og bliver mere kompleks. Mediatoren kan derfor hurtigt blive en monolit, som er svær at vedligeholde.\\
 
-\paragraph{Konklusion}
-Ud fra journalen kan det konkluderes, at Mediator pattern er godt at bruge, i tilfælde, hvor der opstår mange forbindelser mellem mange forskellige klasser. Ved hjælp af mediatoren centraliseres referencerne til de forskellige objekter ét sted, og samler kald til mediatoren, i stedet for enkelte klasser. Dog skal der passes på at mediatoren ikke bliver til en monolit, hvis for meget funktionalitet bliver pakket ind i den.
+Mediator pattern er godt at bruge, i tilfælde, hvor der opstår mange forbindelser mellem mange forskellige klasser. Ved hjælp af mediatoren centraliseres referencerne til de forskellige objekter ét sted, og samler kald til mediatoren, i stedet for enkelte klasser. Dog skal der passes på at mediatoren ikke bliver til en monolit, hvis for meget funktionalitet bliver pakket ind i den.
