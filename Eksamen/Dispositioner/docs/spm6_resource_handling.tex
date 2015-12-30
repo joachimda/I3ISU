@@ -59,6 +59,16 @@ void function() {
 Men hvis vi wrapper d og c i deres eget objekt, vil de automatisk blive deallokeret når vi har ud af scope - om det så bliver på \textit{return} eller når vi rammer linje 10.
 
 \subsection{Copy construction and the assignment operator}
+Disse skal være private i en RAII klassen da der ellers kan opstå situationer hvor to RAII-objekter peger på den samme ressource. 
+Når den ene RAII nedlægges, så deallokeres ressourcen og tager så den andens med i faldet.
+
+\begin{lstlisting}[
+caption=Privat copy-ctor og assignment operator,
+label=code:smartptr_cpyogassign]
+private:
+	SmartString(const SmartString&);
+	SmartString& operator=(const SmartString& other);
+\end{lstlisting}
 
 \subsection{What is the concept behind a Counted SmartPointer?}
 Når vi vil dele en ressource skal ikke ikke længere allokere ny plads i hukommelsen, vi kan bare dele pointeren. Ved hjælp af \textit{counter\_} vil hukommelsen først deallokeres når der ikke er flere som bruger pointeren.\\
@@ -115,9 +125,11 @@ Hvis en shared pointer, p1 peger på variabel a, er dens counter = 1, hvis en an
 Kaldes populært en \textit{reference counted pointer}.
 
 \subsubsection{How to use it}
-\begin{lstlisting}[caption=Eksempel på brugen af en shared pointer, label=usOfSharedPtr]
+\begin{lstlisting}[
+caption=Eksempel på brugen af en shared pointer, label=usOfSharedPtr,
+morekeywords={boost, use_count, reset}]
 //Oprettelse af shared pointer
-	boost::shared\_ptr<T> myPointer(new T(InitValue));
+	boost::shared_ptr<T> myPointer(new T(InitValue));
 
 //Assignment
 	myPointer1 = myPointer2;
@@ -129,7 +141,7 @@ Kaldes populært en \textit{reference counted pointer}.
 	myPointer.reset()
 \end{lstlisting}
 
-\textit{Dangling pointers} kan opstå hvis to shared pointers har cirkulære referencer, og ingen har referencer til dem. Der kan bruges $weak\_ptr<>$ til at undgå dette.
+\textit{Dangling pointers} kan opstå hvis to shared pointers har cirkulære referencer, og ingen har referencer til dem. Der kan bruges $weak\_ptr<>$ til at undgå dette.\\
 
 \paragraph{boost::weak\_ptr}
 kan tildeles en shared\_ptr, som den deler counter med.
