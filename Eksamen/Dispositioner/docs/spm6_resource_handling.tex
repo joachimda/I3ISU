@@ -5,7 +5,7 @@
 \begin{itemize}
 	\item RAII - What and why?
 	\item Copy construction and the assignment operator.
-	\item What is the concept begind a Counted SmartPointer?
+	\item What is the concept behind a Counted SmartPointer?
 	\item What is $boost::shared\_ptr<>$ and how do you use it?
 \end{itemize}
 
@@ -29,30 +29,69 @@
 \subsection{RAII - What and why?}\label{sec:raii}
 \textit{''Wrap up all recources in their own object that handles their lifetime and put object on stack''}\\
 
-Et idiom brugt til sikker brug af ressourcer, for at undgå memory-leaks. Ideen er at ressourcen allokeres under objektets oprettelse og deallokeres ved destruktion.
+Et idiom brugt til sikker brug af ressourcer, for at undgå memory-leaks. Ideen er at ressourcen \textbf{allokeres under objektets oprettelse} og \textbf{deallokeres ved destruktion}. På denne måde skal man ved brug af RAII idiomet ikke selv kalde \textit{new} eller \textit{delete} og undgår derved at ''glemme'' at deallokere ressourcer.
+
+\subsubsection{Stack vs. Heap}
+\begin{itemize}
+	\item \textbf{Stack} - Ressourcer deallokeres ved endt scope.
+	\item \textbf{Heap} - Skal ''manuelt'' deallokeres.
+\end{itemize}
 
 \subsubsection{Why we need RAII}
 Hvis vi har koden vist i udsnit~\ref{code:raiiproblem}. Heri kan vi risikere at funktionen \textit{returner} før d og c bliver deallokeret og så dør baby.
 
-\begin{lstlisting}[caption=Problem som skal løses af RAII, label=code:raiiproblem]
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[
+caption=Problem som skal løses af RAII, label=code:raiiproblem]
 void f() {
 	Client* c = new Client;
 	Data* d   = acuireData(c);
 	
 	if(...)
 		return;
-		
+	
 	delete d;
 	delete d; 
 }
 \end{lstlisting}
+\end{minipage}
 
 Men hvis vi wrapper d og c i deres eget objekt, vil de automatisk blive deallokeret når vi har ud af scope - om det så bliver på \textit{return} eller når vi rammer linje 10.
 
 \subsection{Copy construction and the assignment operator}
 
+\subsection{What is the concept behind a Counted SmartPointer?}
+Når vi vil dele en ressource skal ikke ikke længere allokere ny plads i hukommelsen, vi kan bare dele pointeren. Ved hjælp af \textit{counter\_} vil hukommelsen først deallokeres når der ikke er flere som bruger pointeren.\\
 
-\subsection{What is the concept begind a Counted SmartPointer?}
+I følge \textbf{rule of three} skal vi også lave vores egen udgave af copy-constructor og assignment operatoren.
+Det vigtige ved disse er at de også incrementere \textit{counter\_}, som holder styr på hvor mange referencer der findes til objektet.\\
+
+I listing~\ref{code:ss_copy} kan copy-constructoren ses. Grunden til at \textit{counter\_} ikke incrementeres i denne metode er at assignment operatoren bruges og dén står for incrementeringen. 
+
+\begin{lstlisting}[
+caption=SmartString::Copy-constructor, 
+label=code:ss_copy]
+SmartString(const SmartString& other)
+{
+	*this = other;
+}
+\end{lstlisting}
+
+Videre i listing~\ref{code:ss_assign} findes vores egen udgave af assignment operatoren, hvor incrementering af \textit{counter\_} sker, samt tildeling af variabler.
+
+\begin{lstlisting}[
+caption=SmartString::Assignment operator,
+label=code:ss_assign]
+SmartString& operator=(const SmartString& other)
+{
+	str_ = other.str_;
+	counter_ = other.counter_;	// deling af ptr
+	(*counter_)++;				// incrementering af ptr value
+}
+\end{lstlisting}
+
+Hver gange en 
+Når denne \textit{counter\_} 
 
 \subsection{What is $boost::shared\_ptr<>$ and how do you use it?}
 
