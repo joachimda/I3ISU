@@ -90,8 +90,19 @@ SmartString& operator=(const SmartString& other)
 }
 \end{lstlisting}
 
-Hver gange en 
-Når denne \textit{counter\_} 
+Hver gang destructoren (ses i listing~\ref{code:dtor}) kaldes vil \textit{counter\_} decrementeres og når der endelig ikke er flere der bruger pointeren (counteren), vil den deallokere elementerne.
+
+\begin{lstlisting}[
+caption=Counted SmartPointer::destructor, label=code:dtor]
+~SmartString() {
+	(*counter_)--;
+
+	if(*counter_ == 0) {
+		delete str_;
+		delete counter_;
+	}
+}
+\end{lstlisting}
 
 \subsection{What is $boost::shared\_ptr<>$ and how do you use it?}
 
