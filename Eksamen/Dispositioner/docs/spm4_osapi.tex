@@ -145,7 +145,7 @@ Igen, har brugen af OS Api'et gjort det lettere for os at bruge tråde, mutex's 
 Med henyn til pthreads gør vi blot som beskrevet nedenfor i kodeudsnit \ref{code:threads_after}. I forhold til locking og unlocking af mutexes sker dette i vores MessageQueue. Hvis vi ser på MQ koden, bruges der blot et Mutex objekt hvorpå \textit{lock()} og \textit{unlock()} kaldes. \textbf{\textit{Mutex.cpp}} i linux mappen står for at kalde de respektive lock/unlock funktioner der passer til POSIX threads.
 
 \subsubsection{RAII in use}
-Et idiom brugt til sikker brug af ressourcer, for at undgå memory-leaks. Ideen er at ressourcen allokeres under objektets oprettelse og deallokeres ved destruktion.\\
+Et idiom brugt til sikker brug af ressourcer, for at undgå memory-leaks. Se afsnit~\ref{sec:raii} om RAII. Ideen er at ressourcen allokeres under objektets oprettelse og deallokeres ved destruktion.\\
 
 Kendt under flere navne: 
 \begin{itemize}
@@ -220,4 +220,5 @@ thread.join();
 \end{lstlisting}
 
 \subsection{UML Diagrams to implementation (class and sequence) - How}
+\todo{needs attention!}
 
