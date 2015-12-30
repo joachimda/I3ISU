@@ -31,6 +31,12 @@
 
 Et idiom brugt til sikker brug af ressourcer, for at undgå memory-leaks. Ideen er at ressourcen allokeres under objektets oprettelse og deallokeres ved destruktion.
 
+\subsubsection{Stack vs. Heap}
+\begin{itemize}
+	\item \textbf{Stack} - Ressourcer deallokeres ved endt scope.
+	\item \textbf{Heap} - Skal ''manuelt'' deallokeres.
+\end{itemize}
+
 \subsubsection{Why we need RAII}
 Hvis vi har koden vist i udsnit~\ref{code:raiiproblem}. Heri kan vi risikere at funktionen \textit{returner} før d og c bliver deallokeret og så dør baby.
 
