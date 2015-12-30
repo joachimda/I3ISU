@@ -116,11 +116,10 @@ caption=Counted SmartPointer::destructor, label=code:dtor]
 
 \subsection{What is $boost::shared\_ptr<>$ and how do you use it?}
 
-$Shared\_ptr<>$ er en class template, der indeholder en pointer til et dynamisk allokeret objekt. Der stilles garanti for at objektet der peges på slettes når den sidste \textit{shared\_ptr} der peger på det enten resettes eller destrueres. En $shared\_ptr<>$ er en counted smart pointer, hvilket vil sige at der inkrementeres en counter for hver gang.
+$Shared\_ptr<>$ er en class template, der indeholder en pointer til et dynamisk allokeret objekt. Der stilles garanti for at objektet der peges på slettes når den sidste \textit{shared\_ptr} der peger på det enten resettes eller destrueres. En $shared\_ptr<>$ er en counted smart pointer, hvilket vil sige at der inkrementeres en counter for hver gang objektet kopiers eller refereres.
 
-Eksempel:
-
-Hvis en shared pointer, p1 peger på variabel a, er dens counter = 1, hvis en anden shared pointer p2, sættes lig p1 så er counter = 2. Hvis en tredje pointer også peger på a er counter lig 3 sov.
+\subsubsection{Eksempel}
+Hvis en shared pointer, \textit{p1} peger på variabel \textit{a}, er dens counter = 1, hvis en anden shared pointer \textit{p2}, sættes lig \textit{p1} så er counter = 2. Hvis en tredje pointer også peger på \textit{a} er counter lig 3 osv.
 
 Kaldes populært en \textit{reference counted pointer}.
 
@@ -154,5 +153,5 @@ Det som weak pointeren peger på skal ikke være kritisk at have til rådighed, 
 	\item Boost version af RAII.
 	\item Implementerer en smart pointer.
 	\item Bundet til en funktion eller et objekt.
-	\item Kan ikke kopieres - Hovedpointen!
+	\item Kan ikke kopieres - fordi copy-ctor og assignment operator er private!
 \end{itemize}
