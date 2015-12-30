@@ -146,7 +146,7 @@ morekeywords={boost, use_count, reset}]
 kan tildeles en shared\_ptr, som den deler counter med.
 Det som weak pointeren peger på skal ikke være kritisk at have til rådighed, idet garbage collectoren sletter objektet der peges på, hvis der kun er en weak pointer der peger på det (det er her det kan bruges til at undgå cirkulære referencer)
 
-\textit{lock()} funktionen laver en shared pointer \todo{laver en ny eller laver om på weak pointeren??}, der peger på det som weak pointeren peger på. Dette medfører at dennes hukommelse ikke deallokeres før vi går ud af scope.
+\textit{lock()} funktionen laver en shared pointer, som peger på det som weak pointeren peger på. Dette medfører at dennes hukommelse ikke deallokeres før vi går ud af det scope som den nye shared pointer findes i.
 
 \paragraph{boost::scoped\_ptr}
 \begin{itemize}
