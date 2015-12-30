@@ -50,7 +50,7 @@
 	\begin{itemize}
 		\item Hvilke data den vil subscribe på, via globalt id.
 		\item Pointer til egen MsgQueue.
-		\item \todo{præcis mening med local id er endnu uvist...}Local ID, som skal bruges når den skal modtage, hvilket gør klassen uafhængig af global navngivning\footnote{Delvist svar, har indtil videre ikke kunne bestemme den nøjagtige grund.}.
+		\item Local ID, som skal bruges når den skal modtage, hvilket gør klassen uafhængig af global navngivning\footnote{Delvist svar, har indtil videre ikke kunne bestemme den nøjagtige grund.}.
 	\end{itemize}
 	\item Ved opdatering på data \textit{x}, gør Publisher følgende:
 	\begin{itemize}
@@ -59,7 +59,7 @@
 	\end{itemize}
 \end{itemize}
 
-\todo{insert UML sekvensdiagram over kommunikation}
+%\todo{insert UML sekvensdiagram over kommunikation}
 
 \subsection{The Postoffice Design - Why and how?}
 
@@ -80,10 +80,10 @@ Lavere kobling, som altid. Sender kender kun til modtagers navn og intet andet.
 	\end{itemize}
 \end{itemize}
 
-\todo{muligvis et klassediagram og/eller et sekvens?}
+%\todo{muligvis et klassediagram og/eller et sekvens?}
 
 \subsection{Design considerations and implmentation.}
-\todo{Dækket i det ovenstående?}
+%\todo{Dækket i det ovenstående?}
 
 \subsection{Patterns per design and in relation to the MDS and Postoffice design}
 
@@ -92,7 +92,7 @@ Lavere kobling, som altid. Sender kender kun til modtagers navn og intet andet.
 Et singleton pattern er et software design pattern, der gør det muligt at begrænse antallet af instanser af en klasse til 1.
 
 \paragraph{How to Singleton}
-\todo{Kode eksempel tilgår...}
+%\todo{Kode eksempel tilgår...}
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.4\linewidth]{figs/spm5/singletonclassdia}
@@ -103,11 +103,11 @@ Et singleton pattern er et software design pattern, der gør det muligt at begr�
 \begin{itemize}
 	\item Private constructor - Sikrer at kun klassen kan oprette en instans, ingen andre kan oprette eller kopiere den!
 	\item statisk \textit{getInstance()} funktion - Statisk så den kan kaldes uden et objekt. Denne funktion returnerer instansen, og laver en ny hvis den private pointer (instansen) til sig selv er NULL.
-	\item Statisk private pointer til sig selv - Den eneste instans\todo{right??}.
+	\item Statisk private pointer til sig selv - Den eneste instans.
 \end{itemize}
 
 \paragraph{Singleton pattern i forhold til MDS og postoffice design}
-\todo{her skal der være noget med øvelsen}
+%\todo{her skal der være noget med øvelsen}
 
 \subsubsection{GoF Observer Pattern}
 
@@ -128,7 +128,7 @@ Dette pattern er brugbart når ændringer i et objekt kræver ændring i andre, 
 \end{figure}
 
 \paragraph{Observer pattern i forhold til MDS og postoffice design}
-\todo{her skal der være noget med øvelsen}
+%\todo{her skal der være noget med øvelsen}
 
 \subsubsection{GoF Mediator Pattern}
 Når objekters funktionalitet distribueres ud mellem hinanden, vil der opstå høj kobling, og masser af interkonnektivitet.  I et mediator pattern oprettes et separat mediator-objekt, som står for at kontrollere objekters interaktioner med hinanden. 
