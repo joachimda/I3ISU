@@ -29,7 +29,7 @@
 \subsection{RAII - What and why?}\label{sec:raii}
 \textit{''Wrap up all recources in their own object that handles their lifetime and put object on stack''}\\
 
-Et idiom brugt til sikker brug af ressourcer, for at undgå memory-leaks. Ideen er at ressourcen allokeres under objektets oprettelse og deallokeres ved destruktion.
+Et idiom brugt til sikker brug af ressourcer, for at undgå memory-leaks. Ideen er at ressourcen \textbf{allokeres under objektets oprettelse} og \textbf{deallokeres ved destruktion}. På denne måde skal man ved brug af RAII idiomet ikke selv kalde \textit{new} eller \textit{delete} og undgår derved at ''glemme'' at deallokere ressourcer.
 
 \subsubsection{Stack vs. Heap}
 \begin{itemize}
@@ -40,23 +40,50 @@ Et idiom brugt til sikker brug af ressourcer, for at undgå memory-leaks. Ideen 
 \subsubsection{Why we need RAII}
 Hvis vi har koden vist i udsnit~\ref{code:raiiproblem}. Heri kan vi risikere at funktionen \textit{returner} før d og c bliver deallokeret og så dør baby.
 
-\begin{lstlisting}[caption=Problem som skal løses af RAII, label=code:raiiproblem]
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[
+caption=Problem som skal løses af RAII, label=code:raiiproblem]
 void f() {
 	Client* c = new Client;
 	Data* d   = acuireData(c);
 	
 	if(...)
 		return;
-		
+	
 	delete d;
 	delete d; 
 }
 \end{lstlisting}
+\end{minipage}
 
 Men hvis vi wrapper d og c i deres eget objekt, vil de automatisk blive deallokeret når vi har ud af scope - om det så bliver på \textit{return} eller når vi rammer linje 10.
 
 \subsection{Copy construction and the assignment operator}
+I følge \textbf{rule of three} skal vi også lave vores egen copy-constructor og assignment operator
 
+I listing~\ref{code:ss_copy} kan copy-constructoren ses. 
+
+\begin{lstlisting}[
+caption=SmartString Copy-constructor, 
+label=ss_copy]
+SmartString(const SmartString& other)
+{
+	*this = other;
+}
+\end{lstlisting}
+
+\derp
+
+\begin{lstlisting}[
+caption=SmartString Assignment operator,
+label=ss_assign]
+SmartString& operator=(const SmartString& other)
+{
+	str_ = other.str_;
+	counter_ = other.counter_;
+	(*counter_)++;
+}
+\end{lstlisting}
 
 \subsection{What is the concept begind a Counted SmartPointer?}
 
