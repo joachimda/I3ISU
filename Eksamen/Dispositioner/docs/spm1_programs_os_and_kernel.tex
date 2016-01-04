@@ -144,7 +144,7 @@ Der findes tre forskellige modeller:
 	\label{fig:memorydiagram}
 \end{figure}
 
-Når der mappes virtuel memory til processer er der af sikkerhedshensyn indført random offsets for startaddressen på det virtuelle memory.\\
+Når der mappes virtuel memory til processer er der af sikkerhedshensyn indført random offsets for startaddressen på det virtuelle memory. Et exploit kræver ofte en absoulut addresse. En hacker skal derfor gætte ved brug af random offsets.\\
 
 Resten, udover kernel space er processens egen.\\
 
@@ -166,8 +166,14 @@ Alle processer har deres eget virtual address space, som der skiftes mellem ved 
 	\label{fig:virtualaddressspace}
 \end{figure}
 
+\paragraph{Kernel}
+Her findes kernel kode og data samt Page Tables.
+\paragraph{Stack}
+Her gemmes funktions parametre, returværdier.
+\paragraph{Heap}
+Her gemmes dynamisk allokerede memory.
 \paragraph{BSS}
-Indeholder \textbf{ikke} initialiserede statiske variabler. Dette område er anonymt (mapper ikke til nogen fil, men er blot "reseveret").
+Indeholder \textbf{ikke} initialiserede \textbf{\textit{statiske}} variabler. Dette område er anonymt (mapper ikke til nogen fil, men er blot "reseveret").
 
 \paragraph{Data segment}
 Indeholder statisk allokerede og initialiserede variabler. Dette område er \textbf{ikke} anonymt og mapper til en fil på disken. Data segmentet kortlægger de initialiserede statiske værdier der er givet i source koden. Da dette er privat bliver ændringer ikke gemt i det mappede område.
