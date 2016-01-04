@@ -234,23 +234,6 @@ item Consumer::get()
 \end{lstlisting}
 \end{minipage}
 
-\subsection{Dead locks}\label{sec:deadlock}
-Deadlock er en situation hvor tråde ikke frigiver deres ressourcer fordi de venter på ressourcer som andre tråde ligeledes holder mens de venter på samme ting.\\
-
-På wikipedia om \href{https://en.wikipedia.org/wiki/Deadlock}{deadlock} kan man læse om de fire betingelser som skal være overholdt for at en deadlock kan opstå:
-\begin{enumerate}
-	\item \textbf{Mutual exclution}\\
-	Mindst én ressource skal være ''holdt'' i et \textit{non-shareable mode}\footnote{Kun én tråd kan bruge ressourcen af gangen.}.
-	\item \textbf{Hold and Wait} eller \textbf{Resource holding}\\
-	En tråd ''holder'' mindst én ressource og anmoder om flere ressourcer, hvor disse ''holdes'' af andre tråde.
-	\item \textbf{No preemption\footnote{Læs om preemption i section~\ref{sec:execpu}}}\\
-	En ressource kan kun frigives af tråden som holder den.
-	\item \textbf{Circular wait}\\
-	En tråd/process venter på en ressource som på tidspunktet holdes af en anden tråd/process. Denne anden tråd venter ligeledes på at den første tråd frigiver sin ressource.
-\end{enumerate}
-
-For at deadlocks ikke skal opstå, skal mindst én af de ovenstående betingelser brydes.
-
 \subsection{Dining philosophers}
 Wikipedia om problemet findes \href{https://en.wikipedia.org/wiki/Dining_philosophers_problem}{her}.
 
@@ -290,3 +273,20 @@ Problemet bliver imidlertid så at kun én filosof kan spise af gangen, selv hvi
 I 1984 kom K. Mani Chandy og J. Misra med en anden løsning, som tillod at et arbitrært antal ''agents'' kan bruge et arbitrært antal ressourcer.
 
 Den kræver ikke nogen central enhed, men den kræver tilgengæld at enhederne kommunikerer. Se \href{https://en.wikipedia.org/wiki/Dining_philosophers_problem#Chandy.2FMisra_solution}{wiki} for præcis beskrivelse.
+
+\subsection{Dead locks}\label{sec:deadlock}
+Deadlock er en situation hvor tråde ikke frigiver deres ressourcer fordi de venter på ressourcer som andre tråde ligeledes holder mens de venter på samme ting.\\
+
+På wikipedia om \href{https://en.wikipedia.org/wiki/Deadlock}{deadlock} kan man læse om de fire betingelser som skal være overholdt for at en deadlock kan opstå:
+\begin{enumerate}
+	\item \textbf{Mutual exclution}\\
+	Mindst én ressource skal være ''holdt'' i et \textit{non-shareable mode}\footnote{Kun én tråd kan bruge ressourcen af gangen.}.
+	\item \textbf{Hold and Wait} eller \textbf{Resource holding}\\
+	En tråd ''holder'' mindst én ressource og anmoder om flere ressourcer, hvor disse ''holdes'' af andre tråde.
+	\item \textbf{No preemption\footnote{Læs om preemption i section~\ref{sec:execpu}}}\\
+	En ressource kan kun frigives af tråden som holder den.
+	\item \textbf{Circular wait}\\
+	En tråd/process venter på en ressource som på tidspunktet holdes af en anden tråd/process. Denne anden tråd venter ligeledes på at den første tråd frigiver sin ressource.
+\end{enumerate}
+
+For at deadlocks ikke skal opstå, skal mindst én af de ovenstående betingelser brydes.
