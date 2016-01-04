@@ -31,6 +31,8 @@
 	\item Thread Synchronization I \& II
 \end{itemize}
 
+\newpage
+
 \subsection{Data integrity - Concurrency challenge}
 
 Selvom informationsdeling tråde imellem er en af de væsentligste fordele ved multitrådede applikationer, er det vigtigt at se sig for når flere tråde behandler den samme data.
@@ -149,7 +151,7 @@ Når en tråd tager en mutex assignes den midlertidigt til at have den højeste 
 \end{figure}
 
 \subsubsection{Priority ceiling}
-Alle mutexes assignes til høj prioritet (priority ceiling). Denne prioritet assignes til ejeren af mutexen så snart den tages. Se figur~\ref{fig:ceili}.
+Tråden som har mutexen gives højeste prioritet (priority ceiling). Denne prioritet assignes til ejeren af mutexen så snart den tages. Se figur~\ref{fig:ceili}.
 
 \begin{figure}[h]
 	\centering
@@ -174,7 +176,7 @@ Hvis vi lader begge tråde checke om bufferen er tøm/fuld før de gør noget, s
 
 \subsubsection{Løsning med Mutex}
 
-\begin{lstlisting}[otherkeywords={item, buffer, unlock, lock, signal}]
+\begin{lstlisting}[otherkeywords={un, item, buffer, unlock, lock, signal}]
 // Producers put function
 void Producer::put(item i)
 {
@@ -191,7 +193,7 @@ void Producer::put(item i)
 }
 \end{lstlisting}
 
-\begin{lstlisting}
+\begin{lstlisting}[otherkeywords={un, item, buffer, unlock, lock, signal}]
 // Consumers get function
 item Comsumer::get()
 {
@@ -209,6 +211,7 @@ item Comsumer::get()
 \end{lstlisting}
 
 \subsubsection{Løsning med Semaphore}
+\begin{minipage}{\linewidth}
 \begin{lstlisting}[otherkeywords={create_semaphore, take, push, release, item}]
 // Solutions with semaphores
 empthySlotsSem = create_semaphore(buffer_size);
@@ -229,6 +232,7 @@ item Consumer::get()
 	return item;
 }
 \end{lstlisting}
+\end{minipage}
 
 \subsection{Dining philosophers}
 Wikipedia om problemet findes \href{https://en.wikipedia.org/wiki/Dining_philosophers_problem}{her}.
@@ -236,10 +240,14 @@ Wikipedia om problemet findes \href{https://en.wikipedia.org/wiki/Dining_philoso
 I section~\ref{sec:deadlock} er fire betingelser for deadlocks beskrevet. Vores opgave er at bryde mindst én af disse.
 
 \begin{enumerate}
-	\item \textbf{Mutual exclution} - Nope, de skal have hver deres egen gaffel.
-	\item \textbf{Hold and Wait} eller \textbf{Resource holding} - Heller ikke, de skal have to gafler for at spise.
-	\item \textbf{No preemption\footnote{Læs om preemption i section~\ref{sec:execpu}}} - Nix, de må ikke tage hinandens gafler.
-	\item \textbf{Circular wait} - Bingo! Vi kan bryde denne cyklus!
+	\item \textbf{Mutual exclution} - \textit{at least one resource must be held in a non-shareable mode}.\\
+	Nope, de skal have hver deres egen gaffel.
+	\item \textbf{Hold and Wait} eller \textbf{Resource holding} - \textit{a process is currently holding at least one resource and requesting additional resources which are being held by other processes}.\\
+	Heller ikke, de skal have to gafler for at spise.
+	\item \textbf{No preemption\footnote{Læs om preemption i section~\ref{sec:execpu}}} - \textit{a resource can be released only voluntarily by the process holding it}.\\
+	Nix, de må ikke tage hinandens gafler.
+	\item \textbf{Circular wait} - \textit{a process must be waiting for a resource which is being held by another process, which in turn is waiting for the first process to release the resource}.\\
+	Bingo! Vi kan bryde denne cyklus!
 \end{enumerate}
 
 \begin{figure}[h]

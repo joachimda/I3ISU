@@ -30,6 +30,8 @@
 	\item Posix Threads.
 \end{itemize}
 
+\newpage
+
 \subsection{Processes and threads}
 \begin{itemize}
 	\item En \textbf{process} er en instans af et program, som eksekveres.
@@ -54,9 +56,9 @@
 	\end{itemize}
 \end{itemize}
 
-Tråde er forskellige fra processer selvom de deler flere egenskaber og kendetegn. En tråd eksekveres i en process. Man kan sige at en tråd er en enkelt sekvensstrøm inde i en process.
+Tråde er forskellige fra processer selvom de deler flere egenskaber og kendetegn. Man kan sige at en tråd er en enkelt sekvensstrøm inde i en process.\\
 
-Tråde gør det muligt at eksekvere flere sekvensstrømme ad gangen, og er derved en måde af effektivisere i form af parallelisering. OS's kernel giver gennem system calls mulighed for at oprette og nedlægge tråde.
+Tråde gør det muligt at eksekvere flere sekvensstrømme ad gangen, og er derved en måde af effektivisere i form af parallelisering. OS's kernel giver gennem system-calls mulighed for at oprette og nedlægge tråde.
 
 \paragraph{Thread states}
 \begin{itemize}
@@ -78,8 +80,8 @@ Der findes tre forskellige modeller:
 
 \subsubsection{User level threading}
 \begin{itemize}
-	\item Simpel implementering, ingen kernel support for threads.
-	\item Ekstremt hurtig thread kontekst skift ikke brug for kernel handling).
+	\item Simpel implementering, ingen kernel support for threads - ingen kontrol over kernel thread.
+	\item Ekstremt hurtig thread kontekst skift ikke brug for kernel handling) - kernel threads er langsomme at lave.
 	\item Ikke muligt at håndtere flere CPU-core.
 \end{itemize}
 
@@ -92,9 +94,9 @@ Der findes tre forskellige modeller:
 
 \subsubsection{Kernel level threading}
 \begin{itemize}
-	\item OS kernel er bevidst om trådene. Giver overhead - er 100 gange langsommere end user level threads.
+	\item OS kernel er bevidst om trådene. Giver overhead, og er 100 gange langsommere end user level threads - da de skal oprettes og ved kontekst skift skal et ''mode switch'' foretages i kernel.
 	\item Mapper direkte til "fysiske" threads som \textit{scheduleren} kan kontrollere.
-	\item Effektiv brug af flere kerner.
+	\item Brug af flere kerner.
 \end{itemize}
 
 \begin{figure}[H]
@@ -142,21 +144,13 @@ Der findes tre forskellige modeller:
 	\label{fig:memorydiagram}
 \end{figure}
 
-Når der mappes virtuel memory til processer er der af sikkerhedshensyn indført random offsets for startaddressen på det virtuelle memory.\\
+Når der mappes virtuel memory til processer er der af sikkerhedshensyn indført random offsets for startaddressen på det virtuelle memory. Et exploit kræver ofte en absoulut addresse. En hacker skal derfor gætte ved brug af random offsets.\\
 
-\begin{figure}
-	\centering
-	\includegraphics[width=0.7\linewidth]{figs/spm1/virtualaddressspace}
-	\caption{Typical memory layout of a process on Linux/x86-32.}
-	\label{fig:virtualaddressspace}
-\end{figure}
-
-
-Resten, udover kernel space processens egen.\\
+Resten, udover kernel space er processens egen.\\
 
 Her findes: Stack, heap, memory mapping, BSS, data og text/code segment.
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=\linewidth]{figs/spm1/memoryspace}
 	\caption{Diagram for process switch.}
@@ -165,8 +159,21 @@ Her findes: Stack, heap, memory mapping, BSS, data og text/code segment.
 
 Alle processer har deres eget virtual address space, som der skiftes mellem ved context switches, se figur~\ref{fig:memoryspace}.
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\linewidth]{figs/spm1/virtualaddressspace}
+	\caption{Typical memory layout of a process on Linux/x86-32.}
+	\label{fig:virtualaddressspace}
+\end{figure}
+
+\paragraph{Kernel}
+Her findes kernel kode og data samt Page Tables.
+\paragraph{Stack}
+Her gemmes funktions parametre, returværdier.
+\paragraph{Heap}
+Her gemmes dynamisk allokerede memory.
 \paragraph{BSS}
-Indeholder \textbf{ikke} initialiserede statiske variabler. Dette område er anonymt (mapper ikke til nogen fil, men er blok "reseveret").
+Indeholder \textbf{ikke} initialiserede \textbf{\textit{statiske}} variabler. Dette område er anonymt (mapper ikke til nogen fil, men er blot "reseveret").
 
 \paragraph{Data segment}
 Indeholder statisk allokerede og initialiserede variabler. Dette område er \textbf{ikke} anonymt og mapper til en fil på disken. Data segmentet kortlægger de initialiserede statiske værdier der er givet i source koden. Da dette er privat bliver ændringer ikke gemt i det mappede område.
@@ -177,25 +184,26 @@ Tag et eksempel: indholdet af en pointer (X-bit addresse) er i data segmentet me
 \subsection{Virtual memory}
 Linux processer bliver eksekveret i et virtuelt miljø. På denne måde tror hver process at den har al hukommelsen for sig selv.\\
 
+\begin{minipage}{\linewidth}
 Vigtige grunde til at vi bruger virtuel hukommelse:
-
-\begin{itemize}
-	\item Resource virtualization.
 	\begin{itemize}
-		\item En process skal ikke tænke på hvor meget hukommelse der er tilgængeligt.
-		\item Virtuel hukommelse gør en begrænset mængde fysisk hukommelse til en stor ressource.
+		\item \textbf{Resource virtualization}
+		\begin{itemize}
+			\item En process skal ikke tænke på hvor meget hukommelse der er tilgængeligt.
+			\item Virtuel hukommelse gør en begrænset mængde fysisk hukommelse til en stor ressource.
+		\end{itemize}
+		\item \textbf{Information isolation}
+		\begin{itemize}
+			\item Hver process arbejder i sit eget miljø, derved kan den ikke læse (eller skrive i) en anden process's hukommelse.
+			\item Forbedre sikkerheden, da en process således ikke kan ''spionere'' på en anden process.
+		\end{itemize}
+		\item \textbf{Fault isolation}
+		\begin{itemize}
+			\item Kan ikke fucke andre processer op, da den ikke har adgang der deres hukommelse.
+			\item Hvis en process crasher/fejler/etc. ødelægger det ikke resten af systemet - problemet er isoleret i processen.
+		\end{itemize}
 	\end{itemize}
-	\item Information isolation.
-	\begin{itemize}
-		\item Hver process arbejder i sit eget miljø, derved kan den ikke læse (eller skrive i) en anden process's hukommelse.
-		\item Forbedre sikkerheden, da en process således ikke kan ''spionere'' på en anden process.
-	\end{itemize}
-	\item Fault isolation.
-	\begin{itemize}
-		\item Kan ikke fucke andre processer op, da den ikke har adgang der deres hukommelse.
-		\item Hvis en process crasher/fejler/etc. ødelægger det ikke resten af systemet - problemet er isoleret i processen.
-	\end{itemize}
-\end{itemize}
+\end{minipage}
 
 \subsection{Threads being executed on CPU, associated Scheduler and Cache}\label{sec:execpu}
 \textbf{Scheduleren} sætter processer op til eksekvering på CPU og sørger for at skifte (switche) mellem processer:
@@ -219,6 +227,6 @@ De fleste CPU'er har minimum 3 typer caches:
 \begin{itemize}
 	\item Instruction cache - fremskynder instruction fetching.
 	\item Data cache - fremskynder fetch and store, og deles op i cache levels (L1, L2 osv.).
-	\item TLB (Translation Lookaside Buffer) - fremskynder oversættelse af virtuel til fysiske addresser (TLB er en del af MMU'en\footnote{Memory Management Unit})
+	\item TLB (Translation Lookaside Buffer) - fremskynder oversættelse af virtuel til fysiske addresser (TLB er en del af MMU'en\footnote{Memory Management Unit}).
 \end{itemize}
 TLB cache bruges hver gang en virtuel til fysisk oversættelse sker. De seneste data gemmes da i TLB’en. Dette forøger hastigheden på næste lookup til samme addresse.
