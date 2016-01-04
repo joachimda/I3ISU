@@ -30,6 +30,8 @@
 	\item Posix Threads.
 \end{itemize}
 
+\newpage
+
 \subsection{Processes and threads}
 \begin{itemize}
 	\item En \textbf{process} er en instans af et program, som eksekveres.
@@ -78,9 +80,9 @@ Der findes tre forskellige modeller:
 
 \subsubsection{User level threading}
 \begin{itemize}
-	\item Simpel implementering, ingen kernel support for threads.\todo{hvad bestød det nu igen?}
-	\item Ekstremt hurtig thread kontekst skift ikke brug for kernel handling).\todo{kan ikke huske hvorfor?}
-	\item Ikke muligt at håndtere flere CPU-core.\todo{igen hvorfor?}
+	\item Simpel implementering, ingen kernel support for threads - ingen kontrol over kernel thread.
+	\item Ekstremt hurtig thread kontekst skift ikke brug for kernel handling) - kernel threads er langsomme at lave.
+	\item Ikke muligt at håndtere flere CPU-core.
 \end{itemize}
 
 \begin{figure}[H]
@@ -92,9 +94,9 @@ Der findes tre forskellige modeller:
 
 \subsubsection{Kernel level threading}
 \begin{itemize}
-	\item OS kernel er bevidst om trådene. Giver overhead - er 100 gange langsommere end user level threads.\todo{skal der laves en kernel tråd hver gang vi skal bruge en user tråd?}
+	\item OS kernel er bevidst om trådene. Giver overhead, og er 100 gange langsommere end user level threads - da de skal oprettes og ved kontekst skift skal et ''mode switch'' foretages i kernel.
 	\item Mapper direkte til "fysiske" threads som \textit{scheduleren} kan kontrollere.
-	\item Effektiv brug af flere kerner.\todo{en kernel tråd = en fysisk tråd?}
+	\item Brug af flere kerner.
 \end{itemize}
 
 \begin{figure}[H]
@@ -217,8 +219,8 @@ Der er to måder at schedule på:
 \subsubsection{Cache}
 De fleste CPU'er har minimum 3 typer caches:
 \begin{itemize}
-	\item Instruction cache - fremskynder instruction fetching.\todo{skal vi snakke om}
+	\item Instruction cache - fremskynder instruction fetching.
 	\item Data cache - fremskynder fetch and store, og deles op i cache levels (L1, L2 osv.).
-	\item TLB (Translation Lookaside Buffer) - fremskynder oversættelse af virtuel til fysiske addresser (TLB er en del af MMU'en\footnote{Memory Management Unit}).\todo{alt det fremskyden?}
+	\item TLB (Translation Lookaside Buffer) - fremskynder oversættelse af virtuel til fysiske addresser (TLB er en del af MMU'en\footnote{Memory Management Unit}).
 \end{itemize}
 TLB cache bruges hver gang en virtuel til fysisk oversættelse sker. De seneste data gemmes da i TLB’en. Dette forøger hastigheden på næste lookup til samme addresse.
