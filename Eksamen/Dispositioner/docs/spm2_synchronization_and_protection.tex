@@ -274,6 +274,16 @@ I 1984 kom K. Mani Chandy og J. Misra med en anden løsning, som tillod at et ar
 
 Den kræver ikke nogen central enhed, men den kræver tilgengæld at enhederne kommunikerer. Se \href{https://en.wikipedia.org/wiki/Dining_philosophers_problem#Chandy.2FMisra_solution}{wiki} for præcis beskrivelse.
 
+\paragraph{Fremgangsmåde}
+\begin{enumerate}
+	\item Filosofferne kan kun give en gaffel videre hvis den er beskidt. Alle gafler er beskidte fra start. 
+	\item Filosofferne skal spørge sine naboer om lov når de ønsker en gaffel.
+	\item Filosoffen beholder gaflen hvis den er ren.
+	\item Filosofferne rengører gaflen lige før de sender den videre og efter de har modtaget et request.
+	\item Når en filosof har spist er begge hans gafler beskidte.
+	
+\end{enumerate}
+
 \subsection{Dead locks}\label{sec:deadlock}
 Deadlock er en situation hvor tråde ikke frigiver deres ressourcer fordi de venter på ressourcer som andre tråde ligeledes holder mens de venter på samme ting.\\
 
