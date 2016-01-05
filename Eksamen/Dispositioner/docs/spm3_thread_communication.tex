@@ -33,6 +33,8 @@
 	\item Thread Communication
 \end{itemize}
 
+\newpage
+
 \subsection{The challenges performing Intra-Process Communication}\label{sec:ipc}
 Ulemper ved at implementere IPC med mutex\footnote{Mere om mutexes, se afsnit~\ref{sec:mutex}.} og conditional\footnote{Conditionals i samspil med mutexes, se afsnit~\ref{sec:mtxcond}.} variable, eller semephore\footnote{Semaphore, se afsnit~\ref{sec:semaphore}.}.
 
@@ -93,7 +95,7 @@ Vi caster vore basis message til den messagetype der ønskes.
 \end{figure}
 
 \paragraph{Queue items}
-De items som køerne indeholde. Kan eksempelvis implementeres med en struct, bestående af et id og et beskedobjekt af basisklassen Message.\\
+De items som køerne indeholder kan eksempelvis implementeres med en struct, bestående af et id og et beskedobjekt af basisklassen Message.\\
 
 \begin{lstlisting}[caption=Struct qItem]
 struct Item
@@ -103,7 +105,7 @@ struct Item
 }
 \end{lstlisting}
 
-Dispatcheren kan da switche på QueueItems id, og handleren kan  reagere på beskeden.
+Dispatcheren kan da switche på QueueItems id, og Handleren kan  reagere på beskeden.
 
 \begin{lstlisting}[caption=Dispatcher]
 void Dispatcher(Message* msg, unsigned long id)
@@ -153,7 +155,7 @@ Vi ønsker at have mulighed for at sende data med; i vores tilfælde beskedkøen
 \subsubsection{Its design and implementation}
 \textit{MessageQueue} implementering med psudokode:
 
-\begin{lstlisting}[otherkeywords={unlock, lock, signal, cond_wait}]
+\begin{lstlisting}[morekeywords={unlock, lock, signal, cond_wait}]
 // send() function
 lock(mtx);
 
@@ -166,7 +168,7 @@ unlock(mtx);
 signal(cond);
 \end{lstlisting}
 
-\begin{lstlisting}
+\begin{lstlisting}[morekeywords={unlock, lock, signal, cond_wait}]
 // receive() function
 lock(mtx);
 
