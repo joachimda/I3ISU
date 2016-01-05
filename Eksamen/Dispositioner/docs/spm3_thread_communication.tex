@@ -105,6 +105,30 @@ struct Item
 }
 \end{lstlisting}
 
+
+\subsubsection{Gennemgang af adfærd}
+
+\paragraph{Sender thread}
+\begin{enumerate}
+	\item Opretter instans af struct som er afledt af Message - Vi kalder den Req.
+	\item Sætter Req-$>$mq = \&egenMQ.
+	\item Modtagerens message queue's \textit{send()} funktion kaldes med det ønskede ID, samt Req.
+\end{enumerate}
+
+\paragraph{Modtager thread}
+\begin{enumerate}
+	\item Venter på besked (blokerer på recieve hvis køen er tom).
+	\item Modtaget besked sættes lig en \textit{Message* msg}.
+	\item Kalder dens handler funktion med Req og ID.
+	\begin{itemize}
+		\item Handleren switcher på ID.
+		\item Handler funktionen laver en response på samme måde som sender tråden gør (med fx en confirm besked)
+		\item Handlerfunktionen sender message tilbage Req-$>$mq-$>$send(ID, Cfm). 
+	\end{itemize}
+	\item Modtageren kører \textit{delete} på msg.
+\end{enumerate}
+
+
 Dispatcheren kan da switche på QueueItems id, og Handleren kan  reagere på beskeden.
 
 \begin{lstlisting}[caption=Dispatcher]
