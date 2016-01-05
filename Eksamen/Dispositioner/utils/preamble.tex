@@ -38,11 +38,12 @@ a4paper, % papirtype
 	urlcolor={blue!80!black}
 }
 
-\usepackage[perpage]{footmisc} %% nulstiller footnote counter på hver side
+\usepackage[bottom,perpage]{footmisc}%% nulstiller footnote counter på hver side
 \usepackage{todonotes} %% tillader "to-do"-liste vha. \todo{opgave}
 \usepackage{datetime}
 \usepackage{dblfnote} %% footnotes in two colums
 \DFNalwaysdouble %% footnotes in two colums
+\usepackage{pdfpages} % can fill entire page with fig with: \includepdf{fig.png}
 
 %============================================================%
 %=== Package settings========================================%

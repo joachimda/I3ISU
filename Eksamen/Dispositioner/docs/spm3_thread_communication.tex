@@ -77,59 +77,23 @@ Her kommer conditionals ind i billedet. To conditions - QueueFull og QueueEmpty.
 Implementeres med en FIFO kø af typen STL \textit{queue}, eventuelt med max på antal beskeder.
 
 \paragraph{Beskedtypen}
-Det er muligt at lave beskeder på flere måder:
-\begin{itemize}
-	\item void* - ingen typesikkerhed (delete problemer).
-	\item Templates - For kompleks.
-	\item Arv - Typesikker, simple, måske overhead.
-\end{itemize}
 
 Vi bruger i opgaven beskeder der arver fra en basisbesked. På denne måde er besked objekterne typesikre idet de kan slettes med deres \textbf{baseklasse pointer}.
+Det er muligt at lave beskeder på andre måder:
+
+\begin{itemize}
+	\item void* - ingen typesikkerhed (delete problemer).
+	
+	\item Templates - For kompleks.
+\end{itemize}
+
 Vi caster vore basis message til den messagetype der ønskes.
 
-\begin{figure}
-\centering
-\includegraphics[width=0.7\linewidth]{figs/spm3/message}
-\caption{Message via inheritance}
-\label{fig:message}
-\end{figure}
-
 \paragraph{Queue items}
-De items som køerne indeholder kan eksempelvis implementeres med en struct, bestående af et id og et beskedobjekt af basisklassen Message.\\
 
-\begin{lstlisting}[caption=Struct qItem]
-struct Item
-{
-	unsigned long _id;
-	Message* msg;
-}
-\end{lstlisting}
+De items som køerne indeholder. Kan eksempelvis implementeres med en struct, bestående af et id og et beskedobjekt af basisklassen Message.
 
 Dispatcheren kan da switche på QueueItems id, og Handleren kan  reagere på beskeden.
-
-\begin{lstlisting}[caption=Dispatcher]
-void Dispatcher(Message* msg, unsigned long id)
-{
-	switch(id)
-	{
-		case ID_X:
-		  //Cast msg* til afledt message klasse.
-		  //Do stuff - call specific handler
-		  break;
-		
-		case ID_Y:
-		  //Cast msg* til afledt message klasse.
-		  //Do stuff - call specific handler
-	}
-	
-	unsigned long _id;
-	Message* msg;
-}
-\end{lstlisting}
-
-Hvorfor bruger vi ikke bare ID'er og switche direkte på dem?\\
-
-Vi ønsker at have mulighed for at sende data med; i vores tilfælde beskedkøen - \textit{Jeg sender til dig og addressen på min postkasse er HER}
 
 \paragraph{Asynkrone køer}
 \begin{itemize}
@@ -154,7 +118,7 @@ Vi ønsker at have mulighed for at sende data med; i vores tilfælde beskedkøen
 
 \subsubsection{Its design and implementation}
 \textit{MessageQueue} implementering med psudokode:
-
+\todo{unfuck code}
 \begin{lstlisting}[morekeywords={unlock, lock, signal, cond_wait}]
 // send() function
 lock(mtx);
