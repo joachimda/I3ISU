@@ -90,9 +90,52 @@ Det er muligt at lave beskeder på andre måder:
 Vi caster vore basis message til den messagetype der ønskes.
 
 \paragraph{Queue items}
-
 De items som køerne indeholder. Kan eksempelvis implementeres med en struct, bestående af et id og et beskedobjekt af basisklassen Message.
 
+\subsubsection{Gennemgang af adfærd}
+
+\paragraph{Sender thread}
+\begin{enumerate}
+	\item Opretter instans af struct som er afledt af Message - Vi kalder den Req.
+	\item Sætter Req-$>$mq = \&egenMQ.
+	\item Modtagerens message queue's \textit{send()} funktion kaldes med det ønskede ID, samt Req.
+\end{enumerate}
+
+\paragraph{Modtager thread}
+\begin{enumerate}
+	\item Venter på besked (blokerer på recieve hvis køen er tom).
+	\item Modtaget besked sættes lig en \textit{Message* msg}.
+	\item Kalder dens handler funktion med Req og ID.
+	\begin{itemize}
+		\item Handleren switcher på ID.
+		\item Handler funktionen laver en response på samme måde som sender tråden gør (med fx en confirm besked)
+		\item Handlerfunktionen sender message tilbage Req-$>$mq-$>$send(ID, Cfm). 
+	\end{itemize}
+	\item Modtageren kører \textit{delete} på msg.
+\end{enumerate}
+
+
+Dispatcheren kan da switche på QueueItems id, og Handleren kan  reagere på beskeden.
+
+\begin{lstlisting}[caption=Dispatcher]
+void Dispatcher(Message* msg, unsigned long id)
+{
+	switch(id)
+	{
+		case ID_X:
+		  //Cast msg* til afledt message klasse.
+		  //Do stuff - call specific handler
+		  break;
+		
+		case ID_Y:
+		  //Cast msg* til afledt message klasse.
+		  //Do stuff - call specific handler
+	}
+	
+	unsigned long _id;
+	Message* msg;
+}
+\end{lstlisting}
 Dispatcheren kan da switche på QueueItems id, og Handleren kan  reagere på beskeden.
 
 \paragraph{Asynkrone køer}
