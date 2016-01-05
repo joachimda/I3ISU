@@ -33,6 +33,8 @@
 	\item OS API.
 \end{itemize}
 
+\newpage
+
 \subsection{The design philosophy - Why OO and OS Api?}
 
 Et OS Api giver et abstraktionslag for operativsystemet. Denne abstraktion gør det muligt at \textit{unify} OS arkitektur, og dermed opnå højere portabilitet for applikationer. Med andre ord giver et OS Api os et generelt interface der kan genbruges på tværs af platforme.
@@ -67,7 +69,8 @@ PIMPL - Pointer to Implementation er et SW programmerings idiom, der fremmer \te
 
 Et eksempel med en \textit{Book} klasse:
 
-\begin{lstlisting}[caption=Klassen Book uden PIMPL, label=code:noPIMP]
+\begin{lstlisting}[caption=Klassen Book uden PIMPL, label=code:noPIMP,
+morekeywords={string}]
 class Book
 {
 public:
@@ -78,7 +81,7 @@ private:
 }
 \end{lstlisting}
 
-Som det kan ses i kodeudsnit \ref{code:noPIMP}, skal alle Books klienter recompilere hver gang der tilføjes eller ændres i klassen book.
+Som det kan ses i kode udsnit \ref{code:noPIMP}, skal alle Books klienter recompilere hver gang der tilføjes eller ændres i klassen book.
 
 Vi tilføjer et private medlem, \textbf{\textit{class BookImpl}} samt \textbf{\textit{BookImpl* m\_p}}. Vi har også brug for både destructor og constructor nu, for hhv at slette og sætte m\_p! Med PIMPL implementeret får vi da:
 
